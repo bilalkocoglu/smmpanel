@@ -64,7 +64,7 @@ public class MailService {
     }
 
     @Async
-    public void asynsSendMail(MailType mailType, User fromUser, User destUser, String message){
+    public void asynsSendMail(MailType mailType, User fromUser, User destUser){
         try {
             Map model = new HashMap();
             Template template = null;
@@ -72,30 +72,36 @@ public class MailService {
             String body = "";
 
             if (mailType == MailType.CREATETICKET){
-                subject = "New Ticket !";
-                model.put("title", "Social XXX");
+                subject = "Yeni Destek Talebi !";
                 model.put("button_message", fromUser.getName() + " " + fromUser.getSurname() +" tarafından cevaplamanız gereken yeni bir destek talebi oluşturuldu! Aşağıdaki butona tıklayarak cevaplayabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-
-                template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
-
-                body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-
-                sendMail(subject, destUser.getMail(), body);
             }else if (mailType == MailType.RESPONSETICKET){
                 subject = "Destek Talebiniz Yanıtlandı !";
-                model.put("title", "Social XXX");
                 model.put("button_message", "Destek talebiniz yanıtlandı! Cevaplamak için aşağıdaki butona basabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-
-                template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
-
-                body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
-
-                sendMail(subject, destUser.getMail(), body);
+            }else if (mailType == MailType.PAYMENTNTFREQ){
+                subject = "Yeni Ödeme Bildirimi !";
+                model.put("button_message", fromUser.getName() + ' ' + fromUser.getSurname() + " Kullanıcısı tarafından yeni bir ödeme bildirimi oluşturuldu !");
+                model.put("button_text", "CEVAPLA");
+                model.put("button_href", HOST + "/login");
+            }else if (mailType == MailType.PAYMENTNTFRES){
+                subject = "Ödeme Bildiriminiz Onaylandı !";
+                model.put("button_message","Ödeme bildiriminiz onaylandı ve bakiyeniz güncellendi. Şimdi özgürce alışveriş yapabilirsiniz !");
+                model.put("button_text", "CEVAPLA");
+                model.put("button_href", HOST + "/login");
+            }else {
+                return;
             }
+
+
+            model.put("title", "Social XXX");
+
+            template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
+            body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+            sendMail(subject, destUser.getMail(), body);
         }catch (Exception e){
             log.error("Mail Service Send Mail Error -> " + e.getMessage());
         }

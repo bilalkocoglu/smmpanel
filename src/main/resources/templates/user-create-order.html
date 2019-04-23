@@ -175,7 +175,7 @@ Sipariş Geçmişinde "Tamamlandı" yazmadan yeni sipariş geçmeyiniz!</h4>
 											<input th:field="*{url}" autocomplete="off" type="text" required id="url" class="form-control text-center"  name="url">
 										</div>
                                     <div class="form-group">
-											<label for="quantity">Miktar</label>
+											<label for="quantity">Miktar <span id="maxminspan"></span></label>
 											<input th:field="*{quantity}" onkeypress='validate(event)' required autocomplete="off" type="text" id="quantity" class="form-control text-center"  name="quantity">
 										</div>
                                     <div class="row">
@@ -226,8 +226,8 @@ Sipariş Geçmişinde "Tamamlandı" yazmadan yeni sipariş geçmeyiniz!</h4>
             ajax: 'true'
         }, function (service) {
             selectedService = service;
-            console.log(selectedService);
             $('#serviceNameLabel').text(selectedService.subCategory.category.name + ' - ' + selectedService.customName);
+            $('#maxminspan').text('(Min :' + selectedService.customMinPiece + ' - Max :' + selectedService.customMaxPiece +')');
             $('#amount').val(selectedService.customPrice + " TL");
             $('#totalAmount').val(($('#quantity').val() * (selectedService.customPrice/1000)) + " TL");
             $('#neworderform').attr("action", "/user/order/" + selectedService.id);

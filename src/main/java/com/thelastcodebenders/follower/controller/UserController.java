@@ -106,7 +106,7 @@ public class UserController {
             }else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
         }
-        return "redirect:/user/services";
+        return "redirect:/user/orders";
     }
 
 
@@ -137,7 +137,8 @@ public class UserController {
     }
 
     @PostMapping("/payment-notifications")      //CREATE PAYMENT NOTIFICATION
-    public String createPaymentNotification(@ModelAttribute PaymentNotificationFormDTO paymentNtfForm, RedirectAttributes redirectAttributes) throws LoginException {
+    public String createPaymentNotification(@ModelAttribute PaymentNotificationFormDTO paymentNtfForm,
+                                            RedirectAttributes redirectAttributes) throws LoginException {
         boolean res = paymentNotificationService.createPaymentNotification(paymentNtfForm);
         if (res)
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");

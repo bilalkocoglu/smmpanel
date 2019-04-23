@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.assembler.PaymenNotificationAssembler;
 import com.thelastcodebenders.follower.dto.PaymentNotificationFormDTO;
+import com.thelastcodebenders.follower.enums.MailType;
 import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.model.PaymentNotification;
 import com.thelastcodebenders.follower.model.User;
@@ -24,15 +25,18 @@ public class PaymentNotificationService {
     private UserService userService;
     private PaymenNotificationAssembler paymenNotificationAssembler;
     private BankAccountService bankAccountService;
+    private MailService mailService;
 
     public PaymentNotificationService(PaymentNotificationRepository paymentNotificationRepository,
                                       UserService userService,
                                       PaymenNotificationAssembler paymenNotificationAssembler,
-                                      BankAccountService bankAccountService){
+                                      BankAccountService bankAccountService,
+                                      MailService mailService){
         this.paymentNotificationRepository = paymentNotificationRepository;
         this.userService = userService;
         this.paymenNotificationAssembler = paymenNotificationAssembler;
         this.bankAccountService = bankAccountService;
+        this.mailService = mailService;
     }
 
     public List<String> tableColumns(){
@@ -93,7 +97,8 @@ public class PaymentNotificationService {
                 boolean res = userService.updateUserBalance(paymentNotification.getUser(), paymentNotification.getAmount());
                 if (!res)
                     return false;
-                paymentNotificationRepository.save(paymentNotification);
+                paymentNotification = paymentNotificationRepository.save(paymentNotification);
+                mailService.asynsSendMail(MailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser());
                 return true;
             }else {
                 log.error("Payment Notification Error ! - Boyle bir odeme bildirimi bulunamadi !");
@@ -116,8 +121,10 @@ public class PaymentNotificationService {
             return false;
 
         paymentNotification = paymentNotificationRepository.save(paymentNotification);
-        if (paymentNotification != null)
+        if (paymentNotification != null){
+            mailService.asynsSendMail(MailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin());
             return true;
+        }
         else{
             log.error("Payment Notification Save Error !");
             return false;

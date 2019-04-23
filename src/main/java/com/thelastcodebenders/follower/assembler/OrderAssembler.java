@@ -23,6 +23,9 @@ public class OrderAssembler {
         double apiPrice = newOrderFormDTO.getQuantity() * (service.getApiPrice() / 1000);
         double customPrice = newOrderFormDTO.getQuantity() * (service.getCustomPrice() / 1000);
 
+        apiPrice = Double.parseDouble(String.format("%.2f", apiPrice));
+        customPrice = Double.parseDouble(String.format("%.2f", customPrice));
+
         Order order = Order.builder()
                 .date(date)
                 .service(service)

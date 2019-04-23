@@ -114,12 +114,20 @@ public class AdminController {
 
     @GetMapping("/bankaccounts/{accountId}")    //DELETE BANK ACCOUNT
     public String deleteAccount(@PathVariable("accountId") long id, RedirectAttributes redirectAttributes){
-        boolean res = bankAccountService.deleteAccount(id);
-        if (res)
-            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
-        else
-            redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
-        return "redirect:/admin/bankaccounts";
+        try {
+            boolean res = bankAccountService.deleteAccount(id);
+            if (res)
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
+        }finally {
+            return "redirect:/admin/bankaccounts";
+        }
     }
 
 
@@ -627,5 +635,6 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
         return "redirect:/admin/tickets";
     }
+
 }
 

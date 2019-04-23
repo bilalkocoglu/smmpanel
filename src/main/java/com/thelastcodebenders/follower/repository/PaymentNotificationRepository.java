@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.repository;
 
+import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.model.PaymentNotification;
 import com.thelastcodebenders.follower.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface PaymentNotificationRepository extends JpaRepository<PaymentNoti
     long countByConfirmation(boolean state);
 
     List<PaymentNotification> findByUser(User user);
+
+    long countByBankAccount(BankAccount bankAccount);
 }
