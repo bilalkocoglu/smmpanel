@@ -1,0 +1,203 @@
+package com.thelastcodebenders.follower.service;
+
+import com.thelastcodebenders.follower.assembler.ServiceAssembler;
+import com.thelastcodebenders.follower.dto.ServiceFormDTO;
+import com.thelastcodebenders.follower.dto.UserPageServiceDTO;
+import com.thelastcodebenders.follower.dto.userservices.UserServicesListItem;
+import com.thelastcodebenders.follower.dto.userservices.UserServicesListSubItem;
+import com.thelastcodebenders.follower.enums.ServiceState;
+import com.thelastcodebenders.follower.model.Category;
+import com.thelastcodebenders.follower.model.Package;
+import com.thelastcodebenders.follower.model.SubCategory;
+import com.thelastcodebenders.follower.repository.PackageRepository;
+import com.thelastcodebenders.follower.repository.ServiceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.thelastcodebenders.follower.model.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@org.springframework.stereotype.Service
+public class ServiceService {
+    private static final Logger log = LoggerFactory.getLogger(ServiceService.class);
+
+    private ServiceRepository serviceRepository;
+    private ServiceAssembler serviceAssembler;
+    private CategoryService categoryService;
+    private PackageRepository packageRepository;
+
+    public ServiceService(ServiceRepository serviceRepository,
+                          ServiceAssembler serviceAssembler,
+                          CategoryService categoryService,
+                          PackageRepository packageRepository){
+        this.serviceRepository = serviceRepository;
+        this.serviceAssembler = serviceAssembler;
+        this.categoryService = categoryService;
+        this.packageRepository = packageRepository;
+    }
+
+
+
+    public int activeServiceCount(){
+        return (int)serviceRepository.countByState(ServiceState.ACTIVE);
+    }
+
+    public List<String> serviceColumns(){
+        return Stream.of(
+                "SystemId",
+                "Name",
+                "Category",
+                "API",
+                "Min",
+                "Max",
+                "Api Price",
+                "Custom Price",
+                "State",
+                "Action").collect(Collectors.toList());
+    }
+
+    public List<Service> allService(){
+        return serviceRepository.findAll();
+    }
+
+    public Service findServiceById(long serviceId){
+        try {
+            Optional<Service> opt = serviceRepository.findById(serviceId);
+            if (opt.isPresent())
+                return opt.get();
+            else {
+                log.error("Service Service Find By Id Error");
+                throw new RuntimeException("Düzenlemek istediğiniz servis bulunamadı !");
+            }
+        }catch (Exception e){
+            if ((e instanceof RuntimeException)){
+                throw e;
+            }
+            log.error("Service Service Find By Id Error -> " + e.getMessage());
+            return null;
+        }
+    }
+
+    public List<Service> findActiveServiceByCategory(long subctgId){
+        try {
+            SubCategory subCategory = categoryService.findSubCategoryById(subctgId);
+            List<Service> services = serviceRepository.findBySubCategory(subCategory);
+            List<Service> res = new ArrayList<>();
+            for (Service s: services) {
+                if (s.getState() == ServiceState.ACTIVE)
+                    res.add(s);
+            }
+            return res;
+        }catch (Exception e){
+            log.error("Service Service Find By Category Error -> " + e.getMessage());
+            return null;
+        }
+
+    }
+
+    public ServiceFormDTO createFormDto(Service service){
+        return serviceAssembler.convertServiceToFormDto(service);
+    }
+
+    public boolean formDtoIsValidate(ServiceFormDTO serviceForm){
+        if (serviceForm.getCustomPrice() > 0 && serviceForm.getCustomMax() > 0 &&
+                serviceForm.getCustomMax() > 0 && serviceForm.getCustomMax() >= serviceForm.getCustomMin()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public boolean updateService(ServiceFormDTO serviceForm, long serviceId){
+        try {
+            if (formDtoIsValidate(serviceForm)){
+                Service service = findServiceById(serviceId);
+                if (service == null)
+                    return false;
+
+                if (service.getState() == ServiceState.DELETED){
+                    throw new RuntimeException("Silinmiş bir servisi güncelleyemezsiniz !");
+                }
+
+                if (serviceForm.isActive() &&
+                        (service.getState() == ServiceState.PASSIVE || service.getState() == ServiceState.DELETED) &&
+                                !service.getApi().isState()){
+                    throw new RuntimeException("Aktif etmek istediğiniz servisin bağlı olduğu API pasif durumda !");
+                }
+
+                if (!serviceForm.isActive() && service.getState() == ServiceState.ACTIVE){
+                    List<Package> packages = packageRepository.findByService(service);
+                    for (Package pkg: packages) {
+                        pkg.setState(false);
+                    }
+                    packageRepository.saveAll(packages);
+                }
+
+                SubCategory subCategory = categoryService.findSubCategoryById(serviceForm.getSubcategoryId());
+                if (subCategory == null)
+                    return false;
+
+                service = serviceAssembler.convertFormDtoToService(serviceForm, service, subCategory);
+                serviceRepository.save(service);
+                return true;
+            }else {
+                throw new RuntimeException("Hatalı veri girdiniz. Bu şekilde güncelleme yapamazsınız !");
+            }
+        }catch (Exception e){
+            if (e instanceof RuntimeException){
+                throw e;
+            }
+            log.error("Service Service Update Error -> " + e.getMessage());
+            return false;
+        }
+    }
+
+    public List<UserServicesListItem> createUserServicesItems(){
+        try {
+            List<UserServicesListItem> userServicesListItems = new ArrayList<>();
+            List<Category> categories = categoryService.allCategory();
+            for (Category category: categories) {
+                UserServicesListItem userServicesListItem = new UserServicesListItem();
+                userServicesListItem.setCategory(category);
+
+                List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategory(category.getId());
+                List<UserServicesListSubItem> userServicesListSubItems = new ArrayList<>();
+                for (SubCategory subcategory: subCategories) {
+                    UserServicesListSubItem userServicesListSubItem = new UserServicesListSubItem();
+                    userServicesListSubItem.setSubCategory(subcategory);
+
+                    List<Service> services = findActiveServiceByCategory(subcategory.getId());
+                    userServicesListSubItem.setServices(services);
+                    if (userServicesListSubItem.getServices().size()>0)
+                        userServicesListSubItems.add(userServicesListSubItem);
+                }
+                userServicesListItem.setSubItems(userServicesListSubItems);
+                if (userServicesListItem.getSubItems().size()>0)
+                    userServicesListItems.add(userServicesListItem);
+            }
+            userServicesListItems.get(0).setFirst(true);
+            return userServicesListItems;
+        }catch (Exception e){
+            log.error("Service Service Create User Services Error -> " + e.getMessage());
+            return null;
+        }
+    }
+
+    public UserPageServiceDTO createUserPageServiceFormat(long serviceId){
+        try {
+            Service service = findServiceById(serviceId);
+
+            if (service == null)
+                return null;
+
+            return serviceAssembler.convertServiceToUserPageService(service);
+        }catch (Exception e){
+            log.error("Service Service Create User Page Service Format Error -> " + e.getMessage());
+            return null;
+        }
+    }
+}

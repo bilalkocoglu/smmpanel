@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="admin-template :: head"></head>
+
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="user-template :: sidebar"></div>
+
+        <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+            <nav th:replace="admin-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+            <!-- Navbar (Header) Ends-->
+
+        <div class="main-content">
+          <div class="content-wrapper">
+              <div th:replace="admin-template :: messages"></div>
+
+              <div class="row">
+    
+	<div class="col-xl-3 col-lg-6 col-md-6 col-12">
+		
+        <div class="card gradient-purple-deep-orange">
+            <a th:href="@{/user/load-balance}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-center">
+								<h3 class="font-medium-3 mb-0">Bakiye Yükle</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+        <div class="card gradient-purple-bliss">
+            <a th:href="@{/user/services}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-center">
+								<h3 class="font-medium-3 mb-0">Sipariş Ver</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+            </a>
+		</div>
+		
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+        <div class="card notification-sidebar-toggle gradient-blue-grey-blue">
+			<a href="javascript:;">
+            <div class="card-body">
+				<div class="card-block pt-2 pb-0">
+					<div class="media">
+						<div class="media-body white text-center">
+							<h3 class="font-medium-3 mb-0">Duyurular <span class="badge badge-pill badge-primary" th:text="${announcements.size()}">25</span></h3>
+						</div> 
+					</div>
+				</div>
+			</div></a>
+		</div>
+		
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+        <div class="card gradient-shdow-night">
+            <a th:href="@{/user/tickets}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-center">
+								<h3 class="font-medium-3 mb-0">
+									Destek Talebi
+									<span class="badge badge-pill badge-primary" th:text="${unread_ticket_count == 0 ? null : unread_ticket_count}"></span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+		
+	</div>
+
+</div>
+
+<div class="row match-height">
+	<div class="col-xl-3 col-lg-12 col-12">
+		<div class="card gradient-dawn">
+			<div class="card-body">
+				<div class="card-block pt-2 pb-0">
+					<div class="media">
+						<div class="media-body white text-left">
+							<h3 class="font-large-1 mb-0"><span th:text="${userbalance}"></span> TL</h3>
+							<span>Bakiye</span>
+						</div>
+						<div class="media-right white text-right">
+							<i class="icon-bubbles font-large-2 float-right"></i>
+						</div>
+                        
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+        <div class="card gradient-blueberry">
+			<div class="card-body">
+				<a th:href="@{/user/orders}">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h3 class="font-large-1 mb-0" th:text="${loading_order_count}"></h3>
+								<span>Açık Siparişler</span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-wallet font-large-2 float-right"></i>
+							</div>
+
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+        <div class="card gradient-harmonic-energy">
+			<div class="card-body">
+				<a th:href="@{/user/payment-notifications}">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h4 class="font-large-1 mb-0">
+									<span style="font-size: small;">Onay Bekleyen :</span>
+									<span th:text="${unconfirmed_payment_ntf}"></span>
+								</h4>
+								<span>Ödeme Bildirimleri</span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-users font-large-2 float-right"></i>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-9 col-lg-12 col-12">
+		<div class="card">
+			<div class="card-header">
+				<h4 class="card-title">SON SİPARİŞLER</h4>
+			</div>
+			<div class="card-body" style="overflow-y: auto; overflow-x: hidden; max-height:300px; height: auto!important;">
+				<table class="table table-responsive-sm text-center">
+					<thead>
+						<tr>
+							<th>Sipariş No</th>
+							<th>Tarih</th>
+							<th>URL</th>
+							<th>Miktar</th>
+							<th>Durum</th>
+							<th>Fiyat</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="order : ${orders}">
+							<td th:text="${order.getId()}"></td>
+							<td th:text="${order.getDate()}"></td>
+							<td th:text="${order.getDestUrl()}"></td>
+							<td th:text="${order.getQuantity()}"></td>
+							<td>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
+									  class="btn white btn-round gradient-green-tea">
+                                            Sipariş Alındı
+                                </span>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
+									  class="btn white btn-round gradient-green-tea">
+                                            Yükleniyor
+                                </span>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}"
+									  class="btn white btn-round gradient-green-tea">
+                                            Tamamlandı
+                                </span>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}"
+									  class="btn white btn-round gradient-green-tea">
+                                            Bir Kısmı Tamamlandı(Kalanı İade Edildi)
+                                </span>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}"
+									  class="btn white btn-round gradient-green-tea">
+                                            Gönderim Sırasında
+                                </span>
+								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}"
+									  class="btn white btn-round gradient-green-tea">
+                                            İptal Edildi
+                                </span>
+							</td>
+							<td th:text="${order.getCustomPrice()}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+	<aside id="notification-sidebar" class="notification-sidebar d-md-block"><a class="notification-sidebar-close"><i class="ft-x font-medium-3"></i></a>
+		<div class="side-nav notification-sidebar-content">
+			<div class="row">
+				<div class="col-12 mt-1">
+					<div class="tab-content px-1 pt-1">
+						<div aria-expanded="true" class="tab-pane active">
+							<div id="activity" class="col-12 timeline-left">
+								<h6 class="mt-1 mb-3 text-bold-400">Duyurular</h6>
+								<div id="timeline" class="timeline-left timeline-wrapper">
+									<ul class="timeline">
+										<li class="timeline-line"></li>
+										<li th:each="announcement : ${announcements}" class="timeline-item">
+											<div class="timeline-badge"><span data-toggle="tooltip" data-placement="right" title="100% Türk Takipçi'de %20 İndirim" class="bg-purple bg-lighten-1"><i class="ft-star"></i></span></div>
+											<div class="col s9 recent-activity-list-text"><span class="primary font-medium-2" th:text="${announcement.getTitle()}"></span>
+												<p class="mt-0 mb-2 fixed-line-height font-weight-300 medium-small" th:utext="${announcement.getDescription()}"></p>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</aside>
+
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+
+  </body>
+</html>

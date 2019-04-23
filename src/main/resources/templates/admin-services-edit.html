@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="admin-template :: head"></head>
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+        <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="admin-template :: sidebar"></div>
+        <!-- / main menu-->
+
+        <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+            <nav th:replace="admin-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+          <!-- Navbar (Header) Ends-->
+
+            <div class="main-content">
+                <div class="content-wrapper"><!--Statistics cards Starts-->
+                    <div th:replace="admin-template :: messages"></div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-colored-form-control">Hizmet Düzenle</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="px-3">
+                                        <form id="form" class="form"
+                                              th:action="@{'/admin/services/update/' + ${service.getId()}}"
+                                              th:object="${serviceform}" method="post">
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="userinput4">Hizmet Adı</label>
+                                                            <input th:field="*{customName}" required autocomplete="off" type="text" id="userinput4" class="form-control"  name="company">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="issueinput5">Hizmet Kategori</label>
+                                                                <select th:field="*{subcategoryId}" id="issueinput5" name="priority" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
+                                                                    <option th:each="ctg : ${categories}"
+                                                                            th:text="${ctg.getCategory().getName() + ' - ' + ctg.getName()}"
+                                                                            th:value="${ctg.getId()}"></option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="issueinput10">Hizmet Durumu</label>
+                                                            <select th:field="*{active}" id="issueinput10" name="priority" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
+                                                                <option value="1">Aktif</option>
+                                                                <option value="0">Pasif</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="userinput7">Satış Fiyatı</label>
+                                                            <input type="number" th:field="*{customPrice}" step="0.001" id="userinput7" class="form-control" placeholder="Satış fiyatını giriniz." aria-describedby="basic-addon2" required name="newbalance">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="userinput8">Minimum</label>
+                                                            <input type="number" th:field="*{customMin}" id="userinput8" class="form-control" placeholder="Satış fiyatını giriniz." aria-describedby="basic-addon2" required name="newbalance">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="userinput9">Maximum</label>
+                                                            <div class="controls">
+                                                                <input type="number" th:field="*{customMax}" id="userinput9" class="form-control" placeholder="Satış fiyatını giriniz." aria-describedby="basic-addon2" required name="newbalance">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="basicTextarea">Açıklama</label>
+                                                            <textarea required th:field="*{description}" class="form-control" name="basicTextarea" id="basicTextarea" rows="5"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-actions right">
+                                                <button type="submit" class="btn btn-raised btn-block white gradient-plum">
+                                                    <i class="fa fa-check-square-o"></i> Kaydet
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="basic-layout-colored-form-control">Servis API Bilgileri</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="px-3" style="height: 401px; overflow-y: scroll">
+                                        <table class="table table-responsive-md-md text-center">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API Id</td>
+                                                    <td th:text="${service.getApiServiceId()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API</td>
+                                                    <td th:text="${service.getApi().getName()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API Max</td>
+                                                    <td th:text="${service.getApiMaxPiece()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API Min</td>
+                                                    <td th:text="${service.getApiMinPiece()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API Name</td>
+                                                    <td th:text="${service.getApiName()}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="font-size: small;font-weight: bold;">API Price</td>
+                                                    <td th:text="${service.getApiPrice()}"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/datatable/datatables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/data-tables/datatable-styling.js}" type="text/javascript"></script>
+    <script th:src="@{/js/form-validation.js}" type="text/javascript"></script>
+    <script src="https://cdn.ckeditor.com/4.11.4/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('basicTextarea')
+        $("#form").submit( function(e) {
+
+            var messageLength = CKEDITOR.instances['basicTextarea'].getData().replace(/<[^>]*>/gi, '').length;
+
+            if( !messageLength ) {
+
+                alert( 'Açıklama kısmını boş bırakamazsınız !' );
+
+                e.preventDefault();
+
+            }
+
+        });
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="sidebar">
+    <div data-active-color="white" data-background-color="man-of-steel" data-image="/img/background.jpg" class="app-sidebar">
+        <!-- main menu header-->
+        <!-- Sidebar Header starts-->
+        <div class="sidebar-header">
+            <div class="logo clearfix"><a th:href="@{/user/dahsboard}" class="logo-text float-left">
+                <div class="logo-img"><img th:src="@{/img/logo.png}"/></div><span class="text align-middle">SMM</span></a><a id="sidebarToggle" href="javascript:;" class="nav-toggle d-none d-sm-none d-md-none d-lg-block"><i data-toggle="expanded" class="ft-toggle-right toggle-icon"></i></a><a id="sidebarClose" href="javascript:;" class="nav-close d-block d-md-block d-lg-none d-xl-none"><i class="ft-x"></i></a></div>
+        </div>
+        <div class="sidebar-content">
+            <div class="nav-container">
+                <ul id="main-menu-navigation" data-menu="menu-navigation" class="navigation navigation-main">
+                    <li>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <div class="profile-with-cover">
+                                    <div class="media profil-cover-details" style="display: block">
+                                        <div class="align-self-center halfway-fab text-center">
+                                            <a th:href="@{/user/dashboard}"><img th:src="@{/img/avatar-08.png}" class="rounded-circle img-border gradient-summer width-100" alt="Profil"></a>
+                                        </div>
+                                    </div>
+                                    <span class="font-medium-2 text-uppercase white" th:text="${username}"></span>
+                                    <p class="font-medium-2 white font-small-2"><small>Bakiye: </small><span th:text="${userbalance}">20</span> TL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'homepage')} ? active : null">
+                        <a th:href="@{/user/dashboard}" class="menu-item">
+                            <i class="ft-home"></i>
+                            Anasayfa
+                        </a>
+                    </li>
+                    <li class="nav-item" th:classappend="${#strings.equals(page, 'services')} ? active : null">
+                        <a class="blink" th:href="@{/user/services}">
+                            <i class="ft-message-square"></i>
+                            <span data-i18n="" class="menu-title">Sipariş Ver</span>
+                        </a>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'loadbalance')} ? active : null">
+                        <a th:href="@{/user/load-balance}">
+                            <i class="ft-credit-card"></i>
+                            <span data-i18n="" class="menu-title">Bakiye Yükle</span>
+                        </a>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'orders')} ? active : null">
+                        <a th:href="@{/user/orders}">
+                            <i class="ft-package"></i>
+                            <span data-i18n="" class="menu-title">Siparişler</span>
+                        </a>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'tickets')} ? active : null">
+                        <a th:href="@{/user/tickets}">
+                            <i class="ft-message-square"></i>
+                            <span data-i18n="" class="menu-title">Destek Talepleri</span>
+                        </a>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'paymentnotification')} ? active : null">
+                        <a th:href="@{/user/payment-notifications}">
+                            <i class="ft-bell"></i>
+                            <span data-i18n="" class="menu-title">Ödeme Bildirimleri</span>
+                        </a>
+                    </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'askedquestions')} ? active : null">
+                        <a th:href="@{/user/asked-questions}">
+                            <i class="ft-help-circle"></i>
+                            <span data-i18n="" class="menu-title">Sık Sorulan Sorular</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar-background"></div>
+    </div>
+</div>
+
+</html>

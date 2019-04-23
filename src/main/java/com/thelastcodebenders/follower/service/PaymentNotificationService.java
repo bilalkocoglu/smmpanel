@@ -1,0 +1,126 @@
+package com.thelastcodebenders.follower.service;
+
+import com.thelastcodebenders.follower.assembler.PaymenNotificationAssembler;
+import com.thelastcodebenders.follower.dto.PaymentNotificationFormDTO;
+import com.thelastcodebenders.follower.model.BankAccount;
+import com.thelastcodebenders.follower.model.PaymentNotification;
+import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.repository.PaymentNotificationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class PaymentNotificationService {
+    private static final Logger log = LoggerFactory.getLogger(PaymentNotificationService.class);
+
+    private PaymentNotificationRepository paymentNotificationRepository;
+    private UserService userService;
+    private PaymenNotificationAssembler paymenNotificationAssembler;
+    private BankAccountService bankAccountService;
+
+    public PaymentNotificationService(PaymentNotificationRepository paymentNotificationRepository,
+                                      UserService userService,
+                                      PaymenNotificationAssembler paymenNotificationAssembler,
+                                      BankAccountService bankAccountService){
+        this.paymentNotificationRepository = paymentNotificationRepository;
+        this.userService = userService;
+        this.paymenNotificationAssembler = paymenNotificationAssembler;
+        this.bankAccountService = bankAccountService;
+    }
+
+    public List<String> tableColumns(){
+        List<String> columnNames = new ArrayList<>();
+        columnNames.add("Id");
+        columnNames.add("Kullanıcı");
+        columnNames.add("Banka Adı");
+        columnNames.add("Hesap Sahibi");
+        columnNames.add("Tutar");
+        columnNames.add("Tarih");
+        columnNames.add("İşlem");
+        return columnNames;
+    }
+
+    public int unconfirmedNotifications(){
+        return (int)paymentNotificationRepository.countByConfirmation(false);
+    }
+
+    public int unconfirmedLoginUserNotifications() throws LoginException {
+        List<PaymentNotification> paymentNotifications = getLoginUserPaymentNotifications();
+
+        int count = 0;
+
+        for (PaymentNotification paymentNotification: paymentNotifications) {
+            if (!paymentNotification.isConfirmation())
+                count++;
+        }
+        return count;
+    }
+
+    public List<PaymentNotification> allPaymentNotifications(){
+        return paymentNotificationRepository.findAll();
+    }
+
+    public List<PaymentNotification> getLoginUserPaymentNotifications() throws LoginException {
+        User loginUser = userService.getAuthUser();
+
+        if (loginUser != null){
+            return paymentNotificationRepository.findByUser(loginUser);
+        }else {
+            log.error("Payment Notification Service get Login User Notifications Error ! -> login user = null");
+            return null;
+        }
+    }
+
+    @Transactional
+    public boolean confirmPayment(long paymentNotificationId){
+        try {
+            Optional<PaymentNotification> optPaymentNot = paymentNotificationRepository.findById(paymentNotificationId);
+
+            if (optPaymentNot.isPresent()){
+                PaymentNotification paymentNotification = optPaymentNot.get();
+                if (paymentNotification.isConfirmation()){
+                    log.error("Payment Notification Error ! - Bu bildirim zaten onaylanmis !");
+                    return false;
+                }
+                paymentNotification.setConfirmation(true);
+                boolean res = userService.updateUserBalance(paymentNotification.getUser(), paymentNotification.getAmount());
+                if (!res)
+                    return false;
+                paymentNotificationRepository.save(paymentNotification);
+                return true;
+            }else {
+                log.error("Payment Notification Error ! - Boyle bir odeme bildirimi bulunamadi !");
+                return false;
+            }
+        }catch (Exception e){
+            log.error("Payment Notification Error ! - " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean createPaymentNotification(PaymentNotificationFormDTO paymentNtfForm) throws LoginException {
+        PaymentNotification paymentNotification = paymenNotificationAssembler.convertFormDtoToPaymentNtf(paymentNtfForm);
+        paymentNotification.setUser(userService.getAuthUser());
+
+        BankAccount bankAccount = bankAccountService.findById(paymentNtfForm.getBankAccountId());
+        if (bankAccount != null){
+            paymentNotification.setBankAccount(bankAccount);
+        }else
+            return false;
+
+        paymentNotification = paymentNotificationRepository.save(paymentNotification);
+        if (paymentNotification != null)
+            return true;
+        else{
+            log.error("Payment Notification Save Error !");
+            return false;
+        }
+    }
+}

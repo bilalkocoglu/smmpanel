@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+  
+<head th:replace="admin-template :: head"></head>
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="user-template :: sidebar"></div>
+
+        <!-- / main menu-->
+
+      <div class="main-panel siparis">
+
+        <!-- Navbar (Header) Starts-->
+          <nav th:replace="admin-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+          <!-- Navbar (Header) Ends-->
+          
+        <div class="main-content">
+          <div class="content-wrapper"><!--Statistics cards Starts-->
+              <div th:replace="admin-template :: messages"></div>
+
+              <div class="alert alert-secondary mb-2" role="alert">
+                            <strong>ÖNEMLİ!</strong> Herhangi bir siparişi iptal edemiyoruz, lütfen sipariş vermeden önce şartlarımızı okuyun.
+                </div>
+            <div class="row">
+            <div class="col-md-12 ">
+                        <div class="card">
+                    <div class="card-header">
+                      <h4 class="card-title">Hizmet Listesi</h4>
+                    </div>
+                    <div class="card-body">
+                      <div class="card-block">
+                        <ul class="nav nav-tabs">
+                          <li class="nav-item " th:each="item : ${service_list_items}">
+                            <a class="nav-link"
+                               th:id="'baseIcon-tab' + ${item.getCategory().getName()}" data-toggle="tab"
+                               th:classappend="${item.isFirst() == true} ? active : null"
+                               th:attr="aria-controls='tabIcon' + ${item.getCategory().getName()}"
+                               th:href="'#tabIcon' + ${item.getCategory().getName()}" aria-expanded="false">
+                                <i class="ft-instagram"></i>
+                                <span th:text="${item.getCategory().getName()}"></span>
+                            </a>
+                          </li>
+                        </ul>
+                        <div class="tab-content px-1 pt-1">
+                          <div role="tabpanel" class="tab-pane"
+                               th:each="item : ${service_list_items}"
+                               th:classappend="${item.isFirst() == true} ? active : null"
+                               th:id="'tabIcon' + ${item.getCategory().getName()}" aria-expanded="true">
+
+                              <div th:id="'wrap' + ${item.getCategory().getName()}" role="tablist" aria-multiselectable="true">
+
+                                  <div class="card" >
+                                      <span th:each="subItem : ${item.getSubItems()}">
+                                          <a data-toggle="collapse"
+                                             th:attr="data-parent='#wrap' + ${subItem.getSubCategory().getCategory().getName()},
+                                           aria-controls=${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'"
+                                             th:href="'#' + ${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'"
+                                             aria-expanded="true"
+                                             class="card-title lead clicks">
+
+                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'main'"
+                                                 class="card-header card-header-collapse">
+                                                <span th:text="${subItem.getSubCategory().getCategory().getName()} + ' - ' + ${subItem.getSubCategory().getName()}"></span>
+                                                <span style="float: right" class="badge badge-light" th:text="${subItem.getServices().size()}"></span>
+                                            </div>
+                                            </a>
+                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'" role="tabpanel" class="collapse show">
+                                                <div class="card-body">
+                                                  <div class="card-block">
+                                                            <div class="tab-pane" id="tabIcon1" th:attr="area-labelledby='baseIcon-tab' + ${subItem.getSubCategory().getCategory().getName()}">
+                                                                <div id="InstagramTakipciServisMain" role="tablist" aria-multiselectable="true">
+                                                                            <table class="table table-responsive-sm">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th style="width: 120px;"></th>
+                                                                                        <th>Servis Adı</th>
+                                                                                        <th>Minimum</th>
+                                                                                        <th>Maksimum</th>
+                                                                                        <th>Fiyat</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr th:each="service : ${subItem.getServices()}">
+                                                                                        <th>
+                                                                                            <button th:id="${service.getId()}" type="button" class="btn btn-raised gradient-mint white createorderbtn" data-toggle="modal" data-target="#large">
+                                                                                                <i class="icon-basket-loaded"></i> Sipariş Ver
+                                                                                            </button>
+                                                                                        </th>
+                                                                                        <th th:text="${service.getCustomName()}"></th>
+                                                                                        <td th:text="${service.getCustomMinPiece()}"></td>
+                                                                                        <td th:text="${service.getCustomMaxPiece()}">10000</td>
+                                                                                        <td><span th:text="${service.getCustomPrice()}"></span> TL</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                          </div>
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+
+          </div>
+        </div>
+          <div class="main-content" style="padding: 0px; !important;">
+          <div class="content-wrapper"><!--User Profile Starts-->
+              <div class="row">
+                  <div class="col-md-2"></div>
+                <div class="col-md-8 col-sm-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title text-center" id="basic-layout-colored-form-control">⚠️ ÖNEMLİ BİLGİLENDİRME ⚠️</h4>
+                                </div>
+                                <div class="card-body text-center">
+                                    <h4 style="color: brown"> Koşul ve Sözleşme Okumadan Sipariş Vermeyiniz!</h4><br>
+                                    <h4 style="color: crimson">Aldığınız hizmetler sosyal medya siteleri tarafından uygun görülmemektedir bu nedenle hesabınızda oluşacak sorunlardan sizler sorumlusunuz.</h4><br>
+                                    <h4 style="color:coral">Lütfen aynı hesaba/fotoğrafa/linke sadece 1 işlem giriniz!
+Sipariş Geçmişinde "Tamamlandı" yazmadan yeni sipariş geçmeyiniz!</h4>
+                                </div>
+                            </div>
+                    </div>
+                  <div class="col-md-2"></div>
+                
+
+</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+      
+      <div class="modal fade text-left" id="large" tabindex="1" role="dialog" aria-labelledby="myModalLabel17" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="serviceNameLabel">Tekrar Giriş Yapınız !</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                        <div class="modal-body text-center">    
+                        <div class="row">
+                            <div class="col-md-6" id="servicedescription">
+
+                            </div>    
+                            <div class="col-md-6">
+                                    
+                                <form id="neworderform" class="form" action="#" th:object="${neworderform}" method="post">
+                                    <div class="form-group">
+											<label for="url">URL</label>
+											<input th:field="*{url}" autocomplete="off" type="text" required id="url" class="form-control text-center"  name="url">
+										</div>
+                                    <div class="form-group">
+											<label for="quantity">Miktar</label>
+											<input th:field="*{quantity}" onkeypress='validate(event)' required autocomplete="off" type="text" id="quantity" class="form-control text-center"  name="quantity">
+										</div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+											     <label for="amount">1K Fiyat</label>
+											     <input id="amount" type="text" class="form-control text-center font-medium-2 white gradient-flickr" readonly="readonly" value="0 TL">
+										    </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+											     <label for="totalAmount">Tutar</label>
+											     <input id="totalAmount" type="text" class="form-control text-center" readonly="readonly" value="0 TL">
+										    </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-block btn-raised gradient-flickr white" data-dismiss="modal">Kapat</button>
+                        <button type="submit" class="btn btn-block btn-raised gradient-mint white"><i class="icon-basket-loaded"></i>  Sipariş Ver</button>
+                    </div>
+                        </form>
+
+                    </div>
+            </div>
+        </div>
+    </div>
+  </body>
+<script>
+    window.onload = function () {
+        var questions = document.getElementsByClassName('clicks');
+        for (var i = 0; i<questions.length ; i++){
+            questions[i].click();
+        }
+
+        $('#quantity').val(0);
+    };
+
+    var selectedService = null;
+
+    $('.createorderbtn').on('click', function (event) {
+       var serviceId = parseInt($(this).attr('id'));
+
+        $.getJSON("/user/services/service", {
+            serviceId: serviceId,
+            ajax: 'true'
+        }, function (service) {
+            selectedService = service;
+            console.log(selectedService);
+            $('#serviceNameLabel').text(selectedService.subCategory.category.name + ' - ' + selectedService.customName);
+            $('#amount').val(selectedService.customPrice + " TL");
+            $('#totalAmount').val(($('#quantity').val() * (selectedService.customPrice/1000)) + " TL");
+            $('#neworderform').attr("action", "/user/order/" + selectedService.id);
+            $('#servicedescription').html(selectedService.description);
+        });
+    });
+
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if( !regex.test(key) ) {
+            theEvent.returnValue = false;
+            if(theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+
+    $('#quantity').on('change keydown keypress keyup mousedown click mouseup', function (evt) {
+        var quantity = $(this).val();
+        var totalAmount = quantity * (selectedService.customPrice/1000);
+        $('#totalAmount').val(totalAmount.toFixed(2) + " TL");
+    })
+
+    $('#neworderform').submit( function (e) {
+            var quantityInt = parseInt($('#quantity').val())
+
+
+            if (quantityInt == 0){
+                alert("Miktarı 0 giremezsiniz.");
+                e.preventDefault();
+            }else if(quantityInt < selectedService.customMinPiece || quantityInt > selectedService.customMaxPiece){
+                alert("Sipariş miktarı servis için belirlenen aralıktan büyük veya küçük olamaz !");
+                e.preventDefault();
+            }
+        }
+    );
+
+</script>
+
+</html>

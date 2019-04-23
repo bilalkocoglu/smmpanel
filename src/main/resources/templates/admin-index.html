@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+  <head th:replace="admin-template :: head"></head>
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+      <div th:replace="admin-template :: sidebar"></div>
+
+      <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+		  <nav th:replace="admin-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+        <!-- Navbar (Header) Ends-->
+
+        <div class="main-content">
+          <div class="content-wrapper">
+<div class="row">
+    
+	<div class="col-xl-3 col-lg-6 col-md-6 col-12">
+		<div class="card gradient-dawn">
+			<a th:href="@{/admin/tickets}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h3 class="font-large-1 mb-0" th:text="${unread_ticket_count}"></h3>
+								<span>Destek Talepleri</span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-bubbles font-large-2 float-right"></i>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+		<div class="card gradient-blueberry">
+			<a th:href="@{/admin/paymentnotifications}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h3 class="font-large-1 mb-0" th:text="${payment_count}"></h3>
+								<span>Ödeme Bildirimleri</span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-wallet font-large-2 float-right"></i>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+		<div class="card gradient-harmonic-energy">
+			<a th:href="@{/admin/users}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h3 class="font-large-1 mb-0" th:text="${user_count}"></h3>
+								<span>Kullanıcı Sayısı</span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-users font-large-2 float-right"></i>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-12">
+		<div class="card gradient-plum">
+			<a th:href="@{/admin/services}">
+				<div class="card-body">
+					<div class="card-block pt-2 pb-0">
+						<div class="media">
+							<div class="media-body white text-left">
+								<h3 class="font-large-1 mb-0" th:text="${active_service_count}"></h3>
+								<span>Servisler </span>
+							</div>
+							<div class="media-right white text-right">
+								<i class="icon-settings font-large-2 float-right"></i>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="row match-height">
+	<div class="col-xl-4 col-lg-12 col-12">
+		<div class="card gradient-flickr">
+            <div class="card-header"><h4 class="card-title white">Toplam Kazanç</h4></div>
+			<div style="height: auto" class="card-body">
+				<div class="card-block" style="padding-top: 10%;">
+					<div class="my-3 text-center white">
+						<a class="font-large-2 d-block mb-1">₺ <span th:text="${winnings}"></span> <span class="ft-arrow-up font-large-2"></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-8 col-lg-12 col-12">
+		<div th:replace="admin-template :: messages"></div>
+		<div class="card">
+			<div class="card-header">
+				<h4 style="float: right;" class="card-title">APİ Durumları</h4>
+				<a th:href="@{/admin/apis/update-balance}"
+				   style="float: left; margin: 0px; color: white; border: none;"
+				   class="btn gradient-harmonic-energy">
+					Bakiyeleri Güncelle
+				</a>
+				<a th:href="@{/admin/apis/update-services}"
+				   style="float: left; margin-left: 3px; color: white; border: none;"
+				   class="btn gradient-flickr">
+					Servisleri Güncelle
+				</a>
+			</div>
+			<div class="card-body" style="overflow-y: auto; overflow-x: hidden; max-height:300px; height: auto!important;">
+				<table class="table table-responsive-sm text-center">
+					<thead>
+						<tr>
+							<th th:each="column : ${api_table_colums}" th:text="${column}"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="api : ${apis}">
+                            <td th:text="${api.getName()}"></td>
+                            <td th:text="${api.getUrl()}"></td>
+							<td>
+								<a th:if="${api.isState() == true}" class="btn white btn-round gradient-green-tea">Active</a>
+								<a th:if="${api.isState() == false}" class="btn white btn-round gradient-blueberry">Paused</a>
+							</td>
+							<td th:text="${api.getBalance()}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+  </body>
+</html>
