@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+
+<body class="brk-bordered-theme" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div class="brk-header-mobile">
+			<div class="brk-header-mobile__open"><span></span></div>
+			<div class="brk-header-mobile__logo">
+				<a th:href="@{/}">
+					<img class="brk-header-mobile__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+					<img class="brk-header-mobile__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="img/logo.png" alt="alt">
+				</a>
+			</div>
+		</div>
+		<header class="brk-header brk-header_style-1 brk-header_skin-1 position-fixed d-lg-flex flex-column brk-header_color-white position-fixed" style="display: none;" data-logo-src="img/logo.png" data-bg-mobile="img/brk-bg-mobile-menu.jpg" data-brk-library="component__header">
+			<div class="brk-header__main-bar brk-header_border-top-dark order-lg-2 order-1" style="height: 72px;">
+				<div class="container-fluid">
+					<div class="row align-items-center">
+						<div class="col-lg-3 align-center align-self-lg-center d-none d-lg-flex ml-10">
+							<a href="/" class="brk-header__logo brk-header__item @@modifier"><img class="brk-header__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="img/logo.png" alt="alt"> <img class="brk-header__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="height:70px; width: 70px;" data-src="img/logo.png" alt="alt"></a>
+						</div>
+						<div class="col-lg align-self-lg-stretch text-lg-center">
+							<nav class="brk-nav brk-header__item">
+								<ul class="brk-nav__menu">
+									<li class="brk-nav__drop-down-effect brk-nav__children_clear">
+										<a href="#about">
+											<span>Anasayfa</span>
+										</a>
+									</li>
+                                    <li class="brk-nav__drop-down-effect brk-nav__children_clear">
+										<a href="paketler.html">
+											<span>Tüm Paketler</span>
+										</a>
+									</li>
+									<li class="brk-nav__children brk-nav__drop-down-effect">
+										<a href="#">
+											<span>İnstagram</span>
+										</a>
+											<ul class="brk-nav__sub-menu brk-nav-drop-down font__family-montserrat">
+												<li class="dd-effect"><a href="instagram-paketleri.html"><i class="fas fa-user-plus"></i>İnstagram Takipçi Paketleri</a></li>
+												<li class="dd-effect"><a href="instagram-paketleri.html"><i class="fas fa-thumbs-up"></i>İnstagram Beğeni Paketleri</a></li>
+												<li class="dd-effect"><a href="instagram-paketleri.html"><i class="fas fa-eye"></i>İnstagram İzlenme Paketleri</a></li>
+											</ul>
+										</li>
+                                    <li class="brk-nav__children brk-nav__drop-down-effect"><a href="#"><span>Twitter</span></a>
+											<ul class="brk-nav__sub-menu brk-nav-drop-down font__family-montserrat">
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-user-plus"></i>Twitter Takipçi Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-thumbs-up"></i>Twitter Favori Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-retweet"></i>Twitter Retweet Paketleri
+													</a>
+												</li>
+											</ul>
+										</li>
+                                    <li class="brk-nav__children brk-nav__drop-down-effect"><a href="#"><span>Youtube</span></a>
+											<ul class="brk-nav__sub-menu brk-nav-drop-down font__family-montserrat">
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-user-plus"></i>Youtube Abone Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-thumbs-up"></i>Youtube Beğenme Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-eye"></i>Youtube İzlenme Paketleri
+													</a>
+												</li>
+											</ul>
+										</li>
+                                    <li class="brk-nav__children brk-nav__drop-down-effect"><a href="#"><span>TikTok</span></a>
+											<ul class="brk-nav__sub-menu brk-nav-drop-down font__family-montserrat">
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-user-plus"></i>TikTok Takipçi Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-thumbs-up"></i>Tiktok Beğenme Paketleri
+													</a>
+												</li>
+												<li class="dd-effect">
+													<a href="instagram-paketleri.html">
+														<i class="fas fa-eye"></i>Youtube İzlenme Paketleri
+													</a>
+												</li>
+											</ul>
+										</li>
+									 
+								</ul>
+							</nav>
+						</div>
+						<div class="col-lg-3 align-self-lg-stretch">
+				            <a th:href="@{/login}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+								<span class="before">GİRİŞ YAP</span>
+								<span class="text">GİRİŞ YAP</span>
+								<span class="after">GİRİŞ YAP</span>
+							</a>
+                            
+                            <a href="siparis-takip.html" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+								<span class="before">SİPARİŞ TAKİP</span>
+								<span class="text">SİPARİŞ TAKİP</span>
+								<span class="after">SİPARİŞ TAKİP</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<h1 class="sr-only">SMM PANEL</h1>
+		<div id="rev_slider_19_1_wrapper" class="rev_slider_wrapper fullscreen-container" data-alias="demo_agency_fluid" data-source="gallery" style="background:transparent;padding:0px;">
+			<div id="rev_slider_19_1" class="rev_slider fullscreenbanner" style="display:none;" data-version="5.4.8.1">
+				<ul>
+					<li data-index="rs-44" data-transition="fade" data-slotamount="default" data-hideafterloop="0" data-hideslideonmobile="off" data-easein="default" data-easeout="default" data-masterspeed="300" data-thumb="img/demo_agency_fluid/images/transparent.png" data-rotate="0" data-saveperformance="off" data-title="Slide #1" data-param1="" data-param2="" data-param3="" data-param4="" data-param5="" data-param6="" data-param7="" data-param8="" data-param9="" data-param10="" data-description="">
+						<img th:src="@{/visitor/img/demo_agency_fluid/images/transparent.png}" data-bgcolor="#ffffff" style="background:#ffffff" alt="" data-bgposition="center center" data-bgfit="cover" data-bgrepeat="no-repeat" data-bgparallax="off" class="rev-slidebg" data-no-retina="">
+						<div class="tp-caption rev_group" id="slide-44-layer-17" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;150&apos;,&apos;16&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;middle&apos;,&apos;middle&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;50&apos;,&apos;0&apos;,&apos;100&apos;,&apos;120&apos;]" data-width="[&apos;602&apos;,&apos;453&apos;,&apos;301&apos;,&apos;301&apos;]" data-height="[&apos;356&apos;,&apos;342&apos;,&apos;141&apos;,&apos;117&apos;]" data-whitespace="nowrap" data-type="group" data-basealign="slide" data-responsive_offset="off" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:300,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;opacity:0;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-margintop="[0,0,0,0]" data-marginright="[0,0,0,0]" data-marginbottom="[0,0,0,0]" data-marginleft="[0,0,0,0]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 14; min-width: 602px; max-width: 602px; max-width: 356px; max-width: 356px; white-space: nowrap; font-size: 20px; line-height: 22px; font-weight: 400; color: #ffffff; letter-spacing: 0px;">
+                            
+							<div class="tp-caption" id="slide-44-layer-11" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;15&apos;,&apos;15&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;0&apos;,&apos;0&apos;,&apos;0&apos;,&apos;0&apos;]" data-fontsize="[&apos;54&apos;,&apos;38&apos;,&apos;26&apos;,&apos;24&apos;]" data-lineheight="[&apos;56&apos;,&apos;40&apos;,&apos;28&apos;,&apos;28&apos;]" data-width="[&apos;575&apos;,&apos;410&apos;,&apos;300&apos;,&apos;100%&apos;]" data-height="[&apos;none&apos;,&apos;41&apos;,&apos;none&apos;,&apos;none&apos;]" data-whitespace="normal" data-type="text" data-responsive_offset="off" data-responsive="off" data-frames="[{&quot;delay&quot;:&quot;+0&quot;,&quot;speed&quot;:1500,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;x:[-175%];y:0px;z:0;rX:0;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:1;&quot;,&quot;mask&quot;:&quot;x:[100%];y:0;s:inherit;e:inherit;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;mask&quot;:&quot;x:0;y:0;s:inherit;e:inherit;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-margintop="[0,0,0,0]" data-marginright="[0,0,0,0]" data-marginbottom="[0,0,0,0]" data-marginleft="[0,0,0,0]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;center&apos;,&apos;center&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 15; min-width: 575px; max-width: 575px; white-space: normal; font-size: 40px; line-height: 40px; font-weight: 200; color: #2a2b2f; letter-spacing: 0px;font-family:Montserrat;text-transform:uppercase;">YENİ NESİL SOSYAL MEDYA PANELİ</div>
+                            
+							<div class="tp-caption" id="slide-44-layer-13" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;15&apos;,&apos;15&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;151&apos;,&apos;119&apos;,&apos;155&apos;,&apos;155&apos;]" data-fontsize="[&apos;16&apos;,&apos;14&apos;,&apos;13&apos;,&apos;13&apos;]" data-lineheight="[&apos;26&apos;,&apos;22&apos;,&apos;20&apos;,&apos;20&apos;]" data-width="[&apos;583&apos;,&apos;396&apos;,&apos;500&apos;,&apos;70%&apos;]" data-height="[&apos;none&apos;,&apos;none&apos;,&apos;89&apos;,&apos;89&apos;]" data-whitespace="normal" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="text" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:&quot;+0&quot;,&quot;speed&quot;:1500,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;y:[100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;opacity:0;&quot;,&quot;mask&quot;:&quot;x:0px;y:[100%];s:inherit;e:inherit;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power2.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;rZ:0deg;sX:0.7;sY:0.7;opacity:0;&quot;,&quot;mask&quot;:&quot;x:0;y:0;s:inherit;e:inherit;&quot;,&quot;ease&quot;:&quot;Back.easeIn&quot;}]" data-margintop="[0,0,0,0]" data-marginright="[0,0,0,0]" data-marginbottom="[0,0,0,0]" data-marginleft="[0,0,0,0]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;center&apos;,&apos;center&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 17; min-width: 583px; max-width: 583px; white-space: normal; font-size: 16px; line-height: 26px; font-weight: 400; color: #9f9f9f; letter-spacing: 0px;font-family:Open Sans;">
+								Gelişmiş sipariş sistemimiz ile kayıt olmanıza gerek kalmadan sipariş verebilirsiniz. Hemen aşağıdaki butondan paketlerimize göz atabilirsiniz. <br>
+                            İnstagram beğeni, İnstagram takipçi, Facebook takipçi, Twitter Takipçi ve Retweet gibi birçok hizmet sistemimizde hizmetinizde. 
+                            </div>
+                            <a href="/paketler.html">
+								<div class="tp-caption rev-btn brk-button-shadow" id="slide-44-layer-14" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;0&apos;,&apos;0&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;272&apos;,&apos;249&apos;,&apos;78&apos;,&apos;66&apos;]" data-fontsize="[&apos;16&apos;,&apos;16&apos;,&apos;16&apos;,&apos;14&apos;]" data-lineheight="[&apos;16&apos;,&apos;16&apos;,&apos;16&apos;,&apos;14&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-type="button" data-responsive_offset="off" data-responsive="off" data-frames="[{&quot;delay&quot;:&quot;+0&quot;,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;y:-50px;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;y:50px;opacity:0;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;frame&quot;:&quot;hover&quot;,&quot;speed&quot;:&quot;300&quot;,&quot;ease&quot;:&quot;Linear.easeNone&quot;,&quot;to&quot;:&quot;o:1;rX:0;rY:0;rZ:0;z:0;&quot;,&quot;style&quot;:&quot;c:rgb(255,255,255);bg:rgb(12,101,255);bs:solid;bw:0 0 0 0;&quot;}]" data-margintop="[0,0,0,0]" data-marginright="[0,0,0,0]" data-marginbottom="[0,0,0,0]" data-marginleft="[0,0,0,0]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[20,20,15,10]" data-paddingright="[55,55,40,30]" data-paddingbottom="[20,20,15,10]" data-paddingleft="[55,55,40,30]" style="z-index: 18; white-space: nowrap; font-size: 16px; line-height: 16px; font-weight: 300; color: rgba(255,255,255,1); letter-spacing: ;font-family:Open Sans;text-transform:uppercase;background-color:rgb(39,117,255);border-color:rgba(0,0,0,1);border-radius:30px 30px 30px 30px;outline:none;box-shadow:none;box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;cursor:pointer;">
+									PAKETLERİ İNCELE
+								</div>
+							</a>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-3" id="slide-44-layer-1" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;left&apos;,&apos;left&apos;]" data-hoffset="[&apos;50&apos;,&apos;31&apos;,&apos;31&apos;,&apos;31&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;220&apos;,&apos;115&apos;,&apos;115&apos;,&apos;115&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 5;">
+							<div class="rs-looped rs-rotate" data-easing="Linear.easeNone" data-startdeg="0" data-enddeg="360" data-speed="10" data-origin="50% 50%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/92719-brk_slide_element-1.png}" alt="" data-ww="" data-hh="" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-1" id="slide-44-layer-2" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;left&apos;,&apos;left&apos;]" data-hoffset="[&apos;-115&apos;,&apos;-115&apos;,&apos;-115&apos;,&apos;-115&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;588&apos;,&apos;588&apos;,&apos;588&apos;,&apos;588&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 6;">
+							<div class="rs-looped rs-rotate" data-easing="Linear.easeNone" data-startdeg="0" data-enddeg="360" data-speed="8" data-origin="50% 50%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/89701-brk_slide_element-3.png}" alt="" data-ww="[&apos;230px&apos;,&apos;230px&apos;,&apos;230px&apos;,&apos;230px&apos;]" data-hh="[&apos;230px&apos;,&apos;230px&apos;,&apos;230px&apos;,&apos;230px&apos;]" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-1" id="slide-44-layer-3" data-x="[&apos;center&apos;,&apos;center&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;-149&apos;,&apos;-149&apos;,&apos;-149&apos;,&apos;-149&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;594&apos;,&apos;594&apos;,&apos;594&apos;,&apos;594&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 7;">
+							<div class="rs-looped rs-rotate" data-easing="Linear.easeNone" data-startdeg="0" data-enddeg="-360" data-speed="10" data-origin="50% 50%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/ce870-brk_slide_element-5.png}" alt="" data-ww="[&apos;217px&apos;,&apos;217px&apos;,&apos;217px&apos;,&apos;217px&apos;]" data-hh="[&apos;217px&apos;,&apos;217px&apos;,&apos;217px&apos;,&apos;217px&apos;]" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-1" id="slide-44-layer-5" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;left&apos;,&apos;left&apos;]" data-hoffset="[&apos;403&apos;,&apos;403&apos;,&apos;403&apos;,&apos;403&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;780&apos;,&apos;780&apos;,&apos;780&apos;,&apos;780&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 8;">
+							<div class="rs-looped rs-wave" data-speed="2" data-angle="0" data-radius="30px" data-origin="10% 15%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/ef87c-brk_slide_element-4.png}" alt="" data-ww="[&apos;12auto&apos;,&apos;12auto&apos;,&apos;12auto&apos;,&apos;12auto&apos;]" data-hh="[&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;]" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-2" id="slide-44-layer-6" data-x="[&apos;center&apos;,&apos;center&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;144&apos;,&apos;185&apos;,&apos;185&apos;,&apos;185&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;194&apos;,&apos;136&apos;,&apos;136&apos;,&apos;136&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 9;">
+							<div class="rs-looped rs-rotate" data-easing="Linear.easeNone" data-startdeg="0" data-enddeg="-360" data-speed="10" data-origin="50% 50%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/89708-brk_slide_element-2.png}" alt="" data-ww="" data-hh="" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption tp-resizeme rs-parallaxlevel-1" id="slide-44-layer-9" data-x="[&apos;left&apos;,&apos;left&apos;,&apos;left&apos;,&apos;left&apos;]" data-hoffset="[&apos;1019&apos;,&apos;866&apos;,&apos;866&apos;,&apos;866&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;743&apos;,&apos;650&apos;,&apos;650&apos;,&apos;650&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 10;">
+							<div class="rs-looped rs-slideloop" data-easing="Linear.easeNone" data-speed="1.5" data-xs="-20" data-xe="20" data-ys="30" data-ye="50">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/ef87c-brk_slide_element-4.png}" alt="" data-ww="[&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;]" data-hh="[&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;,&apos;12px&apos;]" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption rs-parallaxlevel-1" id="slide-44-layer-8" data-x="[&apos;center&apos;,&apos;center&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;531&apos;,&apos;436&apos;,&apos;436&apos;,&apos;436&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;434&apos;,&apos;367&apos;,&apos;367&apos;,&apos;367&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:800,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:800,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;auto:auto;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 11;">
+							<div class="rs-looped rs-rotate" data-easing="Linear.easeNone" data-startdeg="0" data-enddeg="360" data-speed="15" data-origin="50% 50%">
+								<img th:src="@{/visitor/img/demo_agency_fluid/images/0195a-brk_slide_element-6.png}" alt="" data-ww="[&apos;417auto&apos;,&apos;417auto&apos;,&apos;417auto&apos;,&apos;417auto&apos;]" data-hh="[&apos;416px&apos;,&apos;416px&apos;,&apos;416px&apos;,&apos;416px&apos;]" data-no-retina="">
+							</div>
+						</div>
+						<div class="tp-caption" id="slide-44-layer-7" data-x="[&apos;center&apos;,&apos;center&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;0&apos;,&apos;0&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;0&apos;,&apos;0&apos;,&apos;0&apos;,&apos;0&apos;]" data-width="full" data-height="none" data-whitespace="nowrap" data-visibility="[&apos;on&apos;,&apos;on&apos;,&apos;off&apos;,&apos;off&apos;]" data-type="image" data-basealign="slide" data-responsive_offset="on" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:1500,&quot;frame&quot;:&quot;0&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:1000,&quot;frame&quot;:&quot;999&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[0,0,0,0]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 12;">
+							<img th:src="@{/visitor/img/demo_agency_fluid/images/4a9ce-brk_slide-1.png}" alt="" data-ww="[&apos;full&apos;,&apos;full&apos;,&apos;full&apos;,&apos;full&apos;]" data-hh="[&apos;862px&apos;,&apos;862px&apos;,&apos;862px&apos;,&apos;862px&apos;]" data-no-retina="">
+						</div>
+						<div class="tp-caption" id="slide-44-layer-15" data-x="[&apos;right&apos;,&apos;right&apos;,&apos;center&apos;,&apos;center&apos;]" data-hoffset="[&apos;0&apos;,&apos;0&apos;,&apos;0&apos;,&apos;0&apos;]" data-y="[&apos;top&apos;,&apos;top&apos;,&apos;top&apos;,&apos;top&apos;]" data-voffset="[&apos;178&apos;,&apos;178&apos;,&apos;250&apos;,&apos;250&apos;]" data-width="none" data-height="none" data-whitespace="nowrap" data-type="text" data-responsive_offset="off" data-responsive="off" data-frames="[{&quot;delay&quot;:10,&quot;speed&quot;:300,&quot;frame&quot;:&quot;0&quot;,&quot;from&quot;:&quot;opacity:0;&quot;,&quot;to&quot;:&quot;o:1;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;},{&quot;delay&quot;:&quot;wait&quot;,&quot;speed&quot;:300,&quot;frame&quot;:&quot;999&quot;,&quot;to&quot;:&quot;opacity:0;&quot;,&quot;ease&quot;:&quot;Power3.easeInOut&quot;}]" data-textalign="[&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;,&apos;inherit&apos;]" data-paddingtop="[50,50,50,50]" data-paddingright="[0,0,0,0]" data-paddingbottom="[0,0,0,0]" data-paddingleft="[0,0,0,0]" style="z-index: 13; white-space: nowrap; font-size: 20px; line-height: 22px; font-weight: 400; color: #ffffff; letter-spacing: 0px;font-family:Open Sans;">
+							<div class="brk-banner-timer" data-brk-library="component__widgets">
+								<div class="font__size-18 line__height-24 text-center text-white pt-40">SOSYAL TREND</div>
+								<div class="font__family-montserrat font__size-28 line__height-30 text-center text-white text-uppercase pt-15">TÜRKİYE'NİN YENİ PANELİ</div>
+								
+								
+								<div class="brk-banner-timer__buttons">
+									<a class="brk-banner-timer__button brk-banner-timer__button_white" th:href="@{/registration}">
+										<i class="far fa-sign-in-alt"></i> KAYIT OL
+									</a>
+									<a class="brk-banner-timer__button brk-banner-timer__button_transparent" href="paketler.html">
+										<i class="fas fa-bolt"></i> HIZLI SİPARİŞ
+									</a>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<div class="tp-bannertimer tp-bottom" style="visibility: hidden !important;"></div>
+			</div>
+		</div>
+		<section>
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-lg-8">
+						<p class="font__family-montserrat font__weight-light font__size-24 line__height-36 mb-30 text-center text-lg-left">
+							İnstagram, Twitter, Youtube başta olmak üzere tüm sosyal medya platformlarında ihtiyacınız olan takipçi, beğeni, izlenme, abone gibi bir çok hizmeti sistemimizden ya da hızlı sipariş ile kısa bir sürede satın alabilirsiniz.
+						</p>
+					</div>
+					<div class="col-12 col-lg-1"></div>
+					<div class="col-12 col-lg-3">
+						<div class="text-center text-lg-left">
+							<a th:href="@{/login}" class="btn btn-inside-out btn-lg border-radius-30 btn-min-width-200 btn-shadow mt-25" data-brk-library="component__button">
+								<span class="before">PANELE GİT</span>
+								<span class="text"> SMM PANEL</span>
+								<span class="after">PANELE GİT</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+        <section class="pt-70 pt-lg-35 pb-120" id="prices">
+			<div class="text-center mb-lg-70 mb-40">
+				<h4 class="font__family-montserrat font__weight-light font__size-28 line__height-30 mb-10 brk-base-font-color">
+					Kampanyalı Paketlerimiz
+				</h4>
+				<h3 class="font__family-montserrat font__size-42 font__weight-bold line__height-46 mb-30">
+					Öne Çıkan Paketler
+				</h3>
+				<p class="brk-dark-font-color font__family-montserrat font__size-15 font__weight-normal line__height-24">
+					Sistemimize kayıt olmadan hızlı bir şekilde satın al butonuna tıklayarak istediğiniz paketi satın alabilirsiniz. Mailinize gelen takip numarası ile siparişinizin durumunu inceleyebilirsiniz.
+				</p>
+			</div>
+			<div class="container">
+				<div class="colored-slider swiper-container" data-brk-library="component__pricing_table,slider__swiper,component__button">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="brk-pricing-colored">
+								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
+									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
+									<div class="brk-pricing-colored__content text-center">
+										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
+											İnstagram Takipçi
+										</div>
+										<div class="brk-pricing-colored__price">
+											<span class="font__family-montserrat font__weight-ultralight">
+												10 ₺
+											</span>
+											<div class="period font__family-open-sans font__weight-bold">
+												1000 Takipçi
+											</div>
+										</div>
+										<div class="brk-pricing-colored__description font__family-open-sans">
+											<ul>
+												<li>Şifre Gerekmiyor</li>
+												<li>Takip Etmek Gerekmiyor</li>
+												<li>Tamamı Aktif Kullanıcılar</li>
+												<li>Takipten Vazgeçebilir</li>
+												<li>En Hızlı Hizmet</li>
+											</ul>
+										</div>
+										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
+											<i class="fas fa-shopping-basket"></i> SATIN AL
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+                        
+						<div class="swiper-slide">
+							<div class="brk-pricing-colored">
+								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
+									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
+									<div class="brk-pricing-colored__content text-center">
+										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
+											İnstagram Takipçi
+										</div>
+										<div class="brk-pricing-colored__price">
+											<span class="font__family-montserrat font__weight-ultralight">
+												10 ₺
+											</span>
+											<div class="period font__family-open-sans font__weight-bold">
+												1000 Takipçi
+											</div>
+										</div>
+										<div class="brk-pricing-colored__description font__family-open-sans">
+											<ul>
+												<li>Şifre Gerekmiyor</li>
+												<li>Takip Etmek Gerekmiyor</li>
+												<li>Tamamı Aktif Kullanıcılar</li>
+												<li>Takipten Vazgeçebilir</li>
+												<li>En Hızlı Hizmet</li>
+											</ul>
+										</div>
+										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
+											<i class="fas fa-shopping-basket"></i> SATIN AL
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+                        <div class="swiper-slide">
+							<div class="brk-pricing-colored">
+								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
+									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
+									<div class="brk-pricing-colored__content text-center">
+										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
+											İnstagram Takipçi
+										</div>
+										<div class="brk-pricing-colored__price">
+											<span class="font__family-montserrat font__weight-ultralight">
+												10 ₺
+											</span>
+											<div class="period font__family-open-sans font__weight-bold">
+												1000 Takipçi
+											</div>
+										</div>
+										<div class="brk-pricing-colored__description font__family-open-sans">
+											<ul>
+												<li>Şifre Gerekmiyor</li>
+												<li>Takip Etmek Gerekmiyor</li>
+												<li>Tamamı Aktif Kullanıcılar</li>
+												<li>Takipten Vazgeçebilir</li>
+												<li>En Hızlı Hizmet</li>
+											</ul>
+										</div>
+										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
+											<i class="fas fa-shopping-basket"></i> SATIN AL
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+                        <div class="swiper-slide">
+							<div class="brk-pricing-colored">
+								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
+									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
+									<div class="brk-pricing-colored__content text-center">
+										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
+											İnstagram Takipçi
+										</div>
+										<div class="brk-pricing-colored__price">
+											<span class="font__family-montserrat font__weight-ultralight">
+												10 ₺
+											</span>
+											<div class="period font__family-open-sans font__weight-bold">
+												1000 Takipçi
+											</div>
+										</div>
+										<div class="brk-pricing-colored__description font__family-open-sans">
+											<ul>
+												<li>Şifre Gerekmiyor</li>
+												<li>Takip Etmek Gerekmiyor</li>
+												<li>Tamamı Aktif Kullanıcılar</li>
+												<li>Takipten Vazgeçebilir</li>
+												<li>En Hızlı Hizmet</li>
+											</ul>
+										</div>
+										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
+											<i class="fas fa-shopping-basket"></i> SATIN AL
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-base-arrow button-prev"><i class="fas fa-long-arrow-alt-left"></i></div>
+					<div class="swiper-base-arrow button-next"><i class="fas fa-long-arrow-alt-right"></i></div>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <h4 style="padding: 50px" class="title__divider title__divider--circle font__size-21 font__weight-bold font__family-montserrat line__height-24 text-center" data-brk-library="component__dividers">
+                                <span class="title__divider__wrapper">
+									<img th:src="@{/visitor/img/logo.png}">
+									<span class="line-left brk-base-bg-1"></span>
+									<span class="line-right brk-base-bg-1"></span>
+								</span>
+                              </h4>
+                    <p class="font__family-montserrat font__weight-light font__size-24 line__height-36 mb-30 text-center">
+						İstediğiniz miktarda sipariş vermek için panelimizi kullanabilir ve hızlı bir şekilde sipariş verebilirsiniz. Panelimizde İnstagram, Twitter, Youtube, Tiktok, Facebook gibi aklınıza gelebecek tüm sosyal medya siteleri için hizmetlerimiz bulunmaktadır. Hadi ne bekliyorsun ?
+					</p>
+                    <div class="text-center">
+						<a th:href="@{/login}" class="btn btn-inside-out btn-lg border-radius-30 btn-min-width-200 btn-shadow mt-25" data-brk-library="component__button">
+							<span class="before">PANELE GİT</span>
+							<span class="text"> SMM PANEL</span>
+							<span class="after">PANELE GİT</span>
+						</a>
+					</div>
+                </div>
+            </div>
+		</section>
+		<section class="custom-tabbed-contents-mt">
+			<div class="brk-tabs brk-tabs_tabbed-intro brk-tabs_tabbed-intro-shaped" data-index="1" data-brk-library="component__tabbed_contents">
+				<ul class="brk-tabs-nav">
+					<li class="brk-tab">
+						<i class="fab fa-instagram"></i>
+						<span>İnstagram</span>
+					</li>
+					<li class="brk-tab">
+						<i class="fab fa-facebook-f"></i>
+						<span>Facebook</span>
+					</li>
+					<li class="brk-tab">
+						<i class="fab fa-twitter"></i>
+						<span>Twitter</span>
+					</li>
+					<li class="brk-tab">
+						<i class="fab fa-youtube"></i>
+						<span>Youtube</span>
+					</li>
+				</ul>
+				<div class="brk-tabs-content position-relative">
+					<div class="brk-abs-overlay">
+						<span class="brk-abs-overlay brk-base-bg-gradient-90deg"></span>
+					</div>
+                    <span class="brk-svg-pattern-container brk-svg-pattern-container-11-top brk-svg-pattern-container_top" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 265" enable-background="new 0 0 1920 265" space="preserve">
+							<g>
+								<g>
+									<path fill="#FFFFFF" d="M0,245.355c73.796,20.648,167.146,31.35,259-0.356c198.5-68.516,300.465-106.329,544-77
+        c229.662,27.66,585.606,115.249,756-12.999C1686.134,59.311,1776.214,8.995,1912.11,0H0V245.355z M1912.11,0h7.89v-0.479
+        C1917.351-0.336,1914.725-0.173,1912.11,0z" />
+								</g>
+							</g>
+						</svg> </span>
+                    <span class="brk-svg-pattern-container brk-svg-pattern-container-11-bottom brk-svg-pattern-container_bottom" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 80" enable-background="new 0 0 1920 80" space="preserve">
+							<g>
+								<g>
+									<path fill="#FFFFFF" d="M1664,26C1193.465-60.58,959.422,159.636,497,45.999C198.597-27.33,60.458,1.476,0,31.136V80h1920V69.241
+        C1862.24,60.935,1780.166,47.375,1664,26z" />
+								</g>
+							</g>
+						</svg></span>
+					<div class="brk-tab-item active">
+						<div class="container">
+							<div class="row">
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										İnstagram Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										İnstagram Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										İnstagram Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div class="brk-tab-item">
+						<div class="container">
+							<div class="row">
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Facebook Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Facebook Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Facebook Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+                    <div class="brk-tab-item">
+						<div class="container">
+							<div class="row">
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Twitter Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Twitter Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Twitter Takipçi
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div><button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200"><span class="before">Read More</span> <span class="text">Read More</span> <span class="after">Read More</span></button></div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+                    <div class="brk-tab-item">
+						<div class="container">
+							<div class="row">
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Youtube Abone
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Youtube İzlenme
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+                                <div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
+										Youtube Beğeni
+									</h2>
+									<p class="font__size-16 line__height-26 text-center">
+										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
+									</p>
+                                    <div>
+										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">Read More</span>
+											<span class="text">Read More</span>
+											<span class="after">Read More</span>
+										</button>
+									</div>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+        
+		<footer style="margin-top: 100px;" class="brk-footer position-relative" id="contact" data-brk-library="component__footer">
+			<div class="brk-footer__wrapper d-flex flex-column align-items-center border-bottom-3 brk-border-color-primary brk-bgi-1 brk-bg-pattern" data-bg=""><span class="brk-abs-bg-overlay brk-bg-gradient-40deg-92"></span> <span class="brk-svg-pattern-container brk-svg-pattern-container_top" style="height: 750px;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2014 755" style="top: -10px; left: -65px; width: calc(100% + 100px);">
+						<defs>
+							<path id="footer-path-id-1" d="M-55 9101s-64.59 843.48 49.67 740.9c114.26-102.57 360.5-86.27 681.26-104.04 320.75-17.77 501.91-155.63 694.2-405.18C1562.42 9083.14 1940 9124.6 1940 9124.6V9096z" />
+						</defs>
+						<g>
+							<g transform="translate(74 -9096)">
+								<use fill="#fff" href="#footer-path-id-1" />
+							</g>
+						</g>
+					</svg></span>
+				<div class="position-relative z-index-3 mb-70 w-100">
+					<div class="text-center">
+						<h4 class="font__family-montserrat font__weight-light font__size-28 line__height-30 mb-10 brk-base-font-color">
+							İletişime Geçin
+						</h4>
+						<h3 class="font__family-montserrat font__size-42 font__weight-bold line__height-46 mb-100">
+							SMM Panel İletişim
+						</h3>
+					</div>
+					<div class="container">
+						<div class="row">
+							<div class="col-12 col-lg-7">
+								<div class="accordion accordion-rounded accordion-image mb-50" role="tablist" aria-multiselectable="true" data-brk-library="component__accordions">
+									<div class="card expanded">
+										<div class="card-header text-left" role="tab" id="headingOne2">
+											<h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase" data-brk-library="component__title">
+												<a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+													<i class="fab fa-delicious"></i>Kullanım Kolaylığı
+												</a>
+											</h5>
+											<a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+												<span class="arrow"></span>
+											</a>
+										</div>
+										<div id="collapseOne2" class="collapse show" role="tabpanel" aria-labelledby="headingOne2">
+											<div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern"><span class="full__size-absolute brk-bg-grad opacity-90"></span>
+												<div class="row">
+													<div class="col-12">
+														<h4 class="font__family-montserrat font__weight-semibold highlight-underline font__size-28 line__height-32 mt-0">
+															<span class="before wow fadeInUp brk-base-bg-8" style="visibility: visible; animation-name: fadeInUp;"></span>Herkes için Kolay Kullanım
+														</h4>
+														<p class="mt-25 font__family-open-sans font__size-16 line__height-26">
+															Sadece kullanıcı adı  veya link girerek kolay alışveriş yapabilirsiniz. Sosyal Medya Paneli destek ekibimiz ve kullanım kolaylığıyla sizlere kolay kullanım sunuyoruz.
+														</p>
+                                                        <ul class="list-inline-2" data-brk-library="component__list">
+                                                          <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <a href="#">
+                                                              <span class="text">
+                                                                <span class="cirlce">
+                                                                  <span class="before"></span>
+                                                                  <span class="after"></span>
+                                                                </span> Hızlı Servisler</span>
+                                                            </a>
+                                                          </li>
+                                                          <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <span class="text">
+                                                              <span class="cirlce">
+                                                                <span class="before"></span>
+                                                                <span class="after"></span>
+                                                              </span> Müşteri Dostu Hizmet</span>
+                                                          </li>
+                                                          <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <span class="text">
+                                                              <span class="cirlce">
+                                                                <span class="before"></span>
+                                                                <span class="after"></span>
+                                                              </span> Uygun Fiyat</span>
+                                                          </li>
+                                                        </ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card">
+										<div class="card-header text-left" role="tab" id="headingTwo2">
+											<h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase">
+												<a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo2">
+													<i class="far fa-gem"></i> Güvenli Ödeme
+												</a>
+											</h5>
+											<a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo2">
+												<span class="arrow"></span>
+											</a>
+										</div>
+										<div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2">
+											<div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern">
+												<span class="full__size-absolute brk-bg-grad opacity-90"></span>
+												<div class="row">
+													<div class="col-sm-12">
+														<h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">
+															Güvenli Ödeme Seçenekleri
+														</h4>
+														<p class="mt-30">
+															xxx Ödeme seçeneklerinde kredi kartı, banka kartı ,EFT gibi bir çok seçenek bulunmaktadır. Hesabınıza Maximum 10 dk içinde paranız yatmaktadır. Online ve güvenli ödeme mevcuttur.
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="card">
+										<div class="card-header text-left" role="tab" id="headingThree2">
+											<h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase">
+												<a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseThree2" aria-expanded="true" aria-controls="collapseThree2">
+													<i class="fab fa-gg"></i> UYGUN FİYATLI SERVİSLER
+												</a>
+											</h5>
+											<a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseThree2" aria-expanded="true" aria-controls="collapseThree2">
+												<span class="arrow"></span>
+											</a>
+										</div>
+										<div id="collapseThree2" class="collapse" role="tabpanel" aria-labelledby="headingThree2">
+											<div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern"><span class="full__size-absolute brk-bg-grad opacity-90"></span>
+												<div class="row">
+													<div class="col-sm-12">
+														<h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">
+															Kaliteli ve Uygun Fiyatlı Servisler
+														</h4>
+														<p class="mt-30 font__size-16">
+                                                            Sistemimizde her bütçeye uygun servisler bulunmaktadır. Servislerin tamamı sorun olmadıkça hızlı ve kalitelidir. Müşterilerimiz için gerekli olan her türlü altyapıyı düşündük ve hazırladık.
+                                                        </p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-12 col-lg-5">
+								<article class="brk-form_footer-14 mb-50">
+									<p class="brk-white-font-color font__size-18 font__weight-bold line__height-18">
+										Bir sorunuz mu var?
+									</p>
+									<h6 class="brk-white-font-color font__family-montserrat font__size-36 font__weight-normal line__height-40 text-uppercase mb-10">
+										İLETİŞİME GEÇ
+									</h6>
+									<form action="#" class="brk-subscribe-mail brk-form-strict brk-form-strict_transparent w-100" data-brk-library="component__form">
+										<input type="text" placeholder="Adınız Soyadınız" name="FNAME">
+										<input type="text" placeholder="Mail adresiniz" name="EMAIL">
+										<textarea name="MESSAGE" id="footer14" placeholder="Mesajınız" style="min-height: 107px"></textarea>
+										<div class="text-center">
+											<button class="btn btn-inside-out btn-lg pl-70 pr-70 btn-inside-out-invert btn-no-shadow border-radius-25 mt-30" data-brk-library="component__button">
+												<span class="before">MESAJ GÖNDER</span>
+												<span class="text">GÖNDER BABBA</span>
+												<span class="after">MESAJ GÖNDER</span>
+											</button>
+										</div>
+									</form>
+								</article>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="position-relative z-index-3 w-100">
+					<div class="container">
+						<div class="row">
+							<div class="col-12 col-md-4">
+								<div class="text-center te d-flex flex-column mb-50">
+									<div class="icon__cover" data-brk-library="component__services">
+										<a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+											<i class="fa fa-phone" aria-hidden="true"></i>
+											<span class="before"></span>
+											<span class="after"></span>
+										</a>
+									</div>
+									<p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+										Telefon
+									</p>
+									<a href="#" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+										0 534 899 87 05
+									</a>
+								</div>
+							</div>
+							<div class="col-12 col-md-4">
+								<div class="text-center d-flex flex-column mb-50">
+									<div class="icon__cover" data-brk-library="component__services">
+										<a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+											<i class="fa fa-map-marker" aria-hidden="true"></i>
+											<span class="before"></span>
+											<span class="after"></span>
+										</a>
+									</div>
+									<p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+										Address
+									</p>
+									<p class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+										İstanbul/ TÜRKİYE
+									</p>
+								</div>
+							</div>
+							<div class="col-12 col-md-4">
+								<div class="text-center d-flex flex-column mb-50">
+									<div class="icon__cover" data-brk-library="component__services">
+										<a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+											<i class="fa fa-envelope" aria-hidden="true"></i>
+											<span class="before"></span><span class="after"></span>
+										</a>
+									</div>
+									<p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+										Email
+									</p>
+									<a href="mailto:info@domain.com" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+										info@domain.com
+									</a>
+								</div>
+							</div>
+							<hr class="horiz-line mt-0 mb-20">
+							<div class="text-center mb-25 w-100">
+								<p class="brk-white-font-color font__family-open-sans font__size-14">&#xA9; 2019 <span class="font__weight-bold">
+									The Lost Code Banders</span> All rights reserved
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</div><a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/jquery.themepunch.tools.min.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/jquery.themepunch.revolution.min.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.layeranimation.min.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.navigation.min.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.parallax.min.js}"></script>
+	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.slideanims.min.js}"></script>
+	<script>
+		var revapi19,
+			tpj;
+		(function() {
+			if (!/loaded|interactive|complete/.test(document.readyState)) document.addEventListener("DOMContentLoaded", onLoad);
+			else onLoad();
+
+			function onLoad() {
+				if (tpj === undefined) {
+					tpj = jQuery;
+					if ("off" == "on") tpj.noConflict();
+				}
+				if (tpj("#rev_slider_19_1").revolution == undefined) {
+					revslider_showDoubleJqueryError("#rev_slider_19_1");
+				} else {
+					revapi19 = tpj("#rev_slider_19_1").show().revolution({
+						sliderType: "standard",
+						jsFileLocation: "/visitor/vendor/revslider/js/",
+						sliderLayout: "fullscreen",
+						dottedOverlay: "none",
+						delay: 6000,
+						navigation: {
+							onHoverStop: "off",
+						},
+						responsiveLevels: [1240, 1024, 778, 480],
+						visibilityLevels: [1240, 1024, 778, 480],
+						gridwidth: [1200, 992, 768, 576],
+						gridheight: [868, 890, 960, 890],
+						lazyType: "none",
+						minHeight: "890",
+						parallax: {
+							type: "mouse",
+							origo: "slidercenter",
+							speed: 400,
+							speedbg: 300,
+							speedls: 300,
+							levels: [5, 8, 11, 14, 18, 30, 35, 40, 45, 46, 47, 48, 49, 50, 51, 55],
+						},
+						shadow: 0,
+						spinner: "spinner0",
+						stopLoop: "off",
+						stopAfterLoops: -1,
+						stopAtSlide: -1,
+						shuffle: "off",
+						autoHeight: "off",
+						fullScreenAutoWidth: "off",
+						fullScreenAlignForce: "off",
+						fullScreenOffsetContainer: "",
+						fullScreenOffset: "",
+						disableProgressBar: "on",
+						hideThumbsOnMobile: "off",
+						hideSliderAtLimit: 0,
+						hideCaptionAtLimit: 0,
+						hideAllCaptionAtLilmit: 0,
+						debugMode: false,
+						fallbacks: {
+							simplifyAll: "off",
+							nextSlideOnWindowFocus: "off",
+							disableFocusListener: false,
+						}
+					});
+				}; /* END OF revapi call */
+			}; /* END OF ON LOAD FUNCTION */
+		}()); /* END OF WRAPPING FUNCTION */
+	</script>
+</body>
+
+</html>

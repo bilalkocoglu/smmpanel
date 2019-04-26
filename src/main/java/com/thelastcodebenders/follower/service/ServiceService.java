@@ -162,11 +162,27 @@ public class ServiceService {
             List<Category> categories = categoryService.allCategory();
             for (Category category: categories) {
                 UserServicesListItem userServicesListItem = new UserServicesListItem();
-                userServicesListItem.setCategory(category);
+                userServicesListItem.setCategory(category);     //tüm kategoriler için bir item oluşturulur
+
+
+
+                /*
+                    bu kategoriye ait aktif bir kategori mevcutsa
+                    Kapmanyalar adında bir listsubitem oluşturulup userServicesListSubItems içine atılır
+                    bu item in services özelliğine paketler atılır.
+                 */
+                List<Package> packages = packageRepository.findByCategoryAndState(category, true);
+                if (!packages.isEmpty())
+                    userServicesListItem.setPackages(packages);
+                else
+                    userServicesListItem.setPackages(new ArrayList<>());
+
+
+                List<UserServicesListSubItem> userServicesListSubItems = new ArrayList<>();
 
                 List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategory(category.getId());
-                List<UserServicesListSubItem> userServicesListSubItems = new ArrayList<>();
                 for (SubCategory subcategory: subCategories) {
+                    //bütün alt kategoriler için birer servicesubitem oluşturulur ve içine servisler atılır
                     UserServicesListSubItem userServicesListSubItem = new UserServicesListSubItem();
                     userServicesListSubItem.setSubCategory(subcategory);
 

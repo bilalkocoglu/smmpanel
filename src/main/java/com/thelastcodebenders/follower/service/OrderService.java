@@ -5,6 +5,7 @@ import com.thelastcodebenders.follower.assembler.OrderAssembler;
 import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
+import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.model.Order;
@@ -152,6 +153,11 @@ public class OrderService {
         User user = userService.getAuthUser();
 
         return orderRepository.findByUser(user, new Sort(Sort.Direction.DESC, "id"));
+    }
+
+    public List<UserPageOrderDTO> getUserPageOrderByAuthUser() throws LoginException {
+        List<Order> orders = getOrdersByAuthUser();
+        return orderAssembler.convertOrdersToUserTypeOrders(orders);
     }
 
     public List<Order> getOrdersByUser(User user){

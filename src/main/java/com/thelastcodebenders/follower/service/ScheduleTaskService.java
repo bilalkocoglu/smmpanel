@@ -25,7 +25,7 @@ public class ScheduleTaskService {
         this.orderService = orderService;
     }
 
-    @Scheduled(fixedDelay = 27 * 60 * 1000, initialDelay = 7 * 60 * 1000)     //45 minutes
+    @Scheduled(fixedDelay = 27 * 60 * 1000, initialDelay = 45 * 60 * 1000)     //45 minutes
     public void servicesUpdate() {
         String message = apiService.allApiUpdateService();
 

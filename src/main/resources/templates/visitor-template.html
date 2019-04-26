@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head">
+        <title> İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli - Yeni trendiniz.</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="shortcut icon" th:href="@{/visitor/img/favicon.ico}">
+        <link rel="apple-touch-icon-precomposed" th:href="@{/visitor/img/favicon.ico}">
+        <meta name="theme-color" content="#2775FF">
+        <meta name="keywords" content="İnstagram takipçi, instagram takipçi satın al, twitter rt al, twitter takipçi, youtube izlenme, youtube abone satın al, takipçi satın al">
+        <meta name="description" content="Sitemimizden kayıt olmadan ya da panel sistemimizi kullanarak siz de artık fenomen olabilirsiniz. Hadi ne duruyorsun gir içeri.">
+        <link rel="stylesheet" id="brk-direction-bootstrap" th:href="@{/visitor/css/assets/bootstrap.css}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link rel="stylesheet" id="brk-skin-color" th:href="@{/visitor/css/skins/brk-blue.css}">
+        <link id="brk-base-color" rel="stylesheet" th:href="@{/visitor/css/skins/brk-base-color.css}">
+        <link rel="stylesheet" id="brk-direction-offsets" th:href="@{/visitor/css/assets/offsets.css}">
+        <link id="brk-css-min" rel="stylesheet" th:href="@{/visitor/css/assets/styles.min.css}">
+        <link rel="stylesheet" th:href="@{/visitor/vendor/revslider/css/settings.css}">
+    </head>
+
+    <div th:fragment="messages">
+        <div th:if="${successmessage != null}" class="alert alert-icon-left alert-success alert-dismissible mb-2" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span th:utext="${successmessage}"></span>
+        </div>
+        <div th:if="${errormessage != null}" class="alert bg-danger alert-icon-left alert-dismissible mb-2" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span th:utext="${errormessage}"></span>
+        </div>
+        <div th:if="${infomessage != null}" class="alert bg-info alert-icon-left alert-dismissible mb-2" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <span th:utext="${infomessage}"></span>
+        </div>
+    </div>
+</html>

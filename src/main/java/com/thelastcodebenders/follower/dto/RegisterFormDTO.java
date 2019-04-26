@@ -15,4 +15,5 @@ public class RegisterFormDTO {
     private String mail;
     private String number;
     private String password;
+    private String repairPass;
 }

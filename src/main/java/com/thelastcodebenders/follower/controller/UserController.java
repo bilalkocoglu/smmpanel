@@ -86,7 +86,7 @@ public class UserController {
         model.addAttribute("username", userService.getAuthUserName());
         model.addAttribute("userbalance", userService.getAuthUserBalance());
         model.addAttribute("page", "orders");
-        model.addAttribute("orders", orderService.getOrdersByAuthUser());
+        model.addAttribute("orders", orderService.getUserPageOrderByAuthUser());
         return "user-orders";
     }
 

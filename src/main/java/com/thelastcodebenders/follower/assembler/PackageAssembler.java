@@ -17,6 +17,7 @@ public class PackageAssembler {
                 .name(packageFormDTO.getName())
                 .price(packageFormDTO.getPrice())
                 .quantity(packageFormDTO.getQuantity())
+                .category(service.getSubCategory().getCategory())
                 .service(service)
                 .state(true)
                 .build();

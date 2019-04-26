@@ -25,7 +25,7 @@ public class UserAssembler {
                 .name(registerFormDTO.getName())
                 .number(registerFormDTO.getNumber())
                 .password(bCryptPasswordEncoder.encode(registerFormDTO.getPassword()))
-                .state(true)
+                .state(false)
                 .role(role)
                 .surname(registerFormDTO.getSurname())
                 .build();

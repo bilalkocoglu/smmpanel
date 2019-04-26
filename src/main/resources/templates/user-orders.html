@@ -53,7 +53,7 @@
                                     <td th:text="${order.getDate()}"></td>
                                     <td th:text="${order.getDestUrl()}"></td>
                                     <td th:text="${order.getCustomPrice()}"></td>
-                                    <td th:text="${order.getService().getSubCategory().getCategory().getName() + ' ' + order.getService().getCustomName()}"></td>
+                                    <td th:text="${order.getServiceName()}"></td>
                                     <td th:text="${order.getQuantity()}"></td>
                                     <td th:text="${order.getStartCount()}"></td>
                                     <td>

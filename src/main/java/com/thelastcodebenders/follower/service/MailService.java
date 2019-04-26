@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.enums.MailType;
+import com.thelastcodebenders.follower.model.Message;
 import com.thelastcodebenders.follower.model.User;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -64,7 +65,7 @@ public class MailService {
     }
 
     @Async
-    public void asynsSendMail(MailType mailType, User fromUser, User destUser){
+    public void asynsSendMail(MailType mailType, User fromUser, User destUser, String message){
         try {
             Map model = new HashMap();
             Template template = null;
@@ -91,6 +92,11 @@ public class MailService {
                 model.put("button_message","Ödeme bildiriminiz onaylandı ve bakiyeniz güncellendi. Şimdi özgürce alışveriş yapabilirsiniz !");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
+            }else if(mailType == MailType.ACCOUNTACTIVATE) {
+                subject = "SosyalTrend'e Hoşgeldiniz !";
+                model.put("button_message","Aramıza hoşgeldin ! Hesabını aktifleştirmek ve sosyal medyada yeni bir yüz olmak için butona tıkla !");
+                model.put("button_text", "AKTİFLEŞTİR");
+                model.put("button_href", HOST + "/account-activate/" + message);
             }else {
                 return;
             }

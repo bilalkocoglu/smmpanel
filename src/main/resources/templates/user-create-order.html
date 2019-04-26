@@ -54,6 +54,52 @@
                               <div th:id="'wrap' + ${item.getCategory().getName()}" role="tablist" aria-multiselectable="true">
 
                                   <div class="card" >
+                                      <span th:if="${!item.packages.isEmpty()}">
+										<a data-toggle="collapse"
+                                           th:attr="data-parent='#wrap' + ${item.getCategory().getName()},
+                                           aria-controls=${item.getCategory().getName() + 'PackageSub'}"
+                                           th:href="${'#' + item.getCategory().getName() + 'PackageSub'}"
+                                           aria-expanded="true" class="card-title lead clicks">
+                                            <div id="InstagramTakipciMain"  class="card-header card-header-collapse">
+                                                <span th:text="${item.getCategory().getName() + ' - Kampanyalar'}"></span>
+                                                <span style="float: right" class="badge badge-light" th:text="${item.getPackages().size()}"></span>
+                                        	</div>
+                                        </a>
+                                        <div th:id="${item.getCategory().getName() + 'PackageSub'}" role="tabpanel" class="collapse show">
+                                            <div class="card-body">
+                                              <div class="card-block">
+                                                        <div class="tab-pane" id="tabIcon1">
+                                                        <div id="InstagramTakipciServisMain" role="tablist" aria-multiselectable="true">
+                                                                        <table class="table table-responsive-sm">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th style="width: 120px;"></th>
+                                                                                    <th>Servis Adı</th>
+                                                                                    <th>Minimum</th>
+                                                                                    <th>Maksimum</th>
+                                                                                    <th>Fiyat</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <th>
+                                                                                        <button type="button" class="btn btn-raised gradient-mint white" data-toggle="modal" data-target="#large">
+                                                                                            <i class="icon-basket-loaded"></i> Sipariş Ver
+                                                                                        </button>
+                                                                                    </th>
+                                                                                    <th>100% Türk Takipçi</th>
+                                                                                    <td>100</td>
+                                                                                    <td>10000</td>
+                                                                                    <td>10 TL</td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                      </div>
+                                  	</span>
                                       <span th:each="subItem : ${item.getSubItems()}">
                                           <a data-toggle="collapse"
                                              th:attr="data-parent='#wrap' + ${subItem.getSubCategory().getCategory().getName()},

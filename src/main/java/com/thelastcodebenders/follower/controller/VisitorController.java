@@ -1,8 +1,6 @@
 package com.thelastcodebenders.follower.controller;
 
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
-import com.thelastcodebenders.follower.service.MailService;
-import com.thelastcodebenders.follower.service.RoleService;
 import com.thelastcodebenders.follower.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -17,21 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class VisitorController {
     private static final Logger log = LoggerFactory.getLogger(VisitorController.class);
 
-    private RoleService roleService;
     private UserService userService;
-    private MailService mailService;
 
-    public VisitorController(RoleService roleService,
-                             UserService userService,
-                             MailService mailService){
-        this.roleService = roleService;
+    public VisitorController(UserService userService){
         this.userService = userService;
-        this.mailService = mailService;
     }
 
     @GetMapping("/")
     public String home(Model model){
-        return "redirect:/login";
+        return "visitor-index";
     }
 
     @GetMapping("/login")
@@ -51,12 +44,12 @@ public class VisitorController {
         return "visitor-register";
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public String createUser(@ModelAttribute RegisterFormDTO registerFormDTO, RedirectAttributes redirectAttributes){
         try {
             boolean res = userService.saveUser(registerFormDTO);
             if (res){
-                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
+                redirectAttributes.addFlashAttribute("successmessage", "Kaydınız tamamlandı ! Hesabınızı onaylamanız için size bir mail gönderdik.");
                 return "redirect:/login";
             }
             else{
@@ -69,6 +62,24 @@ public class VisitorController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
             return "redirect:/registration";
+        }
+    }
+
+    @GetMapping("/account-activate/{code}")
+    public String accountActivateWithMail(@PathVariable("code") String secretKey, RedirectAttributes redirectAttributes){
+        try {
+            boolean res = userService.accountActivateWithMail(secretKey);
+            if (res){
+                redirectAttributes.addFlashAttribute("successmessage", "Hesabınız doğrulandı !");
+                return "redirect:/login";
+            } else
+                return "redirect:/";
+        }catch (Exception e){
+            if (e instanceof RuntimeException){
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+                return "redirect:/login";
+            }else
+                return "redirect:/";
         }
     }
 }

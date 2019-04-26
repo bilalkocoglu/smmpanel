@@ -23,6 +23,10 @@ public class Package {
     @JoinColumn(name = "fk_service")
     private Service service;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_category")
+    private Category category;
+
     private String name;
     private int quantity;
     private double price;

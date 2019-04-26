@@ -26,13 +26,16 @@ public class UserService {
     private UserRepository userRepository;
     private UserAssembler userAssembler;
     private RoleService roleService;
+    private AccountActivationService accountActivationService;
 
     public UserService(UserRepository userRepository,
                        UserAssembler userAssembler,
-                       RoleService roleService){
+                       RoleService roleService,
+                       AccountActivationService accountActivationService){
         this.userRepository = userRepository;
         this.userAssembler = userAssembler;
         this.roleService = roleService;
+        this.accountActivationService = accountActivationService;
     }
 
     public int userCount(){
@@ -159,20 +162,75 @@ public class UserService {
         }
     }
 
-    public boolean saveUser(RegisterFormDTO registerFormDTO){
+    private boolean registerFormValidation(RegisterFormDTO registerForm){
+        if ( isNullOrEmpty(registerForm.getMail()) || isNullOrEmpty(registerForm.getName())
+                || isNullOrEmpty(registerForm.getPassword())
+            || isNullOrEmpty(registerForm.getRepairPass()) || isNullOrEmpty(registerForm.getSurname())){
+            return false;
+        }
+
+        if ( !registerForm.getPassword().equals(registerForm.getRepairPass()) ){
+            return false;
+        }
+
+        return true;
+    }
+
+    private static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
+
+    public boolean saveUser(RegisterFormDTO registerForm){
         try {
-            List<User> users = userRepository.findByMail(registerFormDTO.getMail());
+            if (!registerFormValidation(registerForm)){
+                throw new RuntimeException("Tüm bilgileri doğru bir şekilde girmelisiniz !");
+            }
+
+            List<User> users = userRepository.findByMail(registerForm.getMail());
             if (users.size()>0){
                 throw new RuntimeException("Kayıt için girdiğiniz mail adresi kullanımda !");
             }
+
+
             Role role = roleService.findByRole(RoleType.USER);
-            User user = userAssembler.convertFormDtoToUser(registerFormDTO, role);
-            userRepository.save(user);
+            User user = userAssembler.convertFormDtoToUser(registerForm, role);
+            user = userRepository.save(user);
+            //aktivasyon kodu oluşturup asenkron mail gönder.
+
+            accountActivationService.generateSecretKey(user);
+
             return true;
         }catch (Exception e){
             if (e instanceof RuntimeException)
                 throw e;
             log.error("User Service Save User Error -> " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean accountActivateWithMail(String secketKey){
+        try {
+            User user = accountActivationService.getUserByKey(secketKey);
+
+            if (user == null){
+                log.error("User Null !");
+                return false;
+            }
+
+            if (user.isState()){
+                log.error("Kullanıcı zaten aktif !");
+                throw new RuntimeException("Mail adresi zaten onaylanmış !");
+            }
+
+            changeState(user.getId(), UserAction.ACTIVATE);
+
+            return true;        //success
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                throw e;
+            log.error("User Service Account Activate With Secret Error ! -> " + e.getMessage());
             return false;
         }
     }

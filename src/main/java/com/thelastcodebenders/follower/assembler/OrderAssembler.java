@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.assembler;
 
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
+import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.model.Order;
 import com.thelastcodebenders.follower.model.Service;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class OrderAssembler {
@@ -42,5 +45,27 @@ public class OrderAssembler {
                 .build();
 
         return order;
+    }
+
+    public List<UserPageOrderDTO> convertOrdersToUserTypeOrders(List<Order> orders){
+        List<UserPageOrderDTO> userPageOrders = new ArrayList<>();
+        for (Order order: orders) {
+            UserPageOrderDTO userPageOrder = UserPageOrderDTO.builder()
+                    .customPrice(order.getCustomPrice())
+                    .date(order.getDate())
+                    .destUrl(order.getDestUrl())
+                    .quantity(order.getQuantity())
+                    .remain(order.getRemain())
+                    .remainBalance(order.getRemainBalance())
+                    .serviceName(order.getService().getSubCategory().getCategory().getName() + ' ' + order.getService().getCustomName())
+                    .startCount(order.getStartCount())
+                    .status(order.getStatus())
+                    .id(order.getId())
+                    .build();
+
+            userPageOrders.add(userPageOrder);
+        }
+
+        return userPageOrders;
     }
 }
