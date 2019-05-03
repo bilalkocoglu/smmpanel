@@ -560,48 +560,48 @@ function isSafari() {
   brk_added_libraries = {},
   uniqueUrls = {
     // CSS
-    "css/assets/brk-header-elements.css": true,
-    "css/components/theme-options.css": true,
-    "css/components/accordions.css": true,
-    "css/components/tabs.css": true,
-    "css/components/buttons.css": true,
-    "css/components/pricing-tables.css": true,
-    "css/components/testimonials.css": true,
-    "css/components/CFA.css": true,
-    "css/components/form-controls.css": true,
-    "css/components/flip-boxes.css": true,
-    "css/components/elements.css": true,
-    "css/components/titles.css": true,
-    "vendor/fancybox/css/jquery.fancybox.min.css": true,
+    "/visitor/css/assets/brk-header-elements.css": true,
+    "/visitor/css/components/theme-options.css": true,
+    "/visitor/css/components/accordions.css": true,
+    "/visitor/css/components/tabs.css": true,
+    "/visitor/css/components/buttons.css": true,
+    "/visitor/css/components/pricing-tables.css": true,
+    "/visitor/css/components/testimonials.css": true,
+    "/visitor/css/components/CFA.css": true,
+    "/visitor/css/components/form-controls.css": true,
+    "/visitor/css/components/flip-boxes.css": true,
+    "/visitor/css/components/elements.css": true,
+    "/visitor/css/components/titles.css": true,
+    "/visitor/vendor/fancybox/css/jquery.fancybox.min.css": true,
     // JS
-    "js/assets/brk-customizer.js": true,
-    "js/assets/brk-header.js": true,
-    "js/components/accordions.js": true,
-    "js/components/tabs.js": true,
-    "js/components/buttons.js": true,
-    "js/components/form-controls.js": true,
-    "vendor/formStyler/js/jquery.formstyler.min.js": true,
+    "/visitor/js/assets/brk-customizer.js": true,
+    "/visitor/js/assets/brk-header.js": true,
+    "/visitor/js/components/accordions.js": true,
+    "/visitor/js/components/tabs.js": true,
+    "/visitor/js/components/buttons.js": true,
+    "/visitor/js/components/form-controls.js": true,
+    "/visitor/vendor/formStyler/js/jquery.formstyler.min.js": true,
     // TEST
-    "css/components/footer.css": true,
-    "css/components/image-map.css": true,
+    "/visitor/css/components/footer.css": true,
+    "/visitor/css/components/image-map.css": true,
     // TEST JS
-    "js/components/image-map.js": true,
-    "js/components/footer.js": true,
-    "js/components/parallax-video.js": true,
-    "js/components/sliders.js": true,
-    "js/components/breadcrumbs.js": true,
-    "js/components/info-box.js": true
+    "/visitor/js/components/image-map.js": true,
+    "/visitor/js/components/footer.js": true,
+    "/visitor/js/components/parallax-video.js": true,
+    "/visitor/js/components/sliders.js": true,
+    "/visitor/js/components/breadcrumbs.js": true,
+    "/visitor/js/components/info-box.js": true
   },
   lazyUrls = {
     "component__map": {
       "js": [
         "https://maps.googleapis.com/maps/api/js?key=" + Berserk.settings.gmap_api_key,
-        "js/components/google-maps.js"
+        "/visitor/js/components/google-maps.js"
       ]
     },
     "twitter_init": {
       "js": [
-        "js/assets/twitter-init.js"
+        "/visitor/js/assets/twitter-init.js"
       ]
     }
   },
@@ -768,17 +768,17 @@ function isSafari() {
         "/visitor/vendor/swiper/css/swiper.min.css"
       ],
       "js": [
-        "vendor/swiper/js/swiper.min.js",
+        "/visitor/vendor/swiper/js/swiper.min.js",
         "/visitor/js/assets/swiper-skin.js"
       ]
     },
     "slider__slick": {
       "css": [
-        "vendor/slickCarousel/css/slick.css",
+        "/visitor/vendor/slickCarousel/css/slick.css",
         "/visitor/css/components/sliders.css"
       ],
       "js": [
-        "vendor/slickCarousel/js/slick.min.js",
+        "/visitor/vendor/slickCarousel/js/slick.min.js",
         "/visitor/js/assets/sliders-skin.js"
       ]
     },
@@ -962,7 +962,7 @@ function isSafari() {
         "/visitor/css/components/form-controls.css"
       ],
       "js": [
-        "vendor/formStyler/js/jquery.formstyler.min.js",
+        "/visitor/vendor/formStyler/js/jquery.formstyler.min.js",
         "/visitor/js/components/form-controls.js"
       ]
     },

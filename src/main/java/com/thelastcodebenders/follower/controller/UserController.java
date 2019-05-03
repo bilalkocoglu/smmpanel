@@ -3,8 +3,6 @@ package com.thelastcodebenders.follower.controller;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
-import com.thelastcodebenders.follower.model.Announcement;
-import com.thelastcodebenders.follower.model.Service;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +27,7 @@ public class UserController {
     private BankAccountService bankAccountService;
     private TicketService ticketService;
     private OrderService orderService;
+    private PackageService packageService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -37,7 +36,8 @@ public class UserController {
                           PaymentNotificationService paymentNotificationService,
                           BankAccountService bankAccountService,
                           TicketService ticketService,
-                          OrderService orderService){
+                          OrderService orderService,
+                          PackageService packageService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -46,6 +46,7 @@ public class UserController {
         this.bankAccountService = bankAccountService;
         this.ticketService = ticketService;
         this.orderService = orderService;
+        this.packageService = packageService;
     }
 
     //USER INDEX
@@ -61,6 +62,7 @@ public class UserController {
         model.addAttribute("page", "homepage");
         return "user-index";
     }
+
 
 
     //USER SERVİCES
@@ -79,6 +81,12 @@ public class UserController {
         return serviceService.createUserPageServiceFormat(id);
     }
 
+    @GetMapping("/services/package")    //AJAX PACKAGE
+    public @ResponseBody UserPagePackageDTO packageById(@RequestParam("packageId") long id){
+        return packageService.createUserPageServiceFormat(id);
+    }
+
+
 
     //USER ORDERS
     @GetMapping("/orders")      //ORDER PAGE
@@ -95,18 +103,45 @@ public class UserController {
                                  @PathVariable("serviceId") long serviceId,
                                  RedirectAttributes redirectAttributes){
         try {
-            boolean res = orderService.createOrder(orderForm, serviceId);
-            if (res)
+            boolean res = orderService.createServiceOrder(orderForm, serviceId);
+            if (res){
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
-            else
+                return "redirect:/user/orders";
+            }
+            else{
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
+                return "redirect:/user/services";
+            }
         }catch (Exception e){
             if (e instanceof RuntimeException){
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             }else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
+            return "redirect:/user/services";
         }
-        return "redirect:/user/orders";
+    }
+
+    @PostMapping("/order/package/{packageId:.*}")        //CREATE ORDER PACKAGE
+    public String createNewPackageOrder(@ModelAttribute NewOrderFormDTO orderForm,
+                                        @PathVariable("packageId") long packageId,
+                                        RedirectAttributes redirectAttributes){
+        try {
+            boolean res = orderService.createPackageOrder(orderForm, packageId);
+            if (res){
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
+                return "redirect:/user/orders";
+            }
+            else{
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
+                return "redirect:/user/services";
+            }
+        }catch (Exception e){
+            if (e instanceof RuntimeException){
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            }else
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
+            return "redirect:/user/services";
+        }
     }
 
 
@@ -198,6 +233,7 @@ public class UserController {
     }
 
 
+
     //USER LOAD BALANCE
     @GetMapping("/load-balance")
     public String loadBalance(Model model) throws LoginException {
@@ -206,5 +242,4 @@ public class UserController {
         model.addAttribute("page", "loadbalance");
         return "user-load-balance";
     }
-
-}
+    }

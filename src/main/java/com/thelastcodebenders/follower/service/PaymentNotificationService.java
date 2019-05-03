@@ -98,7 +98,7 @@ public class PaymentNotificationService {
                 if (!res)
                     return false;
                 paymentNotification = paymentNotificationRepository.save(paymentNotification);
-                mailService.asynsSendMail(MailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser(), "");
+                mailService.asyncSendMail(MailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser(), "");
                 return true;
             }else {
                 log.error("Payment Notification Error ! - Boyle bir odeme bildirimi bulunamadi !");
@@ -122,7 +122,7 @@ public class PaymentNotificationService {
 
         paymentNotification = paymentNotificationRepository.save(paymentNotification);
         if (paymentNotification != null){
-            mailService.asynsSendMail(MailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
+            mailService.asyncSendMail(MailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
             return true;
         }
         else{

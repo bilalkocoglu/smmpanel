@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+<div class="main-page">
+	<div th:replace="visitor-template :: mobile-header"></div>
+
+	<header th:replace="visitor-template :: header"></header>
+	<h1 class="sr-only">SMM PANEL</h1>
+	<div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css"><span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+		<div class="breadcrumbs__wrapper">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-12 col-lg-6">
+						<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+							<h2 class="brk-white-font-color font__weight-semibold font__size-48 line__height-68 font__family-montserrat">
+								<span th:text="${category.getName()}"></span> Paketleri
+							</h2>
+						</div>
+					</div>
+					<div class="col-12 col-lg-6">
+						<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+							<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-15 line__height-21 text-uppercase mb-15">
+								<span th:text="${category.getName()}"></span> TAKİPÇİ - <span th:text="${category.getName()}"></span> BEĞENİ - <span th:text="${category.getName()}"></span> İZLENME
+							</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="main-wrapper">
+		<main class="main-container mb-70 mt-md-50">
+			<section>
+				<div class="brk-tabs brk-tabs_tabbed-intro" data-index="1" data-brk-library="component__tabbed_contents">
+					<ul class="brk-tabs-nav" id="liste">
+						<li th:each="packageItem : ${packageItems}"
+							class="brk-tab" th:classappend="${packageItem.isFirst()} ? listeclick: null">
+							<span th:if="${#strings.equals(packageItem.getSubCategory().getName(), 'Takipçi')}">
+								<i class="fas fa-user-plus"></i>
+							</span>
+							<span th:if="${#strings.equals(packageItem.getSubCategory().getName(), 'Yorum')}">
+								<i class="fas fa-comment"></i>
+							</span>
+							<span th:if="${#strings.equals(packageItem.getSubCategory().getName(), 'Izlenme')}">
+								<i class="fas fa-eye"></i>
+							</span>
+							<span th:if="${#strings.equals(packageItem.getSubCategory().getName(), 'Begeni')}">
+								<i class="fas fa-thumbs-up"></i>
+							</span>
+							<span><span th:text="${category.getName()}"></span> <span th:text="${packageItem.getSubCategory().getName()}"></span></span>
+						</li>
+					</ul>
+					<div class="brk-tabs-content position-relative">
+						<div th:each="packageItem : ${packageItems}" class="brk-tab-item">
+							<div class="container mb-140">
+								<article th:each="pkg : ${packageItem.getPackages()}" class="brk-pricing-horizontal brk-base-box-shadow" data-brk-library="component__pricing_table,component__button">
+									<span class="before brk-base-bg-gradient-brown"></span>
+									<div class="brk-pricing-horizontal__container">
+										<h2 class="sr-only">
+											<span th:text="${category.getName()}"></span> <span th:text="${packageItem.getSubCategory().getName()}"></span> Satın Al
+										</h2>
+										<div class="brk-pricing-horizontal__viewed">
+											<h3 class="font__family-montserrat font__weight-bold font__size-12" th:text="${pkg.getName()}">
+												Silver
+											</h3>
+										</div>
+										<div class="brk-pricing-horizontal__info">
+											<div class="brk-pricing-horizontal__img-icon">
+												<img class="img-icon lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+											</div>
+											<div class="brk-pricing-horizontal__price">
+												<span class="sign">₺</span>
+												<span class="font__family-montserrat font__weight-bold font__size-40 line__height-50" th:text="${pkg.getPrice()}"></span>
+											</div>
+											<div class="brk-pricing-horizontal__list-options font__family-roboto font__weight-light font__size-15 line__height-28"
+												 th:utext="${pkg.getDescription()}"></div>
+										</div>
+										<button class="h-button btn font__family-montserrat font__weight-bold">
+											<span class="before brk-bg-grad"></span> <strong>SİPARİŞ VER</strong> <i class="fa fa-angle-right"></i>
+										</button>
+									</div>
+								</article>
+							</div>
+						</div>
+						<div class="brk-base-bg-gradient-14 brk-layer position-absolute opacity-90"></div>
+					</div>
+				</div>
+			</section>
+
+		</main>
+	</div>
+</div>
+
+<div class="container mt-70 mt-md-80 pt-50">
+	<div class="accordion accordion-slider-min" role="tablist" aria-multiselectable="true" data-brk-library="component__accordions">
+		<div class="card">
+			<div class="card-header" role="tab" id="heading2Min">
+				<h5 class="mb-0 font__family-montserrat font__weight-light font__size-21 line__height-22"><a data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="false" aria-controls="collapse2Min">İnstagram Takipçi Satın Al</a></h5><a class="card-toggle-icon collapsed" data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="true" aria-controls="collapse2Min"><span class="before"></span> <span class="after"></span></a>
+			</div>
+			<div id="collapse2Min" class="collapse" role="tabpanel" aria-labelledby="heading2Min">
+				<div class="card-block text-left font__family-open-sans">
+					<h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">Some title goes here</h4>
+					<p class="mt-25 font__size-15">Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.</p>
+					<p class="mt-25 font__size-15">Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer th:replace="visitor-template :: footer"></footer>
+<a href="#top" id="toTop"></a>
+<script th:src="@{/visitor/js/scripts.js}"></script>
+<script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+<script>
+	$(document).ready(function(){
+		$("#liste").find("li.listeclick").trigger("click");
+	})
+</script>
+</body>
+
+</html>

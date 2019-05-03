@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+  
+<head th:replace="admin-template :: head"></head>
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="admin-template :: sidebar"></div>
+      <!-- / main menu-->
+
+      <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+          <nav th:replace="admin-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+        <!-- Navbar (Header) Ends-->
+
+        <div class="main-content">
+          <div class="content-wrapper"><!--Statistics cards Starts-->
+              <div th:replace="admin-template :: messages"></div>
+              <div class="row">
+                  <div class="col-3">
+                      <div class="card">
+                          <div class="card-header">
+                              <p style="font-size: medium; font-weight: bold" class="card-title">Kategori Makaleleri</p>
+                          </div>
+                          <div class="card-body" style="overflow-y: auto; overflow-x: hidden; max-height:300px; height: auto!important;">
+                              <table class="table table-responsive-sm text-center">
+                                  <thead>
+                                  <tr>
+                                      <th>Kategori</th>
+                                      <th>Action</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr th:each="article : ${articles}">
+                                          <td th:text="${article.getCategory().getName()}"></td>
+                                          <td>
+                                              <a th:href="${'/admin/article/edit/' + article.getCategory().getId()}" class="success p-0" data-original-title="" title="Edit">
+                                                  <i class="ft-edit-2 font-medium-3 mr-2"></i>
+                                              </a>
+                                          </td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-9">
+                      <div class="card" th:if="${emptyArticleForm != null}">
+                          <form class="form" id="form" th:action="@{/admin/article/create}" th:object="${emptyArticleForm}" method="post">
+                              <div class="card-header">
+                                  <p>
+                                      <button type="submit"
+                                         style="float: right; margin: 0px; color: white; border: none;"
+                                         class="btn gradient-harmonic-energy">
+                                          Yayınla
+                                      </button>
+                                  </p>
+                              </div>
+                              <div class="card-body">
+                                  <div class="px-3">
+
+                                          <div class="form-body">
+                                              <div class="row">
+                                                  <div class="col-md-12">
+                                                      <div class="form-group">
+                                                          <label for="categorySelect">Kategori</label>
+                                                          <select id="categorySelect" name="category" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
+                                                              <option value="0" disabled="disabled" selected="selected" >Seçim Yapınız !</option>
+                                                              <option th:each="emptyctg : ${emptyCategories}"
+                                                                      th:value="${emptyctg.getId()}"
+                                                                      th:text="${emptyctg.getName()}"></option>
+                                                          </select>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="basicTextarea">Makale</label>
+                                                  <textarea id="basicTextarea" name="article" rows="6" required class="form-control"></textarea>
+                                              </div>
+                                          </div>
+
+                                  </div>
+                              </div>
+                          </form>
+
+                      </div>
+                      <div class="card" th:if="${emptyArticleForm == null}">
+                          <form class="form" id="form1" action="#" th:object="${selectedarticle}" method="post">
+
+                              <div class="card-header">
+                                  <p>
+                                      <button type="submit"
+                                              style="float: right; margin: 0px; color: white; border: none;"
+                                              class="btn gradient-harmonic-energy">
+                                          Güncelle
+                                      </button>
+                                  </p>
+                              </div>
+                              <div class="card-body">
+                                  <div class="px-3">
+
+                                      <div class="form-body">
+                                          <div class="row">
+                                              <div class="col-md-12">
+                                                  <div class="form-group">
+                                                      <label for="categorySelect">Kategori</label>
+                                                      <select id="categorySelect" name="category" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
+                                                          <option value="0" disabled="disabled" selected="selected" >Seçim Yapınız !</option>
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <div class="form-group">
+                                              <label for="basicTextarea">Makale</label>
+                                              <textarea th:field="*{article}" id="basicTextarea" rows="6" required class="form-control"></textarea>
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+                          </form>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/datatable/datatables.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/data-tables/datatable-styling.js}" type="text/javascript"></script>
+    <script src="https://cdn.ckeditor.com/4.11.4/full/ckeditor.js"></script>
+
+    <script>
+        CKEDITOR.replace('basicTextarea');
+        $("#form").submit( function(e) {
+
+            var messageLength = CKEDITOR.instances['basicTextarea'].getData().replace(/<[^>]*>/gi, '').length;
+
+            if ( $('#categorySelect').val() === null ){
+                alert( 'Kategori seçmelisiniz !' );
+                e.preventDefault();
+                return;
+            }
+
+            if( !messageLength ) {
+                alert( 'Makale kısmını boş bırakamazsınız !' );
+                e.preventDefault();
+                return;
+            }
+        });
+    </script>
+
+  </body>
+
+</html>

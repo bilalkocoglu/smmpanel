@@ -1,8 +1,10 @@
 package com.thelastcodebenders.follower.assembler;
 
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
+import com.thelastcodebenders.follower.dto.UserPagePackageDTO;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.Service;
+import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,16 @@ public class PackageAssembler {
                 .category(service.getSubCategory().getCategory())
                 .service(service)
                 .state(true)
+                .build();
+    }
+
+    public UserPagePackageDTO convertPackageToUserPage(Package pkg){
+        return UserPagePackageDTO.builder()
+                .description(pkg.getDescription())
+                .id(pkg.getId())
+                .name(pkg.getCategory().getName() + " - " +pkg.getName())
+                .price(pkg.getPrice())
+                .quantity(pkg.getQuantity())
                 .build();
     }
 }

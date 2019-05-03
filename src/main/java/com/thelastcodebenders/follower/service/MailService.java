@@ -65,7 +65,12 @@ public class MailService {
     }
 
     @Async
-    public void asynsSendMail(MailType mailType, User fromUser, User destUser, String message){
+    public void acyncSendMail(String subject, String destination, String body){
+        sendMail(subject,destination,body);
+    }
+
+    @Async
+    public void asyncSendMail(MailType mailType, User fromUser, User destUser, String message){
         try {
             Map model = new HashMap();
             Template template = null;

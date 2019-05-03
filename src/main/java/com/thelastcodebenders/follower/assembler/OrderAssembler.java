@@ -4,6 +4,7 @@ import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.model.Order;
+import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.Service;
 import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
@@ -19,9 +20,15 @@ import java.util.List;
 public class OrderAssembler {
     private static final Logger log = LoggerFactory.getLogger(OrderAssembler.class);
 
-    public Order convertFormDtoToOrder(NewOrderFormDTO newOrderFormDTO, User user, Service service){
+    private String dateTimeNow(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String date = LocalDateTime.now().format(formatter);
+
+        return date;
+    }
+
+    public Order convertFormDtoToServiceOrder(NewOrderFormDTO newOrderFormDTO, User user, Service service){
+        String date = dateTimeNow();
 
         double apiPrice = newOrderFormDTO.getQuantity() * (service.getApiPrice() / 1000);
         double customPrice = newOrderFormDTO.getQuantity() * (service.getCustomPrice() / 1000);
@@ -44,6 +51,33 @@ public class OrderAssembler {
                 .startCount(0)
                 .build();
 
+        return order;
+    }
+
+    public Order convertFormDTOToPackageOrder(NewOrderFormDTO newOrderFormDTO, User user, Package pkg){
+        String date = dateTimeNow();
+
+        double apiPrice = pkg.getQuantity() * (pkg.getService().getApiPrice() / 1000);
+        double customPrice = pkg.getPrice();
+
+        apiPrice = Double.parseDouble(String.format("%.2f", apiPrice));
+        customPrice = Double.parseDouble(String.format("%.2f", customPrice));
+
+        Order order = Order.builder()
+                .destUrl(newOrderFormDTO.getUrl())
+                .service(pkg.getService())
+                .quantity(pkg.getQuantity())
+                .user(user)
+                .date(date)
+                .customPrice(customPrice)
+                .apiPrice(apiPrice)
+                .closed(false)
+                .packagee(pkg)
+                .remain(0)
+                .remainBalance(0)
+                .startCount(0)
+                .status(OrderStatusType.PENDING)
+                .build();
         return order;
     }
 

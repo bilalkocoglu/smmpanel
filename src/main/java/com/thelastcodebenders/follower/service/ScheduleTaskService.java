@@ -25,20 +25,27 @@ public class ScheduleTaskService {
         this.orderService = orderService;
     }
 
-    @Scheduled(fixedDelay = 27 * 60 * 1000, initialDelay = 45 * 60 * 1000)     //45 minutes
+    @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)     //45 minutes
     public void servicesUpdate() {
+        //long startTime = System.nanoTime();
         String message = apiService.allApiUpdateService();
 
-        if (message.equals(""))
-            message = "Servisler başarılı şekilde güncellendi, servislerde bir değişiklik görülmedi.";
+        if (!message.equals("")){
+            User admin = userService.getAdmin();
 
-        User admin = userService.getAdmin();
+            mailService.sendUpdateServiceStateMail(admin.getMail(), message);
+        }else {
+            log.info("Servisler başarılı şekilde güncellendi ! Değişiklik görülmedi !");
+        }
 
-        mailService.sendUpdateServiceStateMail(admin.getMail(), message);
+        //long endTime = System.nanoTime();
+        //long totalTime = endTime - startTime;
+        //System.out.println("Total Time => " + totalTime);
     }
 
     @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)
     public void updateActiveOrderStatus(){
+        log.info("All Order Update !");
         orderService.updateActiveOrderStatus();
     }
 }

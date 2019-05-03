@@ -179,7 +179,7 @@ public class TicketService {
             try {
                 message = messageRepository.save(message);
 
-                mailService.asynsSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), ticket.getFromUser(),"");
+                mailService.asyncSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), ticket.getFromUser(),"");
                 //burada ortadaki user kullanılmadığı için sallama verilmiştir normalde işlemi yapan admindir.
 
                 return true;
@@ -191,7 +191,7 @@ public class TicketService {
             Message message = messageAssembler.convertStringToMessage(messageBody, true, ticket);
             try {
                 message = messageRepository.save(message);
-                mailService.asynsSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
+                mailService.asyncSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
                 return true;
             }catch (Exception e){
                 log.error("Ticket Service Response Ticket Error -> " + e.getMessage());
@@ -227,7 +227,7 @@ public class TicketService {
         if (admin == null){
             log.error("Cant Send Mail Because Admin Not Found !");
         }else {
-            mailService.asynsSendMail(MailType.CREATETICKET, user, admin,"");
+            mailService.asyncSendMail(MailType.CREATETICKET, user, admin,"");
         }
 
         return true;

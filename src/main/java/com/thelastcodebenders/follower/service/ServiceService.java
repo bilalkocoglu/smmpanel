@@ -71,7 +71,7 @@ public class ServiceService {
                 return opt.get();
             else {
                 log.error("Service Service Find By Id Error");
-                throw new RuntimeException("Düzenlemek istediğiniz servis bulunamadı !");
+                throw new RuntimeException("Servis bulunamadı !");
             }
         }catch (Exception e){
             if ((e instanceof RuntimeException)){

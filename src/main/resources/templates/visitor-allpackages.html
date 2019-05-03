@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div th:replace="visitor-template :: mobile-header"></div>
+		<header th:replace="visitor-template :: header"></header>
+
+
+		<h1 class="sr-only">SMM PANEL</h1>
+	<div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css"><span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+		<div class="breadcrumbs__wrapper">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-12 col-lg-6">
+						<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+							<h2 class="brk-white-font-color font__weight-semibold font__size-48 line__height-68 font__family-montserrat">
+								Tüm Paketlerimiz
+							</h2>
+						</div>
+					</div>
+					<div class="col-12 col-lg-6">
+						<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+							<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">
+								Tüm Paketlerimize göz atın
+							</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="main-wrapper">
+
+		<main class="main-container mb-70 mt-md-500">
+			<div class=" mt-md-500">
+				<div class="container mt-70 mt-md-500">
+					<div th:replace="visitor-template :: messages"></div>
+
+					<div class="row">
+						<div th:each="category : ${categories}" class="col-md-6 col-xl-3">
+							<figure class="shape-box__wrapper-wave text-center" data-brk-library="component__shape_box">
+								<span class="before"></span>
+								<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/hizmetarka.jpg" class="lazyload" alt="alt">
+								<div class="brk-abs-overlay z-index-0 bg-black opacity-60"></div>
+								<figcaption><span class="wave-circle-1"></span>
+									<div class="icon"><i class="fas fa-store"></i></div>
+									<h4 th:text="${category.getName()}" class="font__family-montserrat font__weight-bold font__size-24 text-uppercase main-title"></h4>
+									<p class="main-description font__family-open-sans font__size-14 text-gray">
+										<span th:text="${category.getName()}"></span> beğeni, takipçi, izlenme vb. paketlerimize göz atmak için tıklayın.
+									</p>
+									<a th:href="@{'/package/' + ${category.getName()} + '-paketleri'}" class="btn btn-inside-out btn-lg border-radius-30 font__weight-bold" data-brk-library="component__button">
+										<span class="before" th:text="${category.getName()}"></span>
+										<span class="text">GÖZ AT</span>
+										<span class="after" th:text="${category.getName()}">İNSTAGRAM</span>
+									</a>
+									<span class="wave-circle-2"></span>
+									<span class="after">
+                                    	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 113">
+											<defs>
+												<style>.cls-1 {
+													isolation: isolate;
+												}
+
+												.cls-2 {
+													fill: #fff;
+													fill-rule: evenodd;
+												}</style>
+                                           </defs>
+											<title>Asset 2</title>
+											<g>
+												<g class="cls-1">
+													<g>
+														<path class="cls-2" d="M0,0V113S11.42,90.78,62,90.78,124.54,113,174,113s71.05-27,96-27V0Z" />
+													</g>
+												</g>
+											</g>
+										</svg>
+									</span>
+								</figcaption>
+							</figure>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+    </div>
+	<footer th:replace="visitor-template :: footer"></footer>
+
+	<a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+</body>
+
+</html>

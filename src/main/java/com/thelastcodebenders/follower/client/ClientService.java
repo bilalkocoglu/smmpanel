@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.client;
 
 import com.thelastcodebenders.follower.assembler.ServiceAssembler;
 import com.thelastcodebenders.follower.client.dto.*;
+import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.model.API;
 import com.thelastcodebenders.follower.model.Order;
 import org.slf4j.Logger;
@@ -68,6 +69,7 @@ public class ClientService {
             for (ServiceClientDTO serviceClientDTO : serviceClientDTOList) {
                 services.add(serviceAssembler.convertClientDtoToService(serviceClientDTO, api));
             }
+
             return services;
         }catch (Exception e){
             log.error("Client Service getAllServices Error -> " + e.getMessage());
@@ -75,16 +77,30 @@ public class ClientService {
         }
     }
 
-    public String createOrderReturnOrderId(Order order){
+    public String createOrderReturnOrderId(Order order, CreateAPIOrderType orderType){
         try {
-            CreateOrderRequest createOrderRequest = CreateOrderRequest.builder()
-                    .key(order.getService().getApi().getSecretKey())
-                    .action("add")
-                    .service(order.getService().getApiServiceId())
-                    .link(order.getDestUrl())
-                    .quantity(String.valueOf(order.getQuantity()))
-                    .build();
-            String url = order.getService().getApi().getUrl();
+            CreateOrderRequest createOrderRequest = null;
+            String url = null;
+
+            if (orderType == CreateAPIOrderType.SERVICE){
+                createOrderRequest = CreateOrderRequest.builder()
+                        .key(order.getService().getApi().getSecretKey())
+                        .action("add")
+                        .service(order.getService().getApiServiceId())
+                        .link(order.getDestUrl())
+                        .quantity(String.valueOf(order.getQuantity()))
+                        .build();
+                url = order.getService().getApi().getUrl();
+            }else if(orderType == CreateAPIOrderType.PACKAGE){
+                createOrderRequest = CreateOrderRequest.builder()
+                        .key(order.getPackagee().getService().getApi().getSecretKey())
+                        .action("add")
+                        .service(order.getPackagee().getService().getApiServiceId())
+                        .link(order.getDestUrl())
+                        .quantity(String.valueOf(order.getPackagee().getQuantity()))
+                        .build();
+                url = order.getPackagee().getService().getApi().getUrl();
+            }
 
             ResponseEntity<CreateOrderResponse> response = restTemplate.postForEntity(url, createOrderRequest, CreateOrderResponse.class);
 

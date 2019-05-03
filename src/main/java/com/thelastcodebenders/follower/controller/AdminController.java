@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.controller;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.thelastcodebenders.follower.dto.ChatMessageDTO;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
@@ -38,6 +39,7 @@ public class AdminController {
     private CategoryService categoryService;
     private PackageService packageService;
     private OrderService orderService;
+    private CategoryArticleService categoryArticleService;
 
     public AdminController(TicketService ticketService,
                            PaymentNotificationService paymentNotificationService,
@@ -50,7 +52,8 @@ public class AdminController {
                            AnnouncementService announcementService,
                            CategoryService categoryService,
                            PackageService packageService,
-                           OrderService orderService){
+                           OrderService orderService,
+                           CategoryArticleService categoryArticleService){
         this.ticketService = ticketService;
         this.paymentNotificationService = paymentNotificationService;
         this.userService = userService;
@@ -63,6 +66,7 @@ public class AdminController {
         this.categoryService = categoryService;
         this.packageService = packageService;
         this.orderService = orderService;
+        this.categoryArticleService = categoryArticleService;
     }
 
     //  ADMIN INDEX
@@ -634,6 +638,50 @@ public class AdminController {
         else
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
         return "redirect:/admin/tickets";
+    }
+
+
+
+    //ADMIN CATEGORY ARTICLE
+    @GetMapping("/articles")            //CATEGORY ARTICLE PAGE
+    public String articles(Model model){
+        model.addAttribute("emptyArticleForm", new CategoryArticle());
+        model.addAttribute("emptyCategories", categoryArticleService.emptyCategories());
+        model.addAttribute("articles", categoryArticleService.findAll());
+        model.addAttribute("page", "articles");
+        return "admin-articles";
+    }
+
+    @PostMapping("/article/create")     //CREATE CATEGORY ARTICLE
+    public String createArticles(RedirectAttributes redirectAttributes,
+                                 @ModelAttribute CategoryArticle categoryArticle){
+        try {
+            boolean res = categoryArticleService.save(categoryArticle);
+            if (res)
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleşti !");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+        }catch (Exception e){
+            log.error("/admin/article/create Error -> " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+        }
+
+        return "redirect:/admin/articles";
+    }
+
+    @GetMapping("/article/edit/{categoryId:.*}")
+    public String editArticlePage(Model model,
+                                  @PathVariable("categoryId") long categoryId,
+                                  RedirectAttributes redirectAttributes){
+        try {
+            model.addAttribute("selectedarticle", categoryArticleService.findByCategoryId(categoryId));
+            model.addAttribute("articles", categoryArticleService.findAll());
+            model.addAttribute("page", "articles");
+            return "admin-articles";
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errrormessage", e.getMessage());
+            return "redirect:/admin/articles";
+        }
     }
 
 }

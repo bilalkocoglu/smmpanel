@@ -260,6 +260,10 @@ public class ApiService {
             for (API api: apis) {
                 List<Service> apiServices = clientService.getAllServices(api);
 
+                if (apiServices == null){
+                    throw new RuntimeException("Api'den Servisler çekilemedi !");
+                }
+
                 Stack<Service> stackApiServices = new Stack<>();
                 stackApiServices.addAll(apiServices);
 
@@ -305,8 +309,8 @@ public class ApiService {
                             serviceRepository.save(equivalentService);
                         }else if (equivalentService.getState() == ServiceState.DELETED){
                             equivalentService.setState(ServiceState.PASSIVE);
-                            serviceRepository.save(equivalentService);
                             log.info("Api Service Update Service Method -> " + equivalentService.getId() + "-Idli serviste apiden gelen değişiklikler mevcut. Servislerinizi ve paketlerinizi kontrol ediniz !");
+                            serviceRepository.save(equivalentService);
                             updatedServices.add(equivalentService.getId());
                         }
                     }
@@ -322,9 +326,9 @@ public class ApiService {
                                 pkg.setState(false);
                             }
                             packageService.saveAll(packages);
+                            log.info("Api Service Update Service Method -> " + service.getId() + "Idli servis artık apiden gelmiyor. Servislerinizi ve paketlerinizi kontrol ediniz !");
                             serviceRepository.save(service);
                             deletedServices.add(service.getId());
-                            log.info("Api Service Update Service Method -> " + service.getId() + "Idli servis artık apiden gelmiyor. Servislerinizi ve paketlerinizi kontrol ediniz !");
                         }
                     }
                 }

@@ -8,6 +8,7 @@ import com.thelastcodebenders.follower.repository.SubCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.event.PublicInvocationEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,8 @@ public class CategoryService {
         return Stream.of("Id", "Category", "Action").collect(Collectors.toList());
     }
 
+
+
     public List<SubCategory> allSubcategory(){
         return subCategoryRepository.findAll(new Sort(Sort.Direction.ASC, "category"));
     }
@@ -46,6 +49,7 @@ public class CategoryService {
     public List<Category> allCategory(){
         return categoryRepository.findAll();
     }
+
 
     private boolean isAlreadySubCategory(Category category, String name){
         List<SubCategory> subCategories = subCategoryRepository.findByCategory(category);
@@ -57,6 +61,16 @@ public class CategoryService {
 
         return false;
     }
+
+    private boolean isAlreadyCategory(String categoryName){
+        List<Category> categories = categoryRepository.findByName(categoryName);
+
+        if (categories.isEmpty())
+            return false;
+        else
+            return true;
+    }
+
 
     public boolean saveSubcategory(SubCategory subCategory, String strId){
         try {
@@ -81,15 +95,6 @@ public class CategoryService {
         }
     }
 
-    private boolean isAlreadyCategory(String categoryName){
-        List<Category> categories = categoryRepository.findByName(categoryName);
-
-        if (categories.isEmpty())
-            return false;
-        else
-            return true;
-    }
-
     public boolean saveCategory(Category category){
         try {
             if (isAlreadyCategory(category.getName()))
@@ -108,6 +113,7 @@ public class CategoryService {
             return false;
         }
     }
+
 
     public boolean deleteSubcategory(long subcategoryId){
         try {
@@ -147,6 +153,7 @@ public class CategoryService {
         }
     }
 
+
     public SubCategory findSubCategoryById(long subcategoryId){
         try {
             Optional<SubCategory> opt = subCategoryRepository.findById(subcategoryId);
@@ -172,6 +179,54 @@ public class CategoryService {
             return null;
         }else {
             return subCategoryRepository.findByCategory(opt.get());
+        }
+    }
+
+    public Category findCategoryByName(String name) {
+        List<Category> categories = categoryRepository.findByName(name);
+        if (categories.isEmpty()){
+            log.error("Category Service Find Category By Name Error => Not Found !");
+            return null;
+        }else {
+            return categories.get(0);
+        }
+    }
+
+    public Category findCategoryById(long categoryId){
+        Optional<Category> opt = categoryRepository.findById(categoryId);
+        if (opt.isPresent())
+            return opt.get();
+        else {
+            log.error("Category Service findCategoryById Error -> Category Not Found !");
+            return null;
+        }
+    }
+
+
+    public Category visitorPackagePageCategory(String categoryUrlName){
+        try {
+            String[] parse = categoryUrlName.split("-");
+            if (parse.length<2){
+                log.error("Package Service Visitor Package Error -> CategoryUrlName Parse < 2 !");
+                throw new RuntimeException("Kategori bulunamadı !");
+            }else if(!parse[1].equals("paketleri")){
+                log.error("Package Service Visitor Package Error -> CategoryUrlName Parse[0] != paketleri !");
+                throw new RuntimeException("Kategori bulunamadı !");
+            }else {
+                String categoryName = parse[0];
+                Category category = findCategoryByName(categoryName);
+                if (category == null){
+                    log.error("Package Service Visitor Package Error -> Category Not Found !");
+                    throw new RuntimeException("Kategori bulunamadı !");
+                }else {
+                    return category;
+                }
+            }
+        }catch (Exception e){
+            if(e instanceof RuntimeException)
+                throw e;
+            log.error("Package Service Visitor Package Error -> " + e.getMessage());
+            throw new RuntimeException("Kategori bulunamadı !");
         }
     }
 }

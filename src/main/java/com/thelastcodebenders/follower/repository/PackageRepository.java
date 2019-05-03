@@ -13,4 +13,6 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     List<Package> findByService(Service service);
 
     List<Package> findByCategoryAndState(Category category, boolean state);
+
+    int countByCategoryAndState(Category category, boolean state);
 }

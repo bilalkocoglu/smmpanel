@@ -39,4 +39,307 @@
             <span th:utext="${infomessage}"></span>
         </div>
     </div>
+
+    <div th:fragment="mobile-header">
+        <div class="brk-header-mobile">
+            <div class="brk-header-mobile__open"><span></span></div>
+            <div class="brk-header-mobile__logo">
+                <a th:href="@{/}">
+                    <img class="brk-header-mobile__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+                    <img class="brk-header-mobile__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <header th:fragment="header" class="brk-header brk-header_style-1 brk-header_skin-1 position-fixed d-lg-flex flex-column brk-header_color-white position-fixed" style="display: none;" data-logo-src="/visitor/img/logo.png" data-bg-mobile="/visitor/img/brk-bg-mobile-menu.jpg" data-brk-library="component__header">
+        <div class="brk-header__main-bar brk-header_border-top-dark order-lg-2 order-1" style="height: 72px;">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 align-center align-self-lg-center d-none d-lg-flex ml-10">
+                        <a th:href="@{/}" class="brk-header__logo brk-header__item @@modifier">
+                            <img class="brk-header__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+                            <img class="brk-header__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="height:70px; width: 70px;" data-src="/visitor/img/logo.png" alt="alt">
+                        </a>
+                    </div>
+                    <div class="col-lg align-self-lg-stretch text-lg-center">
+                        <nav class="brk-nav brk-header__item">
+                            <ul class="brk-nav__menu">
+                                <li class="brk-nav__drop-down-effect brk-nav__children_clear">
+                                    <a th:href="@{/}">
+                                        <span>Anasayfa</span>
+                                    </a>
+                                </li>
+                                <li class="brk-nav__drop-down-effect brk-nav__children_clear">
+                                    <a th:href="@{/all-packages}">
+                                        <span>Tüm Paketler</span>
+                                    </a>
+                                </li>
+                                <li th:each="ctg : ${popularCategories}" class="brk-nav__children brk-nav__drop-down-effect">
+                                    <a th:href="@{'/package/' + ${ctg.getName()} + '-paketleri'}">
+                                        <span th:text="${ctg.getName()}">İnstagram</span>
+                                    </a>
+                                    <ul class="brk-nav__sub-menu brk-nav-drop-down font__family-montserrat">
+                                        <li class="dd-effect">
+                                            <a th:href="@{'/package/' + ${ctg.getName()} + '-paketleri'}">
+                                                <i class="fas fa-user-plus"></i>
+                                                <span th:text="${ctg.getName()}"></span> Takipçi Paketleri
+                                            </a>
+                                        </li>
+                                        <li class="dd-effect">
+                                            <a th:href="@{'/package/' + ${ctg.getName()} + '-paketleri'}">
+                                                <i class="fas fa-thumbs-up"></i>
+                                                <span th:text="${ctg.getName()}"></span> Beğeni Paketleri
+                                            </a>
+                                        </li>
+                                        <li class="dd-effect">
+                                            <a th:href="@{'/package/' + ${ctg.getName()} + '-paketleri'}">
+                                                <i class="fas fa-eye"></i>
+                                                <span th:text="${ctg.getName()}"></span> İzlenme Paketleri
+                                            </a>
+                                        </li>
+                                        <li class="dd-effect">
+                                            <a th:href="@{'/package/' + ${ctg.getName()} + '-paketleri'}">
+                                                <i class="fas fa-comment"></i>
+                                                <span th:text="${ctg.getName()}"></span> Yorum Paketleri
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-lg-3 align-self-lg-stretch">
+                        <a th:href="@{/login}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+                            <span class="before">GİRİŞ YAP</span>
+                            <span class="text">GİRİŞ YAP</span>
+                            <span class="after">GİRİŞ YAP</span>
+                        </a>
+
+                        <a href="siparis-takip.html" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+                            <span class="before">SİPARİŞ TAKİP</span>
+                            <span class="text">SİPARİŞ TAKİP</span>
+                            <span class="after">SİPARİŞ TAKİP</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <footer th:fragment="footer" style="margin-top: 100px;" class="brk-footer position-relative" id="contact" data-brk-library="component__footer">
+        <div class="brk-footer__wrapper d-flex flex-column align-items-center border-bottom-3 brk-border-color-primary brk-bgi-1 brk-bg-pattern" data-bg="">
+            <span class="brk-abs-bg-overlay brk-bg-gradient-40deg-92"></span>
+            <span class="brk-svg-pattern-container brk-svg-pattern-container_top" style="height: 750px;">
+					<svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 2014 755" style="top: -10px; left: -65px; width: calc(100% + 100px);">
+						<defs>
+							<path id="footer-path-id-1" d="M-55 9101s-64.59 843.48 49.67 740.9c114.26-102.57 360.5-86.27 681.26-104.04 320.75-17.77 501.91-155.63 694.2-405.18C1562.42 9083.14 1940 9124.6 1940 9124.6V9096z" />
+						</defs>
+						<g>
+							<g transform="translate(74 -9096)">
+								<use fill="#fff" href="#footer-path-id-1" />
+							</g>
+						</g>
+					</svg></span>
+            <div class="position-relative z-index-3 mb-70 w-100">
+                <div class="text-center">
+                    <h4 class="font__family-montserrat font__weight-light font__size-28 line__height-30 mb-10 brk-base-font-color">
+                        İletişime Geçin
+                    </h4>
+                    <h3 class="font__family-montserrat font__size-42 font__weight-bold line__height-46 mb-100">
+                        SMM Panel İletişim
+                    </h3>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-lg-7">
+                            <div class="accordion accordion-rounded accordion-image mb-50" role="tablist" aria-multiselectable="true" data-brk-library="component__accordions">
+                                <div class="card expanded">
+                                    <div class="card-header text-left" role="tab" id="headingOne2">
+                                        <h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase" data-brk-library="component__title">
+                                            <a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+                                                <i class="fab fa-delicious"></i>Kullanım Kolaylığı
+                                            </a>
+                                        </h5>
+                                        <a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseOne2" aria-expanded="true" aria-controls="collapseOne2">
+                                            <span class="arrow"></span>
+                                        </a>
+                                    </div>
+                                    <div id="collapseOne2" class="collapse show" role="tabpanel" aria-labelledby="headingOne2">
+                                        <div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern"><span class="full__size-absolute brk-bg-grad opacity-90"></span>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h4 class="font__family-montserrat font__weight-semibold highlight-underline font__size-28 line__height-32 mt-0">
+                                                        <span class="before wow fadeInUp brk-base-bg-8" style="visibility: visible; animation-name: fadeInUp;"></span>Herkes için Kolay Kullanım
+                                                    </h4>
+                                                    <p class="mt-25 font__family-open-sans font__size-16 line__height-26">
+                                                        Sadece kullanıcı adı  veya link girerek kolay alışveriş yapabilirsiniz. Sosyal Medya Paneli destek ekibimiz ve kullanım kolaylığıyla sizlere kolay kullanım sunuyoruz.
+                                                    </p>
+                                                    <ul class="list-inline-2" data-brk-library="component__list">
+                                                        <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <a href="#">
+                                                              <span class="text">
+                                                                <span class="cirlce">
+                                                                  <span class="before"></span>
+                                                                  <span class="after"></span>
+                                                                </span> Hızlı Servisler</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <span class="text">
+                                                              <span class="cirlce">
+                                                                <span class="before"></span>
+                                                                <span class="after"></span>
+                                                              </span> Müşteri Dostu Hizmet</span>
+                                                        </li>
+                                                        <li class="font__family-montserrat font__size-16 font__weight-bold">
+                                                            <span class="text">
+                                                              <span class="cirlce">
+                                                                <span class="before"></span>
+                                                                <span class="after"></span>
+                                                              </span> Uygun Fiyat</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-left" role="tab" id="headingTwo2">
+                                        <h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase">
+                                            <a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo2">
+                                                <i class="far fa-gem"></i> Güvenli Ödeme
+                                            </a>
+                                        </h5>
+                                        <a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseTwo2" aria-expanded="true" aria-controls="collapseTwo2">
+                                            <span class="arrow"></span>
+                                        </a>
+                                    </div>
+                                    <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2">
+                                        <div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern">
+                                            <span class="full__size-absolute brk-bg-grad opacity-90"></span>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">
+                                                        Güvenli Ödeme Seçenekleri
+                                                    </h4>
+                                                    <p class="mt-30">
+                                                        xxx Ödeme seçeneklerinde kredi kartı, banka kartı ,EFT gibi bir çok seçenek bulunmaktadır. Hesabınıza Maximum 10 dk içinde paranız yatmaktadır. Online ve güvenli ödeme mevcuttur.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-left" role="tab" id="headingThree2">
+                                        <h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase"><a class="font__weight-medium card-title" data-toggle="collapse" data-parent=".accordion-image" href="#collapseThree2" aria-expanded="true" aria-controls="collapseThree2"><i class="fab fa-gg"></i> UYGUN FİYATLI SERVİSLER</a></h5><a class="card-toggle-icon" data-toggle="collapse" data-parent=".accordion-image" href="#collapseThree2" aria-expanded="true" aria-controls="collapseThree2"><span class="arrow"></span></a>
+                                    </div>
+                                    <div id="collapseThree2" class="collapse" role="tabpanel" aria-labelledby="headingThree2">
+                                        <div class="card-block text-left all-light font__family-open-sans brk-bgi-1 brk-bg-pattern">
+                                            <span class="full__size-absolute brk-bg-grad opacity-90"></span>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">
+                                                        Kaliteli ve Uygun Fiyatlı Servisler
+                                                    </h4>
+                                                    <p class="mt-30 font__size-16">
+                                                        Sistemimizde her bütçeye uygun servisler bulunmaktadır. Servislerin tamamı sorun olmadıkça hızlı ve kalitelidir. Müşterilerimiz için gerekli olan her türlü altyapıyı düşündük ve hazırladık.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-5">
+                            <article class="brk-form_footer-14 mb-50">
+                                <p class="brk-white-font-color font__size-18 font__weight-bold line__height-18">
+                                    Bir sorunuz mu var?
+                                </p>
+                                <h6 class="brk-white-font-color font__family-montserrat font__size-36 font__weight-normal line__height-40 text-uppercase mb-10">
+                                    İLETİŞİME GEÇ
+                                </h6>
+                                <form th:action="@{/message}" th:object="${message}" method="post" class="brk-form-strict brk-form-strict_transparent w-100" >
+                                    <input th:field="*{name}" name="name" id="name" required autocomplete="off" type="text" placeholder="Adınız Soyadınız" >
+                                    <input th:field="*{email}" name="email" id="email" required autocomplete="off" type="email" placeholder="Mail adresiniz" >
+                                    <textarea th:field="*{message}" maxlength="300" name="message" id="message" required autocomplete="off" placeholder="Mesajınız" style="min-height: 107px"></textarea>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-inside-out btn-lg pl-70 pr-70 btn-inside-out-invert btn-no-shadow border-radius-25 mt-30"  >
+                                            <span class="before">MESAJ GÖNDER</span>
+                                            <span class="text">GÖNDER BABBA</span>
+                                            <span class="after">MESAJ GÖNDER</span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="position-relative z-index-3 w-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <div class="text-center te d-flex flex-column mb-50">
+                                <div class="icon__cover" data-brk-library="component__services">
+                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+                                        <i class="fa fa-phone" aria-hidden="true"></i>
+                                        <span class="before"></span>
+                                        <span class="after"></span>
+                                    </a>
+                                </div>
+                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+                                    Telefon
+                                </p>
+                                <a href="#" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+                                    0 534 899 87 05
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="text-center d-flex flex-column mb-50">
+                                <div class="icon__cover" data-brk-library="component__services">
+                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                        <span class="before"></span>
+                                        <span class="after"></span>
+                                    </a>
+                                </div>
+                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+                                    Address
+                                </p>
+                                <p class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+                                    İstanbul/ TÜRKİYE
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="text-center d-flex flex-column mb-50">
+                                <div class="icon__cover" data-brk-library="component__services">
+                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        <span class="before"></span>
+                                        <span class="after"></span>
+                                    </a>
+                                </div>
+                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
+                                    Email
+                                </p>
+                                <a href="mailto:info@domain.com" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
+                                    info@domain.com
+                                </a>
+                            </div>
+                        </div>
+                        <hr class="horiz-line mt-0 mb-20">
+                        <div class="text-center mb-25 w-100">
+                            <p class="brk-white-font-color font__family-open-sans font__size-14">&#xA9; 2019 <span class="font__weight-bold">The Lost Code Banders</span> All rights reserved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </html>

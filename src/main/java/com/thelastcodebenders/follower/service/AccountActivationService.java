@@ -44,7 +44,7 @@ public class AccountActivationService {
         accountActivation = accountActivationRepository.save(accountActivation);
 
         if (accountActivation != null){
-            mailService.asynsSendMail(MailType.ACCOUNTACTIVATE, user, user, accountActivation.getSecretkey());
+            mailService.asyncSendMail(MailType.ACCOUNTACTIVATE, user, user, accountActivation.getSecretkey());
         }
     }
 

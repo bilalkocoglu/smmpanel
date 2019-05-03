@@ -81,6 +81,12 @@
                                 <span data-i18n="" class="menu-title">Kategoriler</span>
                             </a>
                         </li>
+                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'articles')} ? active : null">
+                            <a th:href="@{/admin/articles}">
+                                <i class="ft-grid"></i>
+                                <span data-i18n="" class="menu-title">Kategori Makaleleri</span>
+                            </a>
+                        </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'packages')} ? active : null">
                             <a th:href="@{/admin/packages}">
                                 <i class="ft-server"></i>

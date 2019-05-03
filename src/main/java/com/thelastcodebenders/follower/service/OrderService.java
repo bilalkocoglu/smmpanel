@@ -6,9 +6,11 @@ import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
+import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.model.Order;
+import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.Service;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.OrderRepository;
@@ -29,19 +31,22 @@ public class OrderService {
     private OrderAssembler orderAssembler;
     private ClientService clientService;
     private ApiService apiService;
+    private PackageService packageService;
 
     public OrderService(ServiceService serviceService,
                         UserService userService,
                         OrderRepository orderRepository,
                         OrderAssembler orderAssembler,
                         ClientService clientService,
-                        ApiService apiService){
+                        ApiService apiService,
+                        PackageService packageService){
         this.serviceService = serviceService;
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderAssembler = orderAssembler;
         this.clientService = clientService;
         this.apiService = apiService;
+        this.packageService = packageService;
     }
 
     //net kazanç
@@ -80,13 +85,73 @@ public class OrderService {
         return false;
     }
 
-    public boolean createOrder(NewOrderFormDTO newOrderForm, long serviceId) throws LoginException {
+    public boolean createPackageOrder(NewOrderFormDTO newOrderFrom, long packageId) throws LoginException{
+        try {
+            boolean isAlreadyUrl = isAlreadyUrl(newOrderFrom.getUrl());
+
+            if (isAlreadyUrl){
+                log.error("Url üzerinde aktif sipariş mevcut !");
+                throw new RuntimeException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
+            }
+
+            Package pkg = packageService.findById(packageId);
+
+            if (pkg == null){
+                throw new RuntimeException("Sipariş vermek istediğiniz paket bulunamadı !");
+            }else if (!pkg.isState()){
+                throw new RuntimeException("Şu anda seçtiğiniz paket için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+            }
+
+            User user = userService.getAuthUser();
+
+            Order order = orderAssembler.convertFormDTOToPackageOrder(newOrderFrom, user, pkg);
+
+            if (user.getBalance() < order.getCustomPrice()){
+                log.error("Order Service Create Order Error -> Insufficient Balance !");
+                throw new RuntimeException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
+            }
+
+            if( order.getApiPrice() > pkg.getService().getApi().getBalance() ){
+                log.error("Order Service Create Order Error -> API Insufficient Balance !");
+                throw new RuntimeException("İşleminiz gerçekleştirilemedi. " +
+                        "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
+            }
+
+            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
+
+            if (apiOrderId == null){
+                throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+            }
+
+            order.setApiOrderId(apiOrderId);
+
+            order = orderRepository.save(order);
+
+            if (order != null){
+                double newBalance = user.getBalance() - order.getCustomPrice();
+                userService.adminBasedUpdate(user.getId(), user, String.valueOf(newBalance));
+
+                apiService.asyncApiUpdateBalance(order.getService().getApi());
+            }else {
+                log.error("Order Service Create Package Order Error -> order not save");
+            }
+
+            return true;
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                throw e;
+            log.error("Order Service Create Package Order Error -> " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean createServiceOrder(NewOrderFormDTO newOrderForm, long serviceId) throws LoginException {
         try {
             boolean isAlreadyUrl = isAlreadyUrl(newOrderForm.getUrl());
 
             if (isAlreadyUrl){
                 log.error("Url üzerinde aktif bir sipariş mevcut.");
-                throw new RuntimeException("Sipariş vermek istediğiniz link için tamamlanmamış bir sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
+                throw new RuntimeException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
             }
 
             Service service = serviceService.findServiceById(serviceId);
@@ -104,7 +169,7 @@ public class OrderService {
 
             User user = userService.getAuthUser();
 
-            Order order = orderAssembler.convertFormDtoToOrder(newOrderForm, user, service);
+            Order order = orderAssembler.convertFormDtoToServiceOrder(newOrderForm, user, service);
 
             if (user.getBalance() < order.getCustomPrice()){
                 log.error("Order Service Create Order Error -> Insufficient Balance !");
@@ -117,7 +182,7 @@ public class OrderService {
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
             }
 
-            String apiOrderId = clientService.createOrderReturnOrderId(order);
+            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.SERVICE);
 
             if (apiOrderId == null){
                 throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
@@ -133,14 +198,14 @@ public class OrderService {
 
                 apiService.asyncApiUpdateBalance(order.getService().getApi());
             }else {
-                log.error("Line 71 Save Error !");
+                log.error("Order Service Create Service Order Error -> order not save");
             }
 
             return true;
         }catch (Exception e){
             if (e instanceof RuntimeException)
                 throw e;
-            log.error("Order Service Create Order Error -> " + e.getMessage());
+            log.error("Order Service Create Service Order Error -> " + e.getMessage());
             return false;
         }
     }
@@ -175,6 +240,7 @@ public class OrderService {
         try {
             List<Order> activeOrders = orderRepository.findByClosed(false);
 
+
             for (Order order: activeOrders) {
                 OrderStatusResponse orderStatusResponse = clientService.orderStatus(order.getApiOrderId(), order.getService().getApi());
 
@@ -192,7 +258,7 @@ public class OrderService {
 
                     order.setStatus(OrderStatusType.PENDING);
                 }
-                else if (orderStatusResponse.getStatus().equals("Inprogress")){
+                else if (orderStatusResponse.getStatus().equals("In progress")){
                     //yükleniyor
                     log.info(order.getId() + " -> Inprogress !");
 
@@ -279,6 +345,7 @@ public class OrderService {
                     double newBalance = order.getUser().getBalance() + order.getCustomPrice();
                     userService.adminBasedUpdate(order.getUser().getId(), order.getUser(), String.valueOf(newBalance));
 
+                    order.setRemainBalance(order.getCustomPrice());
 
                     //bakiye güncellemesi
                     apiService.asyncApiUpdateBalance(order.getService().getApi());
@@ -297,7 +364,7 @@ public class OrderService {
                     order.setStatus(OrderStatusType.CANCELED);
                 }
 
-                orderRepository.save(order);
+                order = orderRepository.save(order);
             }
         }catch (Exception e){
             log.error("Order Service Order Status Update Error -> " + e.getMessage());
