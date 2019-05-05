@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import javax.security.auth.login.LoginException;
 
 @Controller
@@ -242,4 +241,42 @@ public class UserController {
         model.addAttribute("page", "loadbalance");
         return "user-load-balance";
     }
+
+
+
+    //USER PROFİLE
+    @GetMapping("/profile")
+    public String profilePage(Model model) throws LoginException{
+        model.addAttribute("user", userService.getAuthUser());
+        model.addAttribute("username", userService.getAuthUserName());
+        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        return "user-profile";
     }
+
+    @PostMapping("/profile/changePass")     //CHANGE PASSWORD
+    public String changePassword(RedirectAttributes redirectAttributes,
+                                 @ModelAttribute ChangePasswordDTO changePasswordDTO){
+        try {
+            userService.changePassword(changePasswordDTO);
+
+            redirectAttributes.addFlashAttribute("successmessage", "İşleminiz başarıyla gerçekleşti !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/user/profile";
+    }
+
+
+    //SPINNER
+    @GetMapping("/draw")
+    public String draw(Model model) throws LoginException{
+        model.addAttribute("username", userService.getAuthUserName());
+        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        model.addAttribute("page","draw");
+        return "user-draw";
+    }
+}
+
+
+
+

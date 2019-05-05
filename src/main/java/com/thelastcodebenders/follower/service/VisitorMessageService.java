@@ -73,7 +73,7 @@ public class VisitorMessageService {
             User admin = userService.getAdmin();
 
             visitorMessage.setLocalDateTime(LocalDateTime.now());
-            mailService.acyncSendMail(subject, admin.getMail(), body);
+            mailService.asyncSendMail(subject, admin.getMail(), body);
 
 
             visitorMessageRepository.save(visitorMessage);

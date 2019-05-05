@@ -1,7 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.client.ClientService;
-import com.thelastcodebenders.follower.enums.MailType;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
 import com.thelastcodebenders.follower.model.API;

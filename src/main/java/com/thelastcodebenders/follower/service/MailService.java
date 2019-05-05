@@ -1,7 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
-import com.thelastcodebenders.follower.enums.MailType;
-import com.thelastcodebenders.follower.model.Message;
+import com.thelastcodebenders.follower.enums.AsyncMailType;
+import com.thelastcodebenders.follower.enums.SyncMailType;
 import com.thelastcodebenders.follower.model.User;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -65,39 +65,39 @@ public class MailService {
     }
 
     @Async
-    public void acyncSendMail(String subject, String destination, String body){
+    public void asyncSendMail(String subject, String destination, String body){
         sendMail(subject,destination,body);
     }
 
     @Async
-    public void asyncSendMail(MailType mailType, User fromUser, User destUser, String message){
+    public void asyncSendMail(AsyncMailType asyncMailType, User fromUser, User destUser, String message){
         try {
             Map model = new HashMap();
             Template template = null;
             String subject = "";
             String body = "";
 
-            if (mailType == MailType.CREATETICKET){
+            if (asyncMailType == AsyncMailType.CREATETICKET){
                 subject = "Yeni Destek Talebi !";
                 model.put("button_message", fromUser.getName() + " " + fromUser.getSurname() +" tarafından cevaplamanız gereken yeni bir destek talebi oluşturuldu! Aşağıdaki butona tıklayarak cevaplayabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-            }else if (mailType == MailType.RESPONSETICKET){
+            }else if (asyncMailType == AsyncMailType.RESPONSETICKET){
                 subject = "Destek Talebiniz Yanıtlandı !";
                 model.put("button_message", "Destek talebiniz yanıtlandı! Cevaplamak için aşağıdaki butona basabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-            }else if (mailType == MailType.PAYMENTNTFREQ){
+            }else if (asyncMailType == AsyncMailType.PAYMENTNTFREQ){
                 subject = "Yeni Ödeme Bildirimi !";
                 model.put("button_message", fromUser.getName() + ' ' + fromUser.getSurname() + " Kullanıcısı tarafından yeni bir ödeme bildirimi oluşturuldu !");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-            }else if (mailType == MailType.PAYMENTNTFRES){
+            }else if (asyncMailType == AsyncMailType.PAYMENTNTFRES){
                 subject = "Ödeme Bildiriminiz Onaylandı !";
                 model.put("button_message","Ödeme bildiriminiz onaylandı ve bakiyeniz güncellendi. Şimdi özgürce alışveriş yapabilirsiniz !");
                 model.put("button_text", "CEVAPLA");
                 model.put("button_href", HOST + "/login");
-            }else if(mailType == MailType.ACCOUNTACTIVATE) {
+            }else if(asyncMailType == AsyncMailType.ACCOUNTACTIVATE) {
                 subject = "SosyalTrend'e Hoşgeldiniz !";
                 model.put("button_message","Aramıza hoşgeldin ! Hesabını aktifleştirmek ve sosyal medyada yeni bir yüz olmak için butona tıkla !");
                 model.put("button_text", "AKTİFLEŞTİR");
@@ -114,8 +114,37 @@ public class MailService {
 
             sendMail(subject, destUser.getMail(), body);
         }catch (Exception e){
-            log.error("Mail Service Send Mail Error -> " + e.getMessage());
+            log.error("Mail Service Async Send Mail Error -> " + e.getMessage());
         }
     }
 
+    public boolean syncSendMail(SyncMailType mailType, User fromUser, User destUser, String message){
+        try {
+            Map model = new HashMap();
+            Template template = null;
+            String subject = "";
+            String body = "";
+
+            if (mailType == SyncMailType.RESETPASS){
+                subject = "Şifreniz Sıfırlandı !";
+                model.put("button_message","Sizin için şifrenizi sıfırladık. Güvenlik açısından bu şifre ile giriş yaptıktan sonra profilinizden şifrenizi deiştirmenizi tavsiye ederiz.");
+                model.put("button_text", message);  //password
+                model.put("button_href", HOST + "/");
+            }
+            else
+                return false;
+
+            model.put("title", "Social XXX");
+
+            template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
+            body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+            sendMail(subject, destUser.getMail(), body);
+
+            return true;
+        }catch (Exception e){
+            log.error("Mail Service Sync Send Mail Error -> " + e.getMessage());
+            return false;
+        }
+    }
 }

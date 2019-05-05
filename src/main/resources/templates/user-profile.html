@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="admin-template :: head"></head>
+
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="user-template :: sidebar"></div>
+
+        <!-- / main menu-->
+
+      <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+          <nav th:replace="user-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+          <!-- Navbar (Header) Ends-->
+
+        <div class="main-content">
+          <div class="content-wrapper"><!--User Profile Starts-->
+              <div th:replace="admin-template :: messages"></div>
+
+              <!--Basic User Details Starts-->
+<section id="user-profile">
+    <div class="row">
+        <div class="col-12">
+            <div class="card profile-with-cover">
+                <div class="card-img-top img-fluid bg-cover height-300" style="background: url('/img/14.jpg') 50%;"></div>
+                <div class="media profil-cover-details row">
+
+                    <div class="col-12">
+                        <div class="align-self-center halfway-fab text-center">
+                            <a class="profile-image">
+                                <img th:src="@{/img/avatar-08.png}" class="rounded-circle img-border gradient-summer width-100" alt="Card image">
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="profile-section">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-5 ">
+                        </div>
+                        <div class="col-lg-2 col-md-2 text-center">
+                            <span class="font-medium-2 text-uppercase" th:text="${user.getName() + ' ' + user.getSurname()}"></span>
+                            <p class="grey font-small-2" th:text="${user.getMail()}"></p>
+                        </div>
+                        <div class="col-lg-5 col-md-5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Basic User Details Ends-->
+
+<!--About section starts-->
+              <div class="row">
+<div class="col-md-6 col-sm-12">
+			<div class="card">
+				<div class="card-header">
+					<h4 class="card-title" id="basic-layout-colored-form-control">Kullanıcı Bilgileri</h4>
+				</div>
+				<div class="card-body">
+					<div class="px-3">						
+
+						<form class="form">
+							<div class="form-body">
+								<div class="form-group">
+								    <label for="userinput2">Mail Adresi</label>
+								    <input readonly="readonly" type="text" id="userinput2" class="form-control" th:value="${user.getMail()}"  name="company">
+								</div>
+								<div class="form-group">
+									<label for="userinput3">İSİM</label>
+								    <input readonly="readonly" type="text" id="userinput3" class="form-control" th:value="${user.getName()}">
+								</div>
+                                <div class="form-group">
+									<label for="userinput3">SOYİSİM</label>
+								    <input readonly="readonly" type="text" id="userinput3" class="form-control" th:value="${user.getSurname()}">
+								</div>
+                                <div class="form-group">
+									<label for="userinput4">TELEFON</label>
+								    <input readonly="readonly" type="text" id="userinput4" class="form-control" th:value="${user.getNumber()}">
+								</div>
+							</div>
+							<div class="form-actions right">
+								<!--
+                                <button type="button" class="btn btn-raised btn-block white gradient-plum">
+									<i class="fa fa-check-square-o"></i> Kaydet
+								</button>
+							    -->
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+                  <div class="col-md-6 col-sm-12">
+			<div class="card">
+				<div class="card-header">
+					<h4 class="card-title" id="basic-layout-colored-form-control">Şifre Değiştir</h4>
+				</div>
+				<div class="card-body">
+					<div class="px-3">						
+
+						<form class="form" id="changePasswordForm" action="/user/profile/changePass" method="post">
+							<div class="form-body">
+								<div class="form-group">
+								    <label for="userinput3">ESKİ ŞİFRE</label>
+								    <input required type="password" id="userinput3" class="form-control"  name="currentPass">
+								</div>
+                                <div class="form-group">
+								    <label for="password">YENİ ŞİFRE</label>
+								    <input required type="password" id="password" class="form-control"  name="newPass">
+								</div>
+                                <div class="form-group">
+									<label for="passwordAgain">YENİ ŞİFRE TEKRAR</label>
+									<input required type="password" id="passwordAgain" class="form-control"  name="newPassAgain">
+								</div>
+							</div>
+							<div class="form-actions right">
+								<button type="submit" class="btn btn-raised btn-block white gradient-plum">
+									<i class="fa fa-check-square-o"></i> Kaydet
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+    <script>
+        $('#changePasswordForm').submit( function (e) {
+            var password = $('#password').val();
+            var passwordAgain = $('#passwordAgain').val();
+
+            if (password !== passwordAgain){
+                alert("Şifreler uyuşmuyor !");
+                evnt.preventDefault();
+            }
+        });
+    </script>
+  </body>
+
+</html>

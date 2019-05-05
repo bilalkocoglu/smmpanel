@@ -1,5 +1,5 @@
 package com.thelastcodebenders.follower.enums;
 
-public enum MailType {
+public enum AsyncMailType {
     CREATETICKET, RESPONSETICKET, PAYMENTNTFREQ, PAYMENTNTFRES, ACCOUNTACTIVATE
 }

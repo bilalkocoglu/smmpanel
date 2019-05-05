@@ -2,7 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.assembler.PaymenNotificationAssembler;
 import com.thelastcodebenders.follower.dto.PaymentNotificationFormDTO;
-import com.thelastcodebenders.follower.enums.MailType;
+import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.model.PaymentNotification;
 import com.thelastcodebenders.follower.model.User;
@@ -98,7 +98,7 @@ public class PaymentNotificationService {
                 if (!res)
                     return false;
                 paymentNotification = paymentNotificationRepository.save(paymentNotification);
-                mailService.asyncSendMail(MailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser(), "");
+                mailService.asyncSendMail(AsyncMailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser(), "");
                 return true;
             }else {
                 log.error("Payment Notification Error ! - Boyle bir odeme bildirimi bulunamadi !");
@@ -122,7 +122,7 @@ public class PaymentNotificationService {
 
         paymentNotification = paymentNotificationRepository.save(paymentNotification);
         if (paymentNotification != null){
-            mailService.asyncSendMail(MailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
+            mailService.asyncSendMail(AsyncMailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
             return true;
         }
         else{

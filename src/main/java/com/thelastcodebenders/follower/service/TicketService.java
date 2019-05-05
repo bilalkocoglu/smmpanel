@@ -4,7 +4,7 @@ import com.thelastcodebenders.follower.assembler.MessageAssembler;
 import com.thelastcodebenders.follower.assembler.TicketAssembler;
 import com.thelastcodebenders.follower.dto.CreateTicketFormDTO;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
-import com.thelastcodebenders.follower.enums.MailType;
+import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.model.Message;
 import com.thelastcodebenders.follower.model.Ticket;
@@ -179,7 +179,7 @@ public class TicketService {
             try {
                 message = messageRepository.save(message);
 
-                mailService.asyncSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), ticket.getFromUser(),"");
+                mailService.asyncSendMail(AsyncMailType.RESPONSETICKET, ticket.getFromUser(), ticket.getFromUser(),"");
                 //burada ortadaki user kullanılmadığı için sallama verilmiştir normalde işlemi yapan admindir.
 
                 return true;
@@ -191,7 +191,7 @@ public class TicketService {
             Message message = messageAssembler.convertStringToMessage(messageBody, true, ticket);
             try {
                 message = messageRepository.save(message);
-                mailService.asyncSendMail(MailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
+                mailService.asyncSendMail(AsyncMailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
                 return true;
             }catch (Exception e){
                 log.error("Ticket Service Response Ticket Error -> " + e.getMessage());
@@ -227,7 +227,7 @@ public class TicketService {
         if (admin == null){
             log.error("Cant Send Mail Because Admin Not Found !");
         }else {
-            mailService.asyncSendMail(MailType.CREATETICKET, user, admin,"");
+            mailService.asyncSendMail(AsyncMailType.CREATETICKET, user, admin,"");
         }
 
         return true;

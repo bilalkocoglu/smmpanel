@@ -3,21 +3,21 @@ package com.thelastcodebenders.follower.controller;
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
 import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
 import com.thelastcodebenders.follower.model.Category;
-import com.thelastcodebenders.follower.service.CategoryService;
-import com.thelastcodebenders.follower.service.PackageService;
-import com.thelastcodebenders.follower.service.UserService;
-import com.thelastcodebenders.follower.service.VisitorMessageService;
+import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class VisitorController {
@@ -27,15 +27,18 @@ public class VisitorController {
     private PackageService packageService;
     private CategoryService categoryService;
     private VisitorMessageService visitorMessageService;
+    private CategoryArticleService categoryArticleService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
                              CategoryService categoryService,
-                             VisitorMessageService visitorMessageService){
+                             VisitorMessageService visitorMessageService,
+                             CategoryArticleService categoryArticleService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
         this.visitorMessageService = visitorMessageService;
+        this.categoryArticleService = categoryArticleService;
     }
 
     //Login
@@ -49,6 +52,28 @@ public class VisitorController {
     public String loginFailure(RedirectAttributes redirectAttributes){
         redirectAttributes.addFlashAttribute("errormessage", "Kullanıcı adı veya şifre hatalı !");
         return "redirect:/login";
+    }
+
+    //Forgot Password Page
+    @GetMapping("/forgot-password")
+    public String forgotPasswordPage(Model model){
+        return "visitor-forgot-password";
+    }
+
+    //Forgot Password Action
+    @PostMapping("/forgot-password")
+    public String resetPassword(RedirectAttributes redirectAttributes,
+                                @RequestParam("email") String email){
+        try {
+            boolean res = userService.resetPassword(email);
+            if (res)
+                redirectAttributes.addFlashAttribute("successmessage", "Yeni şifrenizi size mail olarak gönderdik.");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminizi şu anda gerçekleştiremedik. Lütfen daha sonra tekrar deneyiniz !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/forgot-password";
     }
 
     //Register Page
@@ -126,8 +151,14 @@ public class VisitorController {
                                      RedirectAttributes redirectAttributes){
         try {
             Category category = categoryService.visitorPackagePageCategory(categoryUrlName);
-            if (packageService.isValidatePackageCategory(category))
+            if (packageService.isValidatePackageCategory(category)){
                 model.addAttribute("packageItems", packageService.createVisitorPackagesFormat(category));
+                try {
+                    model.addAttribute("categoryArticle", categoryArticleService.findByCategoryId(category.getId()));
+                }catch (Exception e){
+                    log.error("Visitor Controller PackageByCategory Error -> " + e.getMessage());
+                }
+            }
 
             model.addAttribute("category", category);
         }catch (Exception e){

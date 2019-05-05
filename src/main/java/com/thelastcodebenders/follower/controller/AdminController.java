@@ -40,6 +40,7 @@ public class AdminController {
     private PackageService packageService;
     private OrderService orderService;
     private CategoryArticleService categoryArticleService;
+    private DrawPrizeService drawPrizeService;
 
     public AdminController(TicketService ticketService,
                            PaymentNotificationService paymentNotificationService,
@@ -53,7 +54,8 @@ public class AdminController {
                            CategoryService categoryService,
                            PackageService packageService,
                            OrderService orderService,
-                           CategoryArticleService categoryArticleService){
+                           CategoryArticleService categoryArticleService,
+                           DrawPrizeService drawPrizeService){
         this.ticketService = ticketService;
         this.paymentNotificationService = paymentNotificationService;
         this.userService = userService;
@@ -67,6 +69,7 @@ public class AdminController {
         this.packageService = packageService;
         this.orderService = orderService;
         this.categoryArticleService = categoryArticleService;
+        this.drawPrizeService = drawPrizeService;
     }
 
     //  ADMIN INDEX
@@ -642,6 +645,8 @@ public class AdminController {
 
 
 
+
+
     //ADMIN CATEGORY ARTICLE
     @GetMapping("/articles")            //CATEGORY ARTICLE PAGE
     public String articles(Model model){
@@ -658,7 +663,7 @@ public class AdminController {
         try {
             boolean res = categoryArticleService.save(categoryArticle);
             if (res)
-                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleşti !");
+                redirectAttributes.addFlashAttribute("successmessage", "Makale Yayınlandı !");
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
         }catch (Exception e){
@@ -669,7 +674,7 @@ public class AdminController {
         return "redirect:/admin/articles";
     }
 
-    @GetMapping("/article/edit/{categoryId:.*}")
+    @GetMapping("/article/edit/{categoryId:.*}")    //ARTİCLE EDİT PAGE
     public String editArticlePage(Model model,
                                   @PathVariable("categoryId") long categoryId,
                                   RedirectAttributes redirectAttributes){
@@ -684,5 +689,49 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/article/edit/{categoryArticleId:.*}")        //UPDATE ARTİCLE
+    public String updateArticle(@PathVariable("categoryArticleId") long categoryArticleId,
+                                @RequestParam("article") String articleBody,
+                                RedirectAttributes redirectAttributes){
+        try {
+            boolean res = categoryArticleService.update(categoryArticleId, articleBody);
+
+            if( res )
+                redirectAttributes.addFlashAttribute("successmessage", "Yazı başarıyla güncellendi.");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin !");
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("Admin Controller UpdateArticle Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin !");
+            }
+        }
+        return "redirect:/admin/articles";
+    }
+
+
+
+    //DRAW SETTİNGS
+    @GetMapping("/draw-settings")
+    public String drawSettings(Model model){
+        model.addAttribute("drawPrizes", drawPrizeService.findAll());
+        model.addAttribute("maincategories", categoryService.allCategory());
+        model.addAttribute("page", "drawsetting");
+        return "admin-draw-settings";
+    }
+
+    @PostMapping("/draw-prize")
+    public String createDrawPrize(RedirectAttributes redirectAttributes,
+                                  @ModelAttribute DrawPrize drawPrize){
+        try {
+            drawPrizeService.save(drawPrize);
+            redirectAttributes.addFlashAttribute("infomessage", "Ödül başarıyla PASİF olarak eklendi !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/admin/draw-settings";
+    }
 }
 

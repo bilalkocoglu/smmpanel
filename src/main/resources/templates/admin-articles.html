@@ -49,8 +49,12 @@
                       </div>
                   </div>
                   <div class="col-9">
-                      <div class="card" th:if="${emptyArticleForm != null}">
-                          <form class="form" id="form" th:action="@{/admin/article/create}" th:object="${emptyArticleForm}" method="post">
+                      <div class="card"
+                           style="padding-bottom: 10px;"
+                           th:if="${emptyArticleForm != null}">
+                          <form class="form"
+                                id="form"
+                                th:action="@{/admin/article/create}" th:object="${emptyArticleForm}" method="post">
                               <div class="card-header">
                                   <p>
                                       <button type="submit"
@@ -77,9 +81,15 @@
                                                       </div>
                                                   </div>
                                               </div>
-                                              <div class="form-group">
+                                              <div style="margin-bottom: 0px;" class="form-group">
                                                   <label for="basicTextarea">Makale</label>
                                                   <textarea id="basicTextarea" name="article" rows="6" required class="form-control"></textarea>
+                                              </div>
+                                              <div class="row"
+                                                   style="margin: 0px; padding: 5px; background-color: silver; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+                                                  <p style="margin: 0px; font-size: small">
+                                                      <span id="articleinfo" style="float: right">5000 kelime 5000karakter</span>
+                                                  </p>
                                               </div>
                                           </div>
 
@@ -88,8 +98,12 @@
                           </form>
 
                       </div>
-                      <div class="card" th:if="${emptyArticleForm == null}">
-                          <form class="form" id="form1" action="#" th:object="${selectedarticle}" method="post">
+                      <div class="card"
+                           style="padding-bottom: 10px;"
+                           th:if="${emptyArticleForm == null}">
+                          <form class="form"
+                                id="form1"
+                                th:action="@{'/admin/article/edit/' + ${selectedarticle.getId()}}" th:object="${selectedarticle}" method="post">
 
                               <div class="card-header">
                                   <p>
@@ -104,19 +118,18 @@
                                   <div class="px-3">
 
                                       <div class="form-body">
-                                          <div class="row">
-                                              <div class="col-md-12">
-                                                  <div class="form-group">
-                                                      <label for="categorySelect">Kategori</label>
-                                                      <select id="categorySelect" name="category" class="form-control" data-toggle="tooltip" data-trigger="hover" data-placement="top" data-title="Priority">
-                                                          <option value="0" disabled="disabled" selected="selected" >Seçim Yapınız !</option>
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="form-group">
+                                          <h4 class="form-section">
+                                              <i class="ft-info"></i> <span th:text="${selectedarticle.getCategory().getName()}"></span> Makalesi
+                                          </h4>
+                                          <div style="margin-bottom: 0px;" class="form-group">
                                               <label for="basicTextarea">Makale</label>
-                                              <textarea th:field="*{article}" id="basicTextarea" rows="6" required class="form-control"></textarea>
+                                              <textarea th:field="*{article}" name="article" id="basicTextarea" rows="6" required class="form-control"></textarea>
+                                          </div>
+                                          <div class="row"
+                                               style="margin: 0px; padding: 5px; background-color: silver; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px;">
+                                              <p style="margin: 0px; font-size: small">
+                                                  <span id="articleinfo" style="float: right">5000 kelime 5000karakter</span>
+                                              </p>
                                           </div>
                                       </div>
 
@@ -166,6 +179,25 @@
                 return;
             }
         });
+
+        $("#form1").submit( function(e) {
+
+            var messageLength = CKEDITOR.instances['basicTextarea'].getData().replace(/<[^>]*>/gi, '').length;
+
+            if( !messageLength ) {
+                alert( 'Makale kısmını boş bırakamazsınız !' );
+                e.preventDefault();
+                return;
+            }
+        });
+
+        timer = setInterval(updateDiv,1000);
+        function updateDiv(){
+            var editorText = CKEDITOR.instances['basicTextarea'].getData();
+            var charlength = editorText.length;
+            var wordlength = editorText.split(' ').length;
+            $('#articleinfo').text(charlength + ' Karakter - ' + wordlength + ' Kelime');
+        };
     </script>
 
   </body>

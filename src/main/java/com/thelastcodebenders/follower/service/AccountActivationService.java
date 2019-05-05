@@ -1,6 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
-import com.thelastcodebenders.follower.enums.MailType;
+import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.model.AccountActivation;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.AccountActivationRepository;
@@ -44,7 +44,7 @@ public class AccountActivationService {
         accountActivation = accountActivationRepository.save(accountActivation);
 
         if (accountActivation != null){
-            mailService.asyncSendMail(MailType.ACCOUNTACTIVATE, user, user, accountActivation.getSecretkey());
+            mailService.asyncSendMail(AsyncMailType.ACCOUNTACTIVATE, user, user, accountActivation.getSecretkey());
         }
     }
 
@@ -68,5 +68,14 @@ public class AccountActivationService {
         }else {
             return accountActivations.get(0).getUser();
         }
+    }
+
+    public String generateRandomPassword(int lenght){
+        String rndPass = "";
+        for (int i=0; i<lenght ; i++){
+            int index = rnd.nextInt(LATTERS.length);
+            rndPass+=LATTERS[index];
+        }
+        return rndPass;
     }
 }

@@ -9,10 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryArticleService {
-    private static final Logger LOG = LoggerFactory.getLogger(CategoryArticleService.class);
+    private static final Logger log = LoggerFactory.getLogger(CategoryArticleService.class);
 
     private CategoryArticleRepository categoryArticleRepository;
     private CategoryService categoryService;
@@ -41,6 +42,15 @@ public class CategoryArticleService {
         return categoryArticles.get(0);
     }
 
+    public CategoryArticle findById(long id){
+        Optional<CategoryArticle> opt = categoryArticleRepository.findById(id);
+        if(!opt.isPresent()){
+            log.error("Category Article Service FindById Error -> Not Found !");
+            throw new RuntimeException("Böyle bir yazı bulunamadı !");
+        }else
+            return opt.get();
+    }
+
     public List<Category> emptyCategories(){
         List<Category> categories = categoryService.allCategory();
         List<Category> emptyCategories = new ArrayList<>();
@@ -62,7 +72,7 @@ public class CategoryArticleService {
 
     public boolean save(CategoryArticle categoryArticle){
         if (!isValidate(categoryArticle)){
-            LOG.error("Category Article Service Save Error => CategoryArticle is Not Validate !");
+            log.error("Category Article Service Save Error => CategoryArticle is Not Validate !");
             throw new RuntimeException("İşleminiz gerçekleştirilemedi !");
         }
 
@@ -73,7 +83,7 @@ public class CategoryArticleService {
         }
 
         if (categoryArticleRepository.countByCategory(category)>0){
-            LOG.error("Category Article Service Save Error => Already category has got a article !");
+            log.error("Category Article Service Save Error => Already category has got a article !");
 
         }
 
@@ -82,6 +92,16 @@ public class CategoryArticleService {
         return true;
     }
 
+    public boolean update(long categoryArticleId, String articleBody){
+        CategoryArticle categoryArticle = findById(categoryArticleId);
 
+        if(categoryArticle.getArticle().equals(articleBody))
+            return true;
+        else {
+            categoryArticle.setArticle(articleBody);
+            categoryArticleRepository.save(categoryArticle);
+            return true;
+        }
+    }
 
 }

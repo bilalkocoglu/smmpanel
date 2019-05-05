@@ -53,7 +53,9 @@
 							<span th:if="${#strings.equals(packageItem.getSubCategory().getName(), 'Begeni')}">
 								<i class="fas fa-thumbs-up"></i>
 							</span>
-							<span><span th:text="${category.getName()}"></span> <span th:text="${packageItem.getSubCategory().getName()}"></span></span>
+							<span>
+								<span th:text="${packageItem.getSubCategory().getCategory().getName() + ' ' + packageItem.getSubCategory().getName()}"></span>
+							</span>
 						</li>
 					</ul>
 					<div class="brk-tabs-content position-relative">
@@ -97,18 +99,21 @@
 	</div>
 </div>
 
-<div class="container mt-70 mt-md-80 pt-50">
+<div th:if="${categoryArticle != null}" class="container mt-70 mt-md-80 pt-50">
 	<div class="accordion accordion-slider-min" role="tablist" aria-multiselectable="true" data-brk-library="component__accordions">
 		<div class="card">
 			<div class="card-header" role="tab" id="heading2Min">
-				<h5 class="mb-0 font__family-montserrat font__weight-light font__size-21 line__height-22"><a data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="false" aria-controls="collapse2Min">İnstagram Takipçi Satın Al</a></h5><a class="card-toggle-icon collapsed" data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="true" aria-controls="collapse2Min"><span class="before"></span> <span class="after"></span></a>
+				<h5 class="mb-0 font__family-montserrat font__weight-light font__size-21 line__height-22">
+					<a data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="false" aria-controls="collapse2Min">
+						<span th:text="${categoryArticle.getCategory().getName()}"></span> Paketleri Satın Al
+					</a>
+				</h5>
+				<a class="card-toggle-icon collapsed" data-toggle="collapse" data-parent=".accordion-slider-min" href="#collapse2Min" aria-expanded="true" aria-controls="collapse2Min">
+					<span class="before"></span> <span class="after"></span>
+				</a>
 			</div>
 			<div id="collapse2Min" class="collapse" role="tabpanel" aria-labelledby="heading2Min">
-				<div class="card-block text-left font__family-open-sans">
-					<h4 class="font__family-montserrat font__weight-bold font__size-24 line__height-24">Some title goes here</h4>
-					<p class="mt-25 font__size-15">Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet.</p>
-					<p class="mt-25 font__size-15">Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in</p>
-				</div>
+				<div class="card-block text-left font__family-open-sans" th:utext="${categoryArticle.getArticle()}"></div>
 			</div>
 		</div>
 	</div>
