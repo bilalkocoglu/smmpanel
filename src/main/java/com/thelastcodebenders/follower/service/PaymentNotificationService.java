@@ -26,17 +26,20 @@ public class PaymentNotificationService {
     private PaymenNotificationAssembler paymenNotificationAssembler;
     private BankAccountService bankAccountService;
     private MailService mailService;
+    private DrawService drawService;
 
     public PaymentNotificationService(PaymentNotificationRepository paymentNotificationRepository,
                                       UserService userService,
                                       PaymenNotificationAssembler paymenNotificationAssembler,
                                       BankAccountService bankAccountService,
-                                      MailService mailService){
+                                      MailService mailService,
+                                      DrawService drawService){
         this.paymentNotificationRepository = paymentNotificationRepository;
         this.userService = userService;
         this.paymenNotificationAssembler = paymenNotificationAssembler;
         this.bankAccountService = bankAccountService;
         this.mailService = mailService;
+        this.drawService = drawService;
     }
 
     public List<String> tableColumns(){
@@ -97,6 +100,7 @@ public class PaymentNotificationService {
                 boolean res = userService.updateUserBalance(paymentNotification.getUser(), paymentNotification.getAmount());
                 if (!res)
                     return false;
+                drawService.addDrawCount(paymentNotification.getUser());
                 paymentNotification = paymentNotificationRepository.save(paymentNotification);
                 mailService.asyncSendMail(AsyncMailType.PAYMENTNTFRES, paymentNotification.getUser(), paymentNotification.getUser(), "");
                 return true;

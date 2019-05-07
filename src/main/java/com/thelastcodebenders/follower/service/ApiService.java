@@ -3,14 +3,12 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
-import com.thelastcodebenders.follower.model.API;
+import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
-import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.APIRepository;
 import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.thelastcodebenders.follower.model.Service;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.ArrayList;
@@ -30,19 +28,22 @@ public class ApiService {
     private PackageService packageService;
     private MailService mailService;
     private UserService userService;
+    private DrawPrizeService drawPrizeService;
 
     public ApiService(APIRepository apiRepository,
                       ClientService clientService,
                       ServiceRepository serviceRepository,
                       PackageService packageService,
                       MailService mailService,
-                      UserService userService){
+                      UserService userService,
+                      DrawPrizeService drawPrizeService){
         this.apiRepository = apiRepository;
         this.clientService = clientService;
         this.serviceRepository = serviceRepository;
         this.packageService = packageService;
         this.mailService = mailService;
         this.userService = userService;
+        this.drawPrizeService = drawPrizeService;
     }
 
     public List<String> adminTableColumns(){
@@ -113,25 +114,6 @@ public class ApiService {
         }
     }
 
-    public boolean deleteApi(long apiId){
-        try {
-            API api = apiRepository.findById(apiId).get();
-            List<Service> services = serviceRepository.findByApi(api);
-            if (services.isEmpty()){
-                apiRepository.deleteById(apiId);
-                return true;
-            }else {
-                log.error("API Service API Delete Error -> Bu apiye bagli servisler mevcut!");
-                throw new RuntimeException("Bu API'ye bağlı servisler mevcut, bu yüzden silemezsiniz !");
-            }
-        }catch (Exception e){
-            if (e instanceof RuntimeException)
-                throw e;
-            log.error("API Service API Delete Error -> " + e.getMessage());
-            return false;
-        }
-    }
-
     public boolean changeState(long id, UserAction action){
         try {
             Optional<API> opt = apiRepository.findById(id);
@@ -148,11 +130,17 @@ public class ApiService {
                 if(api.isState()){
                     List<Service> services = serviceRepository.findByApi(api);
                     for (Service s: services) {
+
+                        //packages
                         List<Package> packages = packageService.findPackageByService(s);
                         for (Package pkg: packages) {
                             pkg.setState(false);
                         }
                         packageService.saveAll(packages);
+
+                        //drawprizes
+                        drawPrizeService.servicePassivateHandler(s);
+
                         s.setState(ServiceState.PASSIVE);
                     }
                     serviceRepository.saveAll(services);
@@ -178,11 +166,15 @@ public class ApiService {
                 List<Service> services = serviceRepository.findByApi(api);
                 for (Service service: services) {
 
+                    //package
                     List<Package> packages = packageService.findPackageByService(service);
                     for (Package pkg: packages) {
                         pkg.setState(false);
                     }
                     packageService.saveAll(packages);
+
+                    //drawprize
+                    drawPrizeService.servicePassivateHandler(service);
 
                     service.setState(ServiceState.PASSIVE);
                     serviceRepository.save(service);
@@ -214,11 +206,15 @@ public class ApiService {
             log.warn(api.getId() + "Idli apiden bakiye güncelleme için doğru sonuç gelmiyor. Api artık hizmet vermiyor olabilir !");
             List<Service> services = serviceRepository.findByApi(api);
             for (Service service: services) {
+                //packages
                 List<Package> packages = packageService.findPackageByService(service);
                 for (Package pkg: packages) {
                     pkg.setState(false);
                 }
                 packageService.saveAll(packages);
+
+                //drawprizes
+                drawPrizeService.servicePassivateHandler(service);
 
                 service.setState(ServiceState.PASSIVE);
                 serviceRepository.save(service);
@@ -246,9 +242,11 @@ public class ApiService {
         }
     }
 
+
+
     public String allApiUpdateService(){
         try {
-            log.info("All Service Update !!!");
+            //log.info("All Service Update !!!");
             String message = "";
             List<Long> updatedServices = new ArrayList<Long>();
             List<Long> newServices = new ArrayList<Long>();
@@ -297,11 +295,16 @@ public class ApiService {
                             equivalentService.setApiName(apiService.getApiName());
                             equivalentService.setState(ServiceState.PASSIVE);
 
+
+                            //packages
                             List<Package> packages = packageService.findPackageByService(equivalentService);
                             for (Package pkg: packages) {
                                 pkg.setState(false);
                             }
                             packageService.saveAll(packages);
+
+                            //drawprizes
+                            drawPrizeService.servicePassivateHandler(equivalentService);
 
                             log.info("Api Service Update Service Method -> " + equivalentService.getId() + "-Idli serviste apiden gelen değişiklikler mevcut. Servislerinizi ve paketlerinizi kontrol ediniz !");
                             updatedServices.add(equivalentService.getId());
@@ -354,5 +357,9 @@ public class ApiService {
             log.error("Api Service All Service Update Error ! -> " + e.getMessage());
             return "Servisleri güncelleme esnasında bir hata ile karşılaşıldı. Lütfen daha sonra tekrar deneyin !";
         }
+    }
+
+    public boolean deleteApi(long apiId) {
+        return true;
     }
 }

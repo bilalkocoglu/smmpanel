@@ -126,28 +126,28 @@
                                                   <td th:text="${order.getStartCount()}"></td>
                                                   <td>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
-                                                            class="btn white btn-round gradient-green-tea">
-                                                            Sipariş Alındı
+                                                          class="btn white btn-round gradient-yellow-green">
+                                                                Sipariş Alındı
                                                     </span>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
-                                                            class="btn white btn-round gradient-green-tea">
-                                                            Yükleniyor
+                                                          class="btn white btn-round gradient-light-green-amber">
+                                                                Yükleniyor
                                                     </span>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}"
-                                                            class="btn white btn-round gradient-green-tea">
+                                                        class="btn white btn-round gradient-green-tea">
                                                             Tamamlandı
                                                     </span>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}"
-                                                            class="btn white btn-round gradient-green-tea">
-                                                            Bir Kısmı Tamamlandı(Kalanı İade Edildi)
+                                                        class="btn white btn-round gradient-red-pink">
+                                                        Bir Kısmı Tamamlandı(Kalanı İade Edildi)
                                                     </span>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}"
-                                                            class="btn white btn-round gradient-green-tea">
-                                                            Gönderim Sırasında
+                                                        class="btn white btn-round gradient-blueberry">
+                                                        Gönderim Sırasında
                                                     </span>
                                                     <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}"
-                                                            class="btn white btn-round gradient-green-tea">
-                                                            İptal Edildi
+                                                        class="btn white btn-round gradient-ibiza-sunset">
+                                                        İptal Edildi
                                                     </span>
                                                   </td>
                                                   <td th:text="${order.getRemain()}"></td>

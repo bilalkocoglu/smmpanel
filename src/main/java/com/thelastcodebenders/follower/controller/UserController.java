@@ -27,6 +27,7 @@ public class UserController {
     private TicketService ticketService;
     private OrderService orderService;
     private PackageService packageService;
+    private DrawService drawService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -36,7 +37,8 @@ public class UserController {
                           BankAccountService bankAccountService,
                           TicketService ticketService,
                           OrderService orderService,
-                          PackageService packageService){
+                          PackageService packageService,
+                          DrawService drawService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -46,6 +48,7 @@ public class UserController {
         this.ticketService = ticketService;
         this.orderService = orderService;
         this.packageService = packageService;
+        this.drawService = drawService;
     }
 
     //USER INDEX
@@ -77,7 +80,7 @@ public class UserController {
 
     @GetMapping("/services/service")      //AJAX SERVICE
     public @ResponseBody UserPageServiceDTO serviceById(@RequestParam("serviceId") long id){
-        return serviceService.createUserPageServiceFormat(id);
+        return serviceService.createUserpageServiceAjaxFormat(id);
     }
 
     @GetMapping("/services/package")    //AJAX PACKAGE
@@ -270,10 +273,22 @@ public class UserController {
     //SPINNER
     @GetMapping("/draw")
     public String draw(Model model) throws LoginException{
+        int drawCount = drawService.getDrawCount(userService.getAuthUser());
+        if (drawCount > 0){
+            //bir sonraki için süre veya çekiliş
+        }
+        model.addAttribute("drawCount", drawCount);
         model.addAttribute("username", userService.getAuthUserName());
         model.addAttribute("userbalance", userService.getAuthUserBalance());
         model.addAttribute("page","draw");
         return "user-draw";
+    }
+
+    @GetMapping("/draw/action")
+    public String drawAction(Model model) throws LoginException {
+        model.addAttribute("username", userService.getAuthUserName());
+        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        return "user-draw-action";
     }
 }
 

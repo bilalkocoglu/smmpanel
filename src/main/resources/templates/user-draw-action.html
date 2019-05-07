@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr" class="loading"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="admin-template :: head"></head>
+
+
+  <body data-col="2-columns" class=" 2-columns ">
+    <div class="wrapper">
+      <!--.main-menu(class="#{menuColor} #{menuOpenType}", class=(menuShadow == true ? 'menu-shadow' : ''))-->
+        <div th:replace="user-template :: sidebar"></div>
+
+        <!-- / main menu-->
+
+      <div class="main-panel">
+
+        <!-- Navbar (Header) Starts-->
+          <nav th:replace="user-template :: header" class="navbar navbar-expand-lg navbar-light bg-faded"></nav>
+
+          <!-- Navbar (Header) Ends-->
+
+        <div class="main-content sss">
+          <div class="content-wrapper"><!--Statistics cards Starts-->
+              <div th:replace="admin-template :: messages"></div>
+
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-block" style="padding-top: 0px;">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12"></div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <p style="text-align: center; margin: 0px; padding: 0px; font-size: 30px; font-weight: bold;">
+                                            <i class="fa fa-angle-down"></i>
+                                        </p>
+                                            <canvas id="canvas" style="width: 100%;" height="300"
+                                                    data-responsiveMinWidth="180"
+                                                    data-responsiveScaleHeight="true"
+                                                    data-responsiveMargin="50">
+                                            </canvas>
+                                            <a onClick="startSpin();" style="color: white;" id="startbtn" class="btn gradient-blue-grey-blue btn-block">
+                                                Çevir !
+                                            </a>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+          </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">
+                            Tebrikler ! 100Takipçi kazandınız !
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert gradient-yellow-teal mb-2 text-center" role="alert">
+                            Bu pencereyi kapattığınız veya sayfayı yenilediğiniz takdirde ödül alabilmek için olan hakkınızı kullanmış sayılırsınız !
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn gradient-harmonic-energy">Ödülü Al</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/core/bootstrap.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/prism.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/jquery.matchHeight-min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/screenfull.min.js}" type="text/javascript"></script>
+    <script th:src="@{/vendors/js/pace/pace.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/app-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/notification-sidebar.js}" type="text/javascript"></script>
+    <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
+    <script type="text/javascript" th:src="@{/js/spinner.js}"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script>
+        // Create new wheel object specifying the parameters at creation time.
+        var click_count = 0;
+
+        let theWheel = new Winwheel({
+            'numSegments'  : 6,
+            'textFontSize' : 18,
+            'responsive'   : true,  // This wheel is responsive!
+            'segments'     :
+                [
+                    {'fillStyle' : '#eae56f', 'text' : 'Prize 1'},
+                    {'fillStyle' : '#89f26e', 'text' : 'Prize 2'},
+                    {'fillStyle' : '#7de6ef', 'text' : 'Prize 3'},
+                    {'fillStyle' : '#e7706f', 'text' : 'Prize 4'},
+                    {'fillStyle' : '#eae56f', 'text' : 'Prize 5'},
+                    {'fillStyle' : '#89f26e', 'text' : 'Prize 6'}
+                ],
+            'pins' :
+                {
+                    'outerRadius': 6,
+                    'responsive' : true, // This must be set to true if pin size is to be responsive.
+                },
+            'animation' :           // Specify the animation to use.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 7 ,     // Duration in seconds.
+                    'spins'    : 5,     // Number of complete spins.
+                    'callbackFinished' : alertPrize,
+                    'callbackSound' : playSound,    // Specify function to call when sound is to be triggered
+                }
+        });
+
+        function startSpin()
+        {
+            if(click_count == 0){
+                click_count++;
+                theWheel.stopAnimation(false);
+
+                // Reset the rotation angle to less than or equal to 360 so spinning again works as expected.
+                // Setting to modulus (%) 360 keeps the current position.
+                theWheel.rotationAngle = theWheel.rotationAngle % 360;
+
+                // Start animation.
+                theWheel.startAnimation();
+            }
+        }
+
+        let audio = new Audio('/sound/tick.mp3');  // Create audio object and load desired file.
+
+        function playSound()
+        {
+            // Stop and rewind the sound (stops it if already playing).
+            audio.pause();
+            audio.currentTime = 0;
+
+            // Play the sound.
+            audio.play();
+        }
+
+        // -------------------------------------------------------
+        function alertPrize(indicatedSegment)
+        {
+            console.log(indicatedSegment.text);
+            //$('#modalbtn').click();
+            // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+            $('#startbtn').hide();
+            $('#exampleModalCenter').modal('show');
+        }
+    </script>
+
+  </body>
+
+</html>

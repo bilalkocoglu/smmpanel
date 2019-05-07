@@ -49,23 +49,24 @@
                                     <td>
                                         <div th:if="${userticket.getTicket().isClosed() == true}"
                                              style="cursor:auto;"
-                                             class="btn white btn-round  gradient-green-tea">
+                                             class="btn white btn-round  gradient-ibiza-sunset">
                                             Sonlandırıldı
                                         </div>
                                         <div th:if="${userticket.getTicket().isClosed() == false && userticket.isAnswer() == true}"
                                              style="cursor:auto;"
-                                             class="btn white btn-round  gradient-mini">
+                                             class="btn white btn-round  gradient-yellow-green">
                                             Yanıtlandı
                                         </div>
                                         <div th:if="${userticket.getTicket().isClosed() == false && userticket.isAnswer() == false}"
                                              style="cursor:auto;"
-                                             class="btn white btn-round  gradient-nepal">
-                                            Bekleniyor
+                                             class="btn white btn-round  gradient-purple-light-blue">
+                                            Cevap Bekleniyor
                                         </div>
                                     </td>
                                     <td th:text="${userticket.getLastChange()}"></td>
                                     <td>
-                                        <a th:href="@{'/user/tickets/detail/' + ${userticket.getTicket().getId()}}" class="btn white btn-round gradient-dawn">
+                                        <a th:href="@{'/user/tickets/detail/' + ${userticket.getTicket().getId()}}"
+                                           class="btn white btn-round gradient-blackberry">
                                             Detay
                                         </a>
                                     </td>

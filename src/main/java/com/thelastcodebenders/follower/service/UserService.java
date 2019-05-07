@@ -33,19 +33,22 @@ public class UserService {
     private AccountActivationService accountActivationService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private MailService mailService;
+    private DrawService drawService;
 
     public UserService(UserRepository userRepository,
                        UserAssembler userAssembler,
                        RoleService roleService,
                        AccountActivationService accountActivationService,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
-                       MailService mailService){
+                       MailService mailService,
+                       DrawService drawService){
         this.userRepository = userRepository;
         this.userAssembler = userAssembler;
         this.roleService = roleService;
         this.accountActivationService = accountActivationService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
+        this.drawService = drawService;
     }
 
     public int userCount(){
@@ -197,6 +200,10 @@ public class UserService {
             Role role = roleService.findByRole(RoleType.USER);
             User user = userAssembler.convertFormDtoToUser(registerForm, role);
             user = userRepository.save(user);
+
+            //5 çekiliş hakkı ver
+            drawService.addDrawCount(user);
+
             //aktivasyon kodu oluşturup asenkron mail gönder.
 
             accountActivationService.generateSecretKey(user);

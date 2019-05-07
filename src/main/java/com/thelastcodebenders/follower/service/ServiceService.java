@@ -6,14 +6,12 @@ import com.thelastcodebenders.follower.dto.UserPageServiceDTO;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListItem;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListSubItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
-import com.thelastcodebenders.follower.model.Category;
+import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
-import com.thelastcodebenders.follower.model.SubCategory;
 import com.thelastcodebenders.follower.repository.PackageRepository;
 import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.thelastcodebenders.follower.model.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +27,19 @@ public class ServiceService {
     private ServiceAssembler serviceAssembler;
     private CategoryService categoryService;
     private PackageRepository packageRepository;
+    private DrawPrizeService drawPrizeService;
 
     public ServiceService(ServiceRepository serviceRepository,
                           ServiceAssembler serviceAssembler,
                           CategoryService categoryService,
-                          PackageRepository packageRepository){
+                          PackageRepository packageRepository,
+                          DrawPrizeService drawPrizeService){
         this.serviceRepository = serviceRepository;
         this.serviceAssembler = serviceAssembler;
         this.categoryService = categoryService;
         this.packageRepository = packageRepository;
+        this.drawPrizeService = drawPrizeService;
     }
-
 
 
     public int activeServiceCount(){
@@ -60,7 +60,9 @@ public class ServiceService {
                 "Action").collect(Collectors.toList());
     }
 
-    public List<Service> allService(){
+
+
+    public List<Service> findAll(){
         return serviceRepository.findAll();
     }
 
@@ -99,6 +101,8 @@ public class ServiceService {
 
     }
 
+
+
     public ServiceFormDTO createFormDto(Service service){
         return serviceAssembler.convertServiceToFormDto(service);
     }
@@ -130,11 +134,16 @@ public class ServiceService {
                 }
 
                 if (!serviceForm.isActive() && service.getState() == ServiceState.ACTIVE){
+
+                    //packages
                     List<Package> packages = packageRepository.findByService(service);
                     for (Package pkg: packages) {
                         pkg.setState(false);
                     }
                     packageRepository.saveAll(packages);
+
+                    //drawprizes
+                    drawPrizeService.servicePassivateHandler(service);
                 }
 
                 SubCategory subCategory = categoryService.findSubCategoryById(serviceForm.getSubcategoryId());
@@ -155,6 +164,8 @@ public class ServiceService {
             return false;
         }
     }
+
+
 
     public List<UserServicesListItem> createUserServicesItems(){
         try {
@@ -203,7 +214,7 @@ public class ServiceService {
         }
     }
 
-    public UserPageServiceDTO createUserPageServiceFormat(long serviceId){
+    public UserPageServiceDTO createUserpageServiceAjaxFormat(long serviceId){
         try {
             Service service = findServiceById(serviceId);
 

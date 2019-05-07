@@ -1,6 +1,5 @@
 package com.thelastcodebenders.follower.controller;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.thelastcodebenders.follower.dto.ChatMessageDTO;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
@@ -415,21 +414,6 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/apis/delete/{apiId:.*}")      //DELETE API
-    public String deleteApi(@PathVariable("apiId") long apiId, RedirectAttributes redirectAttributes){
-        try {
-            boolean res = apiService.deleteApi(apiId);
-            if (res)
-                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
-            else
-                redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
-        }catch (RuntimeException e){
-            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
-        }finally {
-            return "redirect:/admin/apis";
-        }
-    }
-
     @GetMapping("/apis/passivate/{apiId:.*}")       //PASSIVATE API
     public String passivateApi(@PathVariable("apiId") long apiId, RedirectAttributes redirectAttributes){
         boolean res = apiService.changeState(apiId, UserAction.PASSIVATE);
@@ -486,7 +470,7 @@ public class AdminController {
     @GetMapping("/services")        //SERVİCES PAGE
     public String services(Model model){
         model.addAttribute("service_table_columns", serviceService.serviceColumns());
-        model.addAttribute("services", serviceService.allService());
+        model.addAttribute("services", serviceService.findAll());
         model.addAttribute("page", "service");
         return "admin-services";
     }
@@ -722,12 +706,36 @@ public class AdminController {
         return "admin-draw-settings";
     }
 
-    @PostMapping("/draw-prize")
+    @PostMapping("/draw-prize")         //CREATE DRAW PRİZE
     public String createDrawPrize(RedirectAttributes redirectAttributes,
                                   @ModelAttribute DrawPrize drawPrize){
         try {
             drawPrizeService.save(drawPrize);
             redirectAttributes.addFlashAttribute("infomessage", "Ödül başarıyla PASİF olarak eklendi !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/admin/draw-settings";
+    }
+
+    @GetMapping("/draw-prize/activate/{drawprizeId:.*}")       //ACTİVATE DRAW PRİZE
+    public String drawPrizeActivate(RedirectAttributes redirectAttributes,
+                                    @PathVariable("drawprizeId") long id){
+        try {
+            drawPrizeService.changeState(id, UserAction.ACTIVATE);
+            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/admin/draw-settings";
+    }
+
+    @GetMapping("/draw-prize/passivate/{drawprizeId:.*}")       //ACTİVATE DRAW PRİZE
+    public String drawPrizePassivate(RedirectAttributes redirectAttributes,
+                                    @PathVariable("drawprizeId") long id){
+        try {
+            drawPrizeService.changeState(id, UserAction.PASSIVATE);
+            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }
