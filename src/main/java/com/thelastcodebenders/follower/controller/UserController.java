@@ -3,6 +3,8 @@ package com.thelastcodebenders.follower.controller;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
+import com.thelastcodebenders.follower.model.DrawPrize;
+import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,8 @@ public class UserController {
     private OrderService orderService;
     private PackageService packageService;
     private DrawService drawService;
+    private DrawPrizeService drawPrizeService;
+    private ApiService apiService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -38,7 +42,9 @@ public class UserController {
                           TicketService ticketService,
                           OrderService orderService,
                           PackageService packageService,
-                          DrawService drawService){
+                          DrawService drawService,
+                          DrawPrizeService drawPrizeService,
+                          ApiService apiService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -49,15 +55,20 @@ public class UserController {
         this.orderService = orderService;
         this.packageService = packageService;
         this.drawService = drawService;
+        this.drawPrizeService = drawPrizeService;
+        this.apiService = apiService;
     }
 
     //USER INDEX
     @GetMapping("/dashboard")       //INDEX PAGE
     public String userIndex(Model model) throws LoginException{
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
         model.addAttribute("loading_order_count", orderService.getAuthUserActiveOrderCount());
         model.addAttribute("orders", orderService.getOrdersByAuthUser());
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
         model.addAttribute("unconfirmed_payment_ntf", paymentNotificationService.unconfirmedLoginUserNotifications());
         model.addAttribute("unread_ticket_count", ticketService.unreadTickets(RoleType.USER));
         model.addAttribute("announcements", announcementService.allAskedQuestions());
@@ -70,10 +81,14 @@ public class UserController {
     //USER SERVİCES
     @GetMapping("/services")        //SERVİCES PAGE
     public String newOrderPage(Model model) throws LoginException{
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
         model.addAttribute("neworderform", new NewOrderFormDTO());
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
         model.addAttribute("service_list_items", serviceService.createUserServicesItems());
+
         model.addAttribute("page", "services");
         return "user-create-order";
     }
@@ -93,10 +108,15 @@ public class UserController {
     //USER ORDERS
     @GetMapping("/orders")      //ORDER PAGE
     public String userOrders(Model model) throws LoginException {
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
-        model.addAttribute("page", "orders");
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
         model.addAttribute("orders", orderService.getUserPageOrderByAuthUser());
+
+        model.addAttribute("page", "orders");
+
         return "user-orders";
     }
 
@@ -151,10 +171,15 @@ public class UserController {
     //USER ASKED QUESTİON
     @GetMapping("/asked-questions")         //ASKED QUESTİON PAGE
     public String askedQuestionsPage(Model model) throws LoginException{
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
         model.addAttribute("asked_questions", askedQuestionService.allAskedQuestions());
+
         model.addAttribute("page", "askedquestions");
+
         return "user-asked-questions";
     }
 
@@ -164,12 +189,17 @@ public class UserController {
     //USER PAYMENT NOTIFICATION
     @GetMapping("/payment-notifications")       //PAYMENT NOTIFICATION PAGE
     public String paymentNotification(Model model) throws LoginException{
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
         model.addAttribute("create_payment_form", new PaymentNotificationFormDTO());
         model.addAttribute("payment_notifications", paymentNotificationService.getLoginUserPaymentNotifications());
         model.addAttribute("bank_accounts", bankAccountService.allAccounts());
+
         model.addAttribute("page", "paymentnotification");
+
         return "user-payment-notifications";
     }
 
@@ -189,16 +219,19 @@ public class UserController {
     //USER TICKETS
     @GetMapping("/tickets")     //TICKET PAGE
     public String tickets(Model model) throws LoginException {
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
-        model.addAttribute("usertickets", ticketService.allUserTicket());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+        model.addAttribute("usertickets", ticketService.allTicketsByUser(user));
         model.addAttribute("create_ticket_form", new CreateTicketFormDTO());
         model.addAttribute("page", "tickets");
         return "user-tickets";
     }
 
     @PostMapping("/tickets")        //CREATE TİCKET
-    public String createTicket(@ModelAttribute CreateTicketFormDTO createTicketFormDTO, RedirectAttributes redirectAttributes) throws LoginException {
+    public String createTicket(@ModelAttribute CreateTicketFormDTO createTicketFormDTO,
+                               RedirectAttributes redirectAttributes) throws LoginException {
         boolean res = ticketService.createTicket(createTicketFormDTO);
         if (res)
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");
@@ -208,14 +241,18 @@ public class UserController {
     }
 
     @GetMapping("/tickets/detail/{ticketId:.*}")        //TICKET DETAİL PAGE
-    public String ticketDetail(@PathVariable("ticketId") long ticketId, Model model, RedirectAttributes redirectAttributes) throws LoginException {
+    public String ticketDetail(@PathVariable("ticketId") long ticketId,
+                               Model model,
+                               RedirectAttributes redirectAttributes) throws LoginException {
         UserTicket userTicket = ticketService.oneTicket(ticketId);
         if (userTicket == null){
             redirectAttributes.addFlashAttribute("errormessage", "Böyle bir talep bulunamadı !");
             return "redirect:/user/tickets";
         }else {
-            model.addAttribute("username", userService.getAuthUserName());
-            model.addAttribute("userbalance", userService.getAuthUserBalance());
+            User user = userService.getAuthUser();
+
+            model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+            model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
             model.addAttribute("messagedto", new ChatMessageDTO());
             model.addAttribute("userticket", userTicket);
             return "user-ticket-datail";
@@ -239,8 +276,10 @@ public class UserController {
     //USER LOAD BALANCE
     @GetMapping("/load-balance")
     public String loadBalance(Model model) throws LoginException {
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
         model.addAttribute("page", "loadbalance");
         return "user-load-balance";
     }
@@ -250,9 +289,11 @@ public class UserController {
     //USER PROFİLE
     @GetMapping("/profile")
     public String profilePage(Model model) throws LoginException{
-        model.addAttribute("user", userService.getAuthUser());
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("user", user);
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
         return "user-profile";
     }
 
@@ -273,22 +314,56 @@ public class UserController {
     //SPINNER
     @GetMapping("/draw")
     public String draw(Model model) throws LoginException{
-        int drawCount = drawService.getDrawCount(userService.getAuthUser());
+        User user = userService.getAuthUser();
+
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
+        model.addAttribute("draworders", drawService.findDrawOrderByUser(user));
+
+        int drawCount = drawService.findDrawCountByUser(user).getCount();
         if (drawCount > 0){
             //bir sonraki için süre veya çekiliş
+            model.addAttribute("countDown", drawService.drawPermission(user));
         }
         model.addAttribute("drawCount", drawCount);
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
+
         model.addAttribute("page","draw");
         return "user-draw";
     }
 
     @GetMapping("/draw/action")
-    public String drawAction(Model model) throws LoginException {
-        model.addAttribute("username", userService.getAuthUserName());
-        model.addAttribute("userbalance", userService.getAuthUserBalance());
-        return "user-draw-action";
+    public String drawAction(Model model,
+                             RedirectAttributes redirectAttributes) throws LoginException {
+        User user = userService.getAuthUser();
+
+        //bu sayfaya erişmek için izin var mı yok mu
+        if (drawService.drawActionPermission(user)){
+            model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+            model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+
+            model.addAttribute("spinnerItems", drawPrizeService.getSpinnerItems());
+            model.addAttribute("drawVisitId", drawService.createDrawVisit(user));
+
+            return "user-draw-action";
+        }else {
+            redirectAttributes.addFlashAttribute("errormessage", "Çekiliş hakkınız bulunmamaktadır. Çekilişlere katılmak için lütfen bakiye yükleyiniz !");
+            return "redirect:/user/draw";
+        }
+    }
+
+    @PostMapping("/draw/action/result/{drawVisitId:.*}/{prizeId:.*}")
+    public String drawActionResult(RedirectAttributes redirectAttributes,
+                                   @RequestParam("url") String url,
+                                   @PathVariable("prizeId") long prizeId,
+                                   @PathVariable("drawVisitId") long drawVisitId){
+        try {
+            DrawPrize drawPrize = drawService.newPrize(url, prizeId, drawVisitId);
+            apiService.asyncApiUpdateBalance(drawPrize.getService().getApi());
+        }catch (Exception e){
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+        }
+        return "redirect:/user/draw";
     }
 }
 

@@ -184,7 +184,7 @@ public class OrderService {
 
             String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.SERVICE);
 
-            if (apiOrderId == null){
+            if (apiOrderId == null || apiOrderId.equals("0")){
                 throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
             }
 

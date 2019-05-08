@@ -5,18 +5,18 @@ import com.thelastcodebenders.follower.client.dto.*;
 import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.model.API;
 import com.thelastcodebenders.follower.model.Order;
+import com.thelastcodebenders.follower.model.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 public class ClientService {
     private static final Logger log = LoggerFactory.getLogger(ClientService.class);
 
@@ -50,7 +50,7 @@ public class ClientService {
         }
     }
 
-    public List<com.thelastcodebenders.follower.model.Service> getAllServices(API api){
+    public List<Service> getAllServices(API api){
         try{
             GeneralRequest generalRequest = GeneralRequest
                     .builder()
@@ -65,7 +65,7 @@ public class ClientService {
             }
 
             List<ServiceClientDTO> serviceClientDTOList = Arrays.asList(response.getBody());
-            List<com.thelastcodebenders.follower.model.Service> services = new ArrayList<>();
+            List<Service> services = new ArrayList<>();
             for (ServiceClientDTO serviceClientDTO : serviceClientDTOList) {
                 services.add(serviceAssembler.convertClientDtoToService(serviceClientDTO, api));
             }
@@ -112,6 +112,30 @@ public class ClientService {
             return String.valueOf(response.getBody().getOrder());
         }catch (Exception e){
             log.error("Client Service Return Order Id Error -> " + e.getMessage());
+            return null;
+        }
+    }
+
+    public String createDrawPrizeOrderReturnOrderId(Service service, String link, String quantity){
+        try {
+            CreateOrderRequest createOrderRequest = CreateOrderRequest.builder()
+                    .key(service.getApi().getSecretKey())
+                    .action("add")
+                    .service(service.getApiServiceId())
+                    .link(link)
+                    .quantity(quantity)
+                    .build();
+            String url = service.getApi().getUrl();
+            ResponseEntity<CreateOrderResponse> response = restTemplate.postForEntity(url, createOrderRequest, CreateOrderResponse.class);
+
+            if (response.getStatusCode() != HttpStatus.OK){
+                log.error("Client Service createOrderReturnOrderId Method Error -> Response Code : " + response.getStatusCodeValue());
+                return null;
+            }
+
+            return String.valueOf(response.getBody().getOrder());
+        }catch (Exception e){
+            log.error("Client Service Create Draw Prize Return Order Id Error -> " + e.getMessage());
             return null;
         }
     }

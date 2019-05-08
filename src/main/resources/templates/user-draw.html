@@ -74,7 +74,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div th:if="${drawCount > 0}" class="flex-w flex-c cd100 wsize1 bor1">
+                                <div th:if="${drawCount > 0 && countDown != null}" class="flex-w flex-c cd100 wsize1 bor1">
                                     <div class="flex-col-c-m size2 bg0 bor2">
                                         <span class="l1-txt3 p-b-7 days">35</span>
                                         <span class="s1-txt1">Gün</span>
@@ -93,6 +93,13 @@
                                     <div class="flex-col-c-m size2 bg0">
                                         <span class="l1-txt3 p-b-7 seconds">39</span>
                                         <span class="s1-txt1">Saniye</span>
+                                    </div>
+                                </div>
+                                <div th:if="${drawCount > 0 && countDown == null}">
+                                    <div class="form-group">
+                                        <a href="/user/draw/action" class="btn btn-block btn-raised gradient-indigo-purple white">
+                                            <i class="ft-star"></i>  Çarkı Döndür  <i class="ft-star"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -118,17 +125,40 @@
                                                           <th>Ödül Adı</th>
                                                           <th>Kategori</th>
                                                           <th>Miktar</th>
-                                                          <th>Tarih</th>
                                                           <th>Durum</th>
                                                       </tr>
                                                   </thead>
                                                   <tbody>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
+                                                    <tr th:each="drawOrder : ${draworders}">
+                                                        <td th:text="${drawOrder.getDrawPrize().getName()}"></td>
+                                                        <td th:text="${drawOrder.getDrawPrize().getService().getSubCategory().getCategory().getName()}"></td>
+                                                        <td th:text="${drawOrder.getDrawPrize().getQuantity()}"></td>
+                                                        <td>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
+                                                                  class="btn white btn-round gradient-yellow-green">
+                                                                Sipariş Alındı
+                                                                </span>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
+                                                                  class="btn white btn-round gradient-light-green-amber">
+                                                                Yükleniyor
+                                                            </span>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}"
+                                                                  class="btn white btn-round gradient-green-tea">
+                                                                Tamamlandı
+                                                            </span>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}"
+                                                                  class="btn white btn-round gradient-red-pink">
+                                                                Bir Kısmı Tamamlandı
+                                                            </span>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}"
+                                                                  class="btn white btn-round gradient-blueberry">
+                                                                Gönderim Sırasında
+                                                            </span>
+                                                            <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}"
+                                                                  class="btn white btn-round gradient-ibiza-sunset">
+                                                                İptal Edildi
+                                                            </span>
+                                                        </td>
                                                     </tr>
                                                   </tbody>
                                                   <tfoot>
@@ -136,7 +166,6 @@
                                                           <th>Ödül Adı</th>
                                                           <th>Kategori</th>
                                                           <th>Miktar</th>
-                                                          <th>Tarih</th>
                                                           <th>Durum</th>
                                                       </tr>
                                                   </tfoot>
@@ -181,7 +210,7 @@
 			endtimeYear: 0,
 			endtimeMonth: 0,
 			endtimeDate: 0,
-			endtimeHours: 24    ,
+			endtimeHours: 24,
 			endtimeMinutes: 0,
 			endtimeSeconds: 0,
 			timeZone: ""
@@ -199,7 +228,6 @@
 
 
         var drawcount = [[${drawCount}]];
-        console.log(drawcount);
 
         /*]]>*/
     </script>

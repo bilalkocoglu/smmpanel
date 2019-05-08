@@ -1,24 +1,33 @@
 package com.thelastcodebenders.follower.service;
 
 
+import com.thelastcodebenders.follower.assembler.DrawPrizeAssembler;
+import com.thelastcodebenders.follower.dto.DrawPrizeSpinnerItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
 import com.thelastcodebenders.follower.model.DrawPrize;
+import com.thelastcodebenders.follower.model.DrawVisit;
 import com.thelastcodebenders.follower.model.Service;
 import com.thelastcodebenders.follower.repository.DrawPrizeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class DrawPrizeService {
     private static final Logger log = LoggerFactory.getLogger(DrawPrizeService.class);
 
     private DrawPrizeRepository drawPrizeRepository;
+    private DrawPrizeAssembler drawPrizeAssembler;
 
-    public DrawPrizeService(DrawPrizeRepository drawPrizeRepository){
+    public DrawPrizeService(DrawPrizeRepository drawPrizeRepository,
+                            DrawPrizeAssembler drawPrizeAssembler){
         this.drawPrizeRepository = drawPrizeRepository;
+        this.drawPrizeAssembler = drawPrizeAssembler;
     }
 
 
@@ -28,7 +37,13 @@ public class DrawPrizeService {
     }
 
     public DrawPrize findById(long id){
-        return drawPrizeRepository.getOne(id);
+        Optional<DrawPrize> opt = drawPrizeRepository.findById(id);
+        if (opt.isPresent())
+            return opt.get();
+        else {
+            log.error("Draw Prize Service findById Error -> Not Found !");
+            return null;
+        }
     }
 
     public List<DrawPrize> findPrizeByService(Service service){
@@ -82,7 +97,6 @@ public class DrawPrizeService {
     }
 
 
-
     public void changeState(long id, UserAction action){
         try {
             DrawPrize drawPrize = findById(id);
@@ -110,5 +124,18 @@ public class DrawPrizeService {
                 throw new RuntimeException("İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
             }
         }
+    }
+
+    public List<DrawPrizeSpinnerItem> getSpinnerItems(){
+        List<DrawPrize> drawPrizes = drawPrizeRepository.findTop3ByState(true,
+                new Sort(Sort.Direction.ASC, "apiPrice"));
+
+        List<DrawPrizeSpinnerItem> drawPrizeSpinnerItems = new ArrayList<>();
+
+        for (DrawPrize drawPrize: drawPrizes) {
+            drawPrizeSpinnerItems.add(drawPrizeAssembler.convertDrawPrizeToServiceMode(drawPrize));
+        }
+
+        return drawPrizeSpinnerItems;
     }
 }

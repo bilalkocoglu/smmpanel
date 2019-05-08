@@ -1,12 +1,12 @@
 package com.thelastcodebenders.follower.model;
 
-import com.thelastcodebenders.follower.enums.OrderStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,19 +14,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "draworder")
-public class DrawOrder {
+@Table(name = "drawvisit")
+public class DrawVisit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "draworder_id")
+    @Column(name = "drawvisit_id")
     private long id;
 
     @ManyToOne
     @JoinColumn
-    private DrawPrize drawPrize;
+    private User user;
 
-    private OrderStatusType status;
+    @ManyToOne
+    @JoinColumn
+    private DrawOrder drawOrder;
 
-    private String apiOrderId;
-    private boolean closed;
+    private LocalDateTime date;
 }

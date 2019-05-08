@@ -61,7 +61,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">
-                            Tebrikler ! 100Takipçi kazandınız !
+                            Tebrikler ! <span id="prizeNameSpan"></span> kazandınız !
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -71,9 +71,15 @@
                         <div class="alert gradient-yellow-teal mb-2 text-center" role="alert">
                             Bu pencereyi kapattığınız veya sayfayı yenilediğiniz takdirde ödül alabilmek için olan hakkınızı kullanmış sayılırsınız !
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn gradient-harmonic-energy">Ödülü Al</button>
+                        <form class="form" id="prizeform" method="post" action="#">
+                            <div class="form-group">
+                                <label for="url">URL</label>
+                                <input autocomplete="off" type="text" required id="url" class="form-control text-center" name="url">
+                            </div>
+                            <div class="modal-footer" style="padding-bottom: 0px;">
+                                <button type="submit" class="btn gradient-harmonic-energy">Ödülü Al</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -94,22 +100,29 @@
     <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
     <script type="text/javascript" th:src="@{/js/spinner.js}"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
-    <script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+
+        var spinnerItems = [[${spinnerItems}]];
+        var drawVisitId = [[${drawVisitId}]];
+
+        /*]]>*/
         // Create new wheel object specifying the parameters at creation time.
         var click_count = 0;
 
         let theWheel = new Winwheel({
             'numSegments'  : 6,
-            'textFontSize' : 18,
+            'textFontSize' : 17,
             'responsive'   : true,  // This wheel is responsive!
             'segments'     :
                 [
-                    {'fillStyle' : '#eae56f', 'text' : 'Prize 1'},
-                    {'fillStyle' : '#89f26e', 'text' : 'Prize 2'},
-                    {'fillStyle' : '#7de6ef', 'text' : 'Prize 3'},
-                    {'fillStyle' : '#e7706f', 'text' : 'Prize 4'},
-                    {'fillStyle' : '#eae56f', 'text' : 'Prize 5'},
-                    {'fillStyle' : '#89f26e', 'text' : 'Prize 6'}
+                    {'fillStyle' : '#eae56f', 'text' : spinnerItems[0].name},
+                    {'fillStyle' : '#89f26e', 'text' : spinnerItems[1].name},
+                    {'fillStyle' : '#7de6ef', 'text' : spinnerItems[0].name},
+                    {'fillStyle' : '#e7706f', 'text' : spinnerItems[1].name},
+                    {'fillStyle' : '#eae56f', 'text' : spinnerItems[0].name},
+                    {'fillStyle' : '#89f26e', 'text' : spinnerItems[2].name}
                 ],
             'pins' :
                 {
@@ -156,10 +169,20 @@
         // -------------------------------------------------------
         function alertPrize(indicatedSegment)
         {
-            console.log(indicatedSegment.text);
+            $('#startbtn').hide();
+
+            var count=0;
+            spinnerItems.forEach(function(item) {
+                if (count == 0){
+                    if (item.name === indicatedSegment.text) {
+                        $('#prizeNameSpan').text(indicatedSegment.text);
+                        $('#prizeform').attr("action", "/user/draw/action/result/" + drawVisitId + "/" + item.id);
+                        count++;
+                    }
+                }
+            });
             //$('#modalbtn').click();
             // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
-            $('#startbtn').hide();
             $('#exampleModalCenter').modal('show');
         }
     </script>

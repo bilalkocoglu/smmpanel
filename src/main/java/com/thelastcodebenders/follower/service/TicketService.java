@@ -137,8 +137,8 @@ public class TicketService {
         return userTicket;
     }
 
-    public List<UserTicket> allUserTicket() throws LoginException {
-        List<Ticket> tickets = ticketRepository.findByFromUser(userService.getAuthUser());
+    public List<UserTicket> allTicketsByUser(User user)  {
+        List<Ticket> tickets = ticketRepository.findByFromUser(user);
 
         List<UserTicket> userTickets = new ArrayList<>();
 

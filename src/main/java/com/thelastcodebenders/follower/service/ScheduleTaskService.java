@@ -35,7 +35,7 @@ public class ScheduleTaskService {
 
             mailService.sendUpdateServiceStateMail(admin.getMail(), message);
         }else {
-            log.info("Servisler başarılı şekilde güncellendi ! Değişiklik görülmedi !");
+            //log.info("Servisler başarılı şekilde güncellendi ! Değişiklik görülmedi !");
         }
 
         //long endTime = System.nanoTime();
@@ -45,7 +45,7 @@ public class ScheduleTaskService {
 
     @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)
     public void updateActiveOrderStatus(){
-        log.info("All Order Update !");
+        //log.info("All Order Update !");
         orderService.updateActiveOrderStatus();
     }
 }

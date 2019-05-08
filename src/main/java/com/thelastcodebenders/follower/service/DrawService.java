@@ -1,14 +1,23 @@
 package com.thelastcodebenders.follower.service;
 
-import com.thelastcodebenders.follower.model.DrawCount;
-import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.client.ClientService;
+import com.thelastcodebenders.follower.dto.CountDownDTO;
+import com.thelastcodebenders.follower.enums.OrderStatusType;
+import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.repository.DrawCountRepository;
 import com.thelastcodebenders.follower.repository.DrawOrderRepository;
+import com.thelastcodebenders.follower.repository.DrawVisitRepository;
+import org.apache.catalina.Lifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DrawService {
@@ -17,11 +26,20 @@ public class DrawService {
 
     private DrawCountRepository drawCountRepository;
     private DrawOrderRepository drawOrderRepository;
+    private DrawVisitRepository drawVisitRepository;
+    private DrawPrizeService drawPrizeService;
+    private ClientService clientService;
 
     public DrawService(DrawCountRepository drawCountRepository,
-                       DrawOrderRepository drawOrderRepository){
+                       DrawOrderRepository drawOrderRepository,
+                       DrawVisitRepository drawVisitRepository,
+                       DrawPrizeService drawPrizeService,
+                       ClientService clientService){
         this.drawCountRepository = drawCountRepository;
         this.drawOrderRepository = drawOrderRepository;
+        this.drawVisitRepository = drawVisitRepository;
+        this.drawPrizeService = drawPrizeService;
+        this.clientService = clientService;
     }
 
     public DrawCount findDrawCountByUser(User user){
@@ -31,6 +49,34 @@ public class DrawService {
             return null;
         else
             return drawCounts.get(0);
+    }
+
+    public DrawVisit findDrawVisitById(long id){
+        Optional<DrawVisit> opt = drawVisitRepository.findById(id);
+        if (opt.isPresent())
+            return opt.get();
+        else {
+            log.error("Draw Service findDrawVisitById Error -> Not Found !");
+            return null;
+        }
+    }
+
+    public List<DrawVisit> findDrawVisitByUser(User user){
+        List<DrawVisit> drawVisits = drawVisitRepository.findByUser(user, new Sort(Sort.Direction.DESC, "id"));
+        return drawVisits;
+    }
+
+    public List<DrawOrder> findDrawOrderByUser(User user){
+        List<DrawOrder> drawOrders = new ArrayList<>();
+
+        List<DrawVisit> drawVisits = findDrawVisitByUser(user);
+
+        for (DrawVisit drawVisit: drawVisits) {
+            if (drawVisit.getDrawOrder() != null)
+                drawOrders.add(drawVisit.getDrawOrder());
+        }
+
+        return drawOrders;
     }
 
     public void addDrawCount(User user){
@@ -52,8 +98,90 @@ public class DrawService {
         return drawCount;
     }
 
-    public int getDrawCount(User user){
+    public CountDownDTO drawPermission(User user){
         DrawCount drawCount = findDrawCountByUser(user);
-        return drawCount.getCount();
+
+        if (drawCount.getCount() == 0){
+            throw new RuntimeException("Çekiliş hakkınız bulunmamaktadır. Çekilişlere katılmak için lütfen bakiye yükleyiniz !");
+        }
+
+        List<DrawVisit> drawVisits = drawVisitRepository.findByUser(user, new Sort(Sort.Direction.DESC, "date"));
+
+        if (drawVisits.isEmpty()){
+            return null; //Çekiliş yapabilir !
+        }else {
+            log.error("DrawVisits Not Empty !");
+            return null;
+        }
     }
+
+    public boolean drawActionPermission(User user){
+        try {
+            CountDownDTO countDownDTO = drawPermission(user);
+
+            if (countDownDTO == null)
+                return true;
+            else
+                return false;
+        }catch (Exception e){
+            log.error("DrawService DrawActionPermission Error -> " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Transactional
+    public long createDrawVisit(User user){
+        DrawVisit drawVisit = DrawVisit.builder()
+                .date(LocalDateTime.now())
+                .user(user)
+                .build();
+        drawVisit = drawVisitRepository.save(drawVisit);
+
+        DrawCount drawCount = findDrawCountByUser(user);
+
+        drawCount.setCount(drawCount.getCount()-1);
+        drawCountRepository.save(drawCount);
+        return drawVisit.getId();
+    }
+
+    public DrawPrize newPrize(String url, long prizeId, long drawVisitId){
+        try {
+            DrawVisit drawVisit = findDrawVisitById(drawVisitId);
+
+            if (drawVisit == null){
+                throw new RuntimeException("Geçersiz Çekiliş !");
+            }
+
+            DrawPrize drawPrize = drawPrizeService.findById(prizeId);
+
+            if (drawPrize == null){
+                throw new RuntimeException("Geçersiz Çekiliş !");
+            }
+
+            String apiOrderId = clientService.createDrawPrizeOrderReturnOrderId(drawPrize.getService(), url, String.valueOf(drawPrize.getQuantity()));
+
+            if (apiOrderId == null || apiOrderId.equals("0")){
+                throw new RuntimeException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+            }
+
+            DrawOrder drawOrder = DrawOrder.builder()
+                    .apiOrderId(apiOrderId)
+                    .drawPrize(drawPrize)
+                    .status(OrderStatusType.PENDING)
+                    .closed(false)
+                    .build();
+
+            drawOrder = drawOrderRepository.save(drawOrder);
+
+            drawVisit.setDrawOrder(drawOrder);
+            drawVisitRepository.save(drawVisit);
+            return drawPrize;
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                throw e;
+            else
+                throw new RuntimeException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+        }
+    }
+
 }

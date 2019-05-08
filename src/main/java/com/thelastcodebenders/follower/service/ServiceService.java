@@ -123,6 +123,10 @@ public class ServiceService {
                 if (service == null)
                     return false;
 
+                if (serviceForm.getCustomMin() < service.getApiMinPiece() || serviceForm.getCustomMax()>service.getApiMaxPiece()){
+                    throw new RuntimeException("Max-Min değerleri belirtilen aralıkta olmak zorundadır !");
+                }
+
                 if (service.getState() == ServiceState.DELETED){
                     throw new RuntimeException("Silinmiş bir servisi güncelleyemezsiniz !");
                 }
