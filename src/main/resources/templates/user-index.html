@@ -176,7 +176,7 @@
 							<td th:text="${order.getQuantity()}"></td>
 							<td>
 								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
-									  class="btn white btn-round gradient-yellow-green">
+									  class="btn btn-round gradient-yellow-green">
                                             Sipariş Alındı
                                 </span>
 								<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"

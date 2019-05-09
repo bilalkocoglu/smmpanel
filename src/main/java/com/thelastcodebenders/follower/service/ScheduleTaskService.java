@@ -14,15 +14,18 @@ public class ScheduleTaskService {
     private MailService mailService;
     private UserService userService;
     private OrderService orderService;
+    private DrawService drawService;
 
     public ScheduleTaskService(ApiService apiService,
                                MailService mailService,
                                UserService userService,
-                               OrderService orderService){
+                               OrderService orderService,
+                               DrawService drawService){
         this.apiService = apiService;
         this.mailService = mailService;
         this.userService = userService;
         this.orderService = orderService;
+        this.drawService = drawService;
     }
 
     @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)     //45 minutes
@@ -47,5 +50,6 @@ public class ScheduleTaskService {
     public void updateActiveOrderStatus(){
         //log.info("All Order Update !");
         orderService.updateActiveOrderStatus();
+        drawService.updateActiveOrderStatus();
     }
 }

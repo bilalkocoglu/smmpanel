@@ -76,22 +76,22 @@
                                 </div>
                                 <div th:if="${drawCount > 0 && countDown != null}" class="flex-w flex-c cd100 wsize1 bor1">
                                     <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 days">35</span>
+                                        <span class="l1-txt3 p-b-7 days">-</span>
                                         <span class="s1-txt1">Gün</span>
                                     </div>
 
                                     <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 hours">17</span>
+                                        <span class="l1-txt3 p-b-7 hours">-</span>
                                         <span class="s1-txt1">Saat</span>
                                     </div>
 
                                     <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 minutes">50</span>
+                                        <span class="l1-txt3 p-b-7 minutes">-</span>
                                         <span class="s1-txt1">Dakika</span>
                                     </div>
 
                                     <div class="flex-col-c-m size2 bg0">
-                                        <span class="l1-txt3 p-b-7 seconds">39</span>
+                                        <span class="l1-txt3 p-b-7 seconds">-</span>
                                         <span class="s1-txt1">Saniye</span>
                                     </div>
                                 </div>
@@ -135,7 +135,7 @@
                                                         <td th:text="${drawOrder.getDrawPrize().getQuantity()}"></td>
                                                         <td>
                                                             <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
-                                                                  class="btn white btn-round gradient-yellow-green">
+                                                                  class="btn btn-round gradient-yellow-green">
                                                                 Sipariş Alındı
                                                                 </span>
                                                             <span th:if="${drawOrder.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
@@ -203,15 +203,25 @@
     <script th:src="@{/vendors/tilt/tilt.jquery.min.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
     <script th:src="@{/js/main.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
     <script th:src="@{/js/rocket-loader.min.js}" data-cf-settings="257e82ca5a041335e6c37e2a-|49" defer=""></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+
+        var countDown = [[${countDown}]];
+
+        /*]]>*/
+    </script>
     <script type="257e82ca5a041335e6c37e2a-text/javascript">
+        console.log(countDown);
+
 		$('.cd100').countdown100({
 			// Set Endtime here
 			// Endtime must be > current time
 			endtimeYear: 0,
 			endtimeMonth: 0,
 			endtimeDate: 0,
-			endtimeHours: 24,
-			endtimeMinutes: 0,
+			endtimeHours: countDown.endtimeHours,
+			endtimeMinutes: countDown.endtimeMinutes,
 			endtimeSeconds: 0,
 			timeZone: ""
 			// ex:  timeZone: "America/New_York", can be empty
@@ -223,15 +233,6 @@
 			scale: 1.1
 		})
 	</script>
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-
-
-        var drawcount = [[${drawCount}]];
-
-        /*]]>*/
-    </script>
-
-  </body>
+    </body>
 
 </html>

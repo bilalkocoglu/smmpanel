@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value = UserController.END_POINT)
@@ -282,6 +283,19 @@ public class UserController {
         model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
         model.addAttribute("page", "loadbalance");
         return "user-load-balance";
+    }
+/*
+    @PostMapping("/load-balance")
+    public String loadBalancePost(Model model,
+                                  @RequestParam("balance") String balance){
+
+    }*/
+
+    @GetMapping("/iyzico/callback")
+    public String iyzicoCallback(HttpServletRequest httpServletRequest,
+                                 Model model){
+        model.addAttribute("requestBody", httpServletRequest.toString());
+        return "iyzico-deneme";
     }
 
 

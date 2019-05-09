@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.client.ClientService;
+import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.CountDownDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.model.*;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,8 +112,23 @@ public class DrawService {
         if (drawVisits.isEmpty()){
             return null; //Çekiliş yapabilir !
         }else {
-            log.error("DrawVisits Not Empty !");
-            return null;
+
+            DrawVisit endVisit = drawVisits.get(0);
+            Duration duration = Duration.between(endVisit.getDate(), LocalDateTime.now());
+            //System.out.println(duration.toString());
+            if ( duration.toDays() > 1)
+                return null;
+            else {
+                //1 gün - geçen süre
+                long durationMinutes = (24*60) - duration.toMinutes();
+                int hours = (int) (durationMinutes/60);
+                int minute = (int) durationMinutes % 60;
+                return CountDownDTO.builder()
+                        .endtimeHours(hours)
+                        .endtimeMinutes(minute)
+                        .endtimeSeconds(0)
+                        .build();
+            }
         }
     }
 
@@ -150,6 +167,8 @@ public class DrawService {
 
             if (drawVisit == null){
                 throw new RuntimeException("Geçersiz Çekiliş !");
+            }else if (drawVisit.getDrawOrder() != null){
+                throw new RuntimeException("Geçersiz Çekiliş !");
             }
 
             DrawPrize drawPrize = drawPrizeService.findById(prizeId);
@@ -181,6 +200,65 @@ public class DrawService {
                 throw e;
             else
                 throw new RuntimeException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+        }
+    }
+
+    //shedule task method !!
+    public void updateActiveOrderStatus(){
+        try {
+            List<DrawOrder> activeOrders = drawOrderRepository.findByClosed(false);
+
+
+            for (DrawOrder order: activeOrders) {
+                OrderStatusResponse orderStatusResponse = clientService.orderStatus(order.getApiOrderId(), order.getDrawPrize().getService().getApi());
+
+                if (orderStatusResponse.getStatus().equals("Pending")){
+                    //sipariş alındı
+                    log.info(order.getId() + " -> Pending !");
+
+                    order.setStatus(OrderStatusType.PENDING);
+                }
+                else if (orderStatusResponse.getStatus().equals("In progress")){
+                    //yükleniyor
+                    log.info(order.getId() + " -> Inprogress !");
+
+                    order.setStatus(OrderStatusType.INPROGRESS);
+                }
+                else if (orderStatusResponse.getStatus().equals("Completed")){
+                    //tamamlandı
+                    log.info(order.getId() + " -> Complated !");
+
+
+                    order.setClosed(true);
+                    order.setStatus(OrderStatusType.COMPLETED);
+                }
+                else if (orderStatusResponse.getStatus().equals("Partial")){
+                    //bir kısmı tamamlandı kalanı iade edildi
+                    log.info(order.getId() + " -> Partial !");
+
+                    order.setClosed(true);
+                    order.setStatus(OrderStatusType.PARTIAL);
+                }
+                else if (orderStatusResponse.getStatus().equals("Processing")){
+                    //gönderim sırasında
+                    log.info(order.getId() + " -> Processing !");
+
+                    order.setStatus(OrderStatusType.PROCESSING);
+                }
+                else if (orderStatusResponse.getStatus().equals("Canceled")){
+                    //iptal edildi
+                    //para iade edilecek, api bakiyesi güncellenecek
+                    log.info(order.getId() + " -> Canceled !");
+
+
+                    order.setClosed(true);
+                    order.setStatus(OrderStatusType.CANCELED);
+                }
+
+                order = drawOrderRepository.save(order);
+            }
+        }catch (Exception e){
+            log.error("Order Service Order Status Update Error -> " + e.getMessage());
         }
     }
 
