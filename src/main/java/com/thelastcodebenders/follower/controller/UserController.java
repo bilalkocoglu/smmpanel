@@ -1,8 +1,10 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.iyzipay.model.CheckoutFormInitialize;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
+import com.thelastcodebenders.follower.iyzico.PaymentService;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
@@ -33,6 +35,7 @@ public class UserController {
     private DrawService drawService;
     private DrawPrizeService drawPrizeService;
     private ApiService apiService;
+    private PaymentService paymentService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -45,7 +48,8 @@ public class UserController {
                           PackageService packageService,
                           DrawService drawService,
                           DrawPrizeService drawPrizeService,
-                          ApiService apiService){
+                          ApiService apiService,
+                          PaymentService paymentService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -58,6 +62,7 @@ public class UserController {
         this.drawService = drawService;
         this.drawPrizeService = drawPrizeService;
         this.apiService = apiService;
+        this.paymentService = paymentService;
     }
 
     //USER INDEX
@@ -284,20 +289,22 @@ public class UserController {
         model.addAttribute("page", "loadbalance");
         return "user-load-balance";
     }
-/*
+
     @PostMapping("/load-balance")
     public String loadBalancePost(Model model,
-                                  @RequestParam("balance") String balance){
+                                  @RequestParam("balance") String balance,
+                                  HttpServletRequest httpServletRequest) throws LoginException {
+        User user = userService.getAuthUser();
 
-    }*/
+        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
 
-    @GetMapping("/iyzico/callback")
-    public String iyzicoCallback(HttpServletRequest httpServletRequest,
-                                 Model model){
-        model.addAttribute("requestBody", httpServletRequest.toString());
-        return "iyzico-deneme";
+        CheckoutFormInitialize checkoutFormInitialize = paymentService.createPayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
+        System.out.println(checkoutFormInitialize.toString());
+        model.addAttribute("paymentPageUrl", checkoutFormInitialize.getPaymentPageUrl() + "&iframe=true");
+
+        return "user-load-balance-iyzico";
     }
-
 
 
     //USER PROFİLE

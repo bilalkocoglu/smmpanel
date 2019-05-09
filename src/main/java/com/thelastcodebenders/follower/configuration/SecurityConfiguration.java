@@ -53,7 +53,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.
                 authorizeRequests()
                 .antMatchers("/","/login", "/forgot-password" ,"/login-failure", "/registration", "/account-activate/**",
-                        "/all-packages", "/package/**", "/message").permitAll()
+                        "/all-packages", "/package/**", "/message", "/iyzico/callback").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()

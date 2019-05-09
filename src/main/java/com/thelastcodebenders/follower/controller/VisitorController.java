@@ -185,4 +185,11 @@ public class VisitorController {
         }
         return "redirect:/";
     }
+
+    @GetMapping("/iyzico/callback")
+    public String iyzicoCallback(HttpServletRequest httpServletRequest,
+                                 Model model){
+        model.addAttribute("requestBody", httpServletRequest.toString());
+        return "iyzico-deneme";
+    }
 }
