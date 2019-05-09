@@ -22,7 +22,9 @@
         <div class="main-content bakiye">
           <div class="content-wrapper"><!--Statistics cards Starts-->
               <div th:replace="admin-template :: messages"></div>
-                <iframe th:src="${paymentPageUrl}" style="width: 100%; height: 500px; border: none;"></iframe>
+                <!--<iframe th:src="${paymentPageUrl}" style="width: 100%; height: 500px; border: none;"></iframe>-->
+              <div th:utext="${iyzicoscript}"></div>
+              <div id="iyzipay-checkout-form" class="responsive"></div>
           </div>
         </div>
 

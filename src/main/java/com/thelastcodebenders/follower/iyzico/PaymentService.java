@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.iyzico;
 import com.iyzipay.Options;
 import com.iyzipay.model.*;
 import com.iyzipay.request.CreateCheckoutFormInitializeRequest;
+import com.iyzipay.request.RetrieveCheckoutFormRequest;
 import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class PaymentService {
         createCheckoutFormInitializeRequest.setPrice(BigDecimal.valueOf(price));
         createCheckoutFormInitializeRequest.setBasketId("deneme123");
         createCheckoutFormInitializeRequest.setPaymentGroup("OTHER");
-        createCheckoutFormInitializeRequest.setCallbackUrl("https://iyzico-test.herokuapp.com/iyzico/callback");
+        createCheckoutFormInitializeRequest.setCallbackUrl("http://localhost:8090/user/iyzico/callback");
         createCheckoutFormInitializeRequest.setCurrency(Currency.TRY.name());
         createCheckoutFormInitializeRequest.setPaidPrice(BigDecimal.valueOf(price));
 
@@ -90,6 +91,15 @@ public class PaymentService {
         return checkoutFormInitialize;
     }
 
+    public CheckoutForm infoPayment(String token, String conversationId){
+        RetrieveCheckoutFormRequest request = new RetrieveCheckoutFormRequest();
+        request.setLocale(Locale.TR.getValue());
+        request.setConversationId(conversationId);
+        request.setToken(token);
 
+
+        CheckoutForm checkoutForm = CheckoutForm.retrieve(request, options);
+        return checkoutForm;
+    }
 
 }

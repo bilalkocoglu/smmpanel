@@ -1,6 +1,8 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
+import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
@@ -300,10 +302,28 @@ public class UserController {
         model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
 
         CheckoutFormInitialize checkoutFormInitialize = paymentService.createPayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
-        System.out.println(checkoutFormInitialize.toString());
-        model.addAttribute("paymentPageUrl", checkoutFormInitialize.getPaymentPageUrl() + "&iframe=true");
+        model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
 
         return "user-load-balance-iyzico";
+    }
+
+    @PostMapping("/iyzico/callback")
+    public String iyzicoCallback(@RequestParam("token") String token,
+                                 RedirectAttributes redirectAttributes){
+
+        CheckoutForm checkoutForm = paymentService.infoPayment(token, "deneme123");
+        System.out.println(checkoutForm.toString());
+        if(checkoutForm.getStatus().equals(Status.SUCCESS.getValue())
+                && checkoutForm.getPaymentStatus().equals("SUCCESS")){
+            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı !");
+        }else {
+            if(checkoutForm.getErrorMessage()!=null)
+                redirectAttributes.addFlashAttribute("errormessage", checkoutForm.getErrorMessage());
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem başarısız !");
+        }
+
+        return "redirect:/user/load-balance";
     }
 
 
@@ -386,6 +406,8 @@ public class UserController {
         }
         return "redirect:/user/draw";
     }
+
+
 }
 
 

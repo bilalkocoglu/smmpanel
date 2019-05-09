@@ -1,7 +1,10 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.iyzipay.model.CheckoutForm;
+import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
 import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
+import com.thelastcodebenders.follower.iyzico.PaymentService;
 import com.thelastcodebenders.follower.model.Category;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
@@ -18,6 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
+import java.util.Map;
 
 @Controller
 public class VisitorController {
@@ -28,17 +33,20 @@ public class VisitorController {
     private CategoryService categoryService;
     private VisitorMessageService visitorMessageService;
     private CategoryArticleService categoryArticleService;
+    private PaymentService paymentService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
                              CategoryService categoryService,
                              VisitorMessageService visitorMessageService,
-                             CategoryArticleService categoryArticleService){
+                             CategoryArticleService categoryArticleService,
+                             PaymentService paymentService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
         this.visitorMessageService = visitorMessageService;
         this.categoryArticleService = categoryArticleService;
+        this.paymentService = paymentService;
     }
 
     //Login
@@ -186,10 +194,6 @@ public class VisitorController {
         return "redirect:/";
     }
 
-    @GetMapping("/iyzico/callback")
-    public String iyzicoCallback(HttpServletRequest httpServletRequest,
-                                 Model model){
-        model.addAttribute("requestBody", httpServletRequest.toString());
-        return "iyzico-deneme";
-    }
+
+
 }
