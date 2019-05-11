@@ -86,7 +86,7 @@
                                 <td><span th:text="${paymentntf.getAmount()}"></span> TL</td>
                                 <td th:text="${paymentntf.getBankAccount().getBankName()}"></td>
                                 <td th:text="${paymentntf.getFullname()}"></td>
-                                <td th:text="${paymentntf.getDate() + ' - ' + paymentntf.getTime()}"></td>
+                                <td th:text="${paymentntf.getDate()}"></td>
                                 <td>
                                   <a th:if="${paymentntf.isConfirmation()}" class="btn white btn-round gradient-green-tea">
                                     Onaylandı

@@ -30,7 +30,6 @@ public class PaymentNotification {
     private BankAccount bankAccount;
     private String fullname;    //hesap sahibinin
     private double amount;
-    private LocalDate date;
-    private LocalTime time;
+    private String date;
     private boolean confirmation;   //true:onaylanmış, false:onaylanmamış
 }

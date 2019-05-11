@@ -48,6 +48,12 @@ public class AccountActivationService {
         }
     }
 
+    public void sendKeyAgain(User user){
+        String key = getKeyByUser(user);
+
+        mailService.asyncSendMail(AsyncMailType.ACCOUNTACTIVATE, user, user, key);
+    }
+
     private String generateKey(){
         String key = "";
 
@@ -67,6 +73,17 @@ public class AccountActivationService {
             return null;
         }else {
             return accountActivations.get(0).getUser();
+        }
+    }
+
+    public String getKeyByUser(User user){
+        List<AccountActivation> accountActivations = accountActivationRepository.findByUser(user);
+
+        if (accountActivations.isEmpty()){
+            log.error("Account Activation Service getKeyByUser Error -> " +user.getId() + " kullanıcısına tanımlanmış anahtar yok !");
+            throw new RuntimeException("Bu kullanıcıya ait anahtar yok !");
+        }else {
+            return accountActivations.get(0).getSecretkey();
         }
     }
 

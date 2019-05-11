@@ -6,7 +6,7 @@ import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
-import com.thelastcodebenders.follower.iyzico.PaymentService;
+import com.thelastcodebenders.follower.iyzipay.PaymentService;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
@@ -38,6 +38,7 @@ public class UserController {
     private DrawPrizeService drawPrizeService;
     private ApiService apiService;
     private PaymentService paymentService;
+    private CardPaymentService cardPaymentService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -51,7 +52,8 @@ public class UserController {
                           DrawService drawService,
                           DrawPrizeService drawPrizeService,
                           ApiService apiService,
-                          PaymentService paymentService){
+                          PaymentService paymentService,
+                          CardPaymentService cardPaymentService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -65,6 +67,7 @@ public class UserController {
         this.drawPrizeService = drawPrizeService;
         this.apiService = apiService;
         this.paymentService = paymentService;
+        this.cardPaymentService = cardPaymentService;
     }
 
     //USER INDEX
@@ -295,13 +298,22 @@ public class UserController {
     @PostMapping("/load-balance")
     public String loadBalancePost(Model model,
                                   @RequestParam("balance") String balance,
-                                  HttpServletRequest httpServletRequest) throws LoginException {
+                                  HttpServletRequest httpServletRequest,
+                                  RedirectAttributes redirectAttributes) throws LoginException {
         User user = userService.getAuthUser();
 
         model.addAttribute("username", user.getName() + ' ' + user.getSurname());
         model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
 
         CheckoutFormInitialize checkoutFormInitialize = paymentService.createPayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
+        System.out.println(checkoutFormInitialize.toString());
+        if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
+            log.error("Checkout Form Initialize Error -> " + checkoutFormInitialize.getErrorMessage());
+            redirectAttributes.addFlashAttribute("errormessage",
+                    "Şu anda ödeme alma işlemini başlatamadık. Lütfen tekrar deneyiniz veya diğer ödeme yöntemlerini kullanınız. Sorun ile ilgili destek talebi açarsanız arkadaşlarımız kısa süre içinde yardımcı olacaktır.");
+            return "redirect:/load-balance";
+        }
+
         model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
 
         return "user-load-balance-iyzico";
@@ -309,12 +321,20 @@ public class UserController {
 
     @PostMapping("/iyzico/callback")
     public String iyzicoCallback(@RequestParam("token") String token,
-                                 RedirectAttributes redirectAttributes){
+                                 RedirectAttributes redirectAttributes) throws LoginException {
+        User user = userService.getAuthUser();
 
-        CheckoutForm checkoutForm = paymentService.infoPayment(token, "deneme123");
+        CheckoutForm checkoutForm = paymentService.infoPayment(token, "");
         System.out.println(checkoutForm.toString());
+
+
         if(checkoutForm.getStatus().equals(Status.SUCCESS.getValue())
                 && checkoutForm.getPaymentStatus().equals("SUCCESS")){
+
+            cardPaymentService.newSuccessCardPayment(user, checkoutForm.getPaidPrice().doubleValue(), token);
+            userService.updateUserBalance(user, checkoutForm.getPaidPrice().doubleValue());
+            drawService.addDrawCount(user);
+
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı !");
         }else {
             if(checkoutForm.getErrorMessage()!=null)
@@ -365,7 +385,9 @@ public class UserController {
         int drawCount = drawService.findDrawCountByUser(user).getCount();
         if (drawCount > 0){
             //bir sonraki için süre veya çekiliş
-            model.addAttribute("countDown", drawService.drawPermission(user));
+            CountDownDTO countDownDTO = drawService.drawPermission(user);
+            if (countDownDTO != null)
+                model.addAttribute("countDown", countDownDTO);
         }
         model.addAttribute("drawCount", drawCount);
 
@@ -378,17 +400,25 @@ public class UserController {
                              RedirectAttributes redirectAttributes) throws LoginException {
         User user = userService.getAuthUser();
 
-        //bu sayfaya erişmek için izin var mı yok mu
-        if (drawService.drawActionPermission(user)){
-            model.addAttribute("username", user.getName() + ' ' + user.getSurname());
-            model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+        try {
+            //bu sayfaya erişmek için izin var mı yok mu
+            if (drawService.drawActionPermission(user)){
+                model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+                model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
 
-            model.addAttribute("spinnerItems", drawPrizeService.getSpinnerItems());
-            model.addAttribute("drawVisitId", drawService.createDrawVisit(user));
+                model.addAttribute("spinnerItems", drawPrizeService.getSpinnerItems());
+                model.addAttribute("drawVisitId", drawService.createDrawVisit(user));
 
-            return "user-draw-action";
-        }else {
-            redirectAttributes.addFlashAttribute("errormessage", "Çekiliş hakkınız bulunmamaktadır. Çekilişlere katılmak için lütfen bakiye yükleyiniz !");
+                return "user-draw-action";
+            }else {
+                redirectAttributes.addFlashAttribute("errormessage", "Şu anda çekilişe katılamıyorsunuz. Lütfen daha sonra tekrar deneyin.");
+                return "redirect:/user/draw";
+            }
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "Şu anda çekilişe katılamıyorsunuz. Lütfen daha sonra tekrar deneyin.");
             return "redirect:/user/draw";
         }
     }

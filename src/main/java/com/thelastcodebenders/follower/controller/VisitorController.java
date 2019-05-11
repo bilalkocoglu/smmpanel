@@ -1,28 +1,18 @@
 package com.thelastcodebenders.follower.controller;
 
-import com.iyzipay.model.CheckoutForm;
-import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
 import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
-import com.thelastcodebenders.follower.iyzico.PaymentService;
+import com.thelastcodebenders.follower.iyzipay.PaymentService;
 import com.thelastcodebenders.follower.model.Category;
-import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
-import java.util.Map;
 
 @Controller
 public class VisitorController {
@@ -56,9 +46,14 @@ public class VisitorController {
     }
 
     //AUTH Failure
-    @GetMapping("/login-failure")
-    public String loginFailure(RedirectAttributes redirectAttributes){
-        redirectAttributes.addFlashAttribute("errormessage", "Kullanıcı adı veya şifre hatalı !");
+    @GetMapping("/login-failure/{errorcode:.*}")
+    public String loginFailure(RedirectAttributes redirectAttributes,
+                               @PathVariable("errorcode") int errorcode){
+        if (errorcode == 1){
+            redirectAttributes.addFlashAttribute("errormessage", "Hesabınız aktif değil !");
+        }else if (errorcode == 2){
+            redirectAttributes.addFlashAttribute("errormessage", "Kullanıcı adı veya şifre hatalı !");
+        }
         return "redirect:/login";
     }
 
@@ -84,6 +79,30 @@ public class VisitorController {
         return "redirect:/forgot-password";
     }
 
+
+    @GetMapping("/account-activate/again")
+    public String accountActivateAgainPage(Model model){
+        return "visitor-activate-again";
+    }
+
+    @PostMapping("/account-activate/again")
+    public String accountActivateAgain(RedirectAttributes redirectAttributes,
+                                       @RequestParam("email") String email){
+        try {
+            userService.accountActivateMailAgain(email);
+            redirectAttributes.addFlashAttribute("successmessage", "Aktifleştirme linkiniz mail olarak gönderildi !");
+        }catch (Exception e){
+            if (e instanceof RuntimeException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error(e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+        }
+        return "redirect:/account-activate/again";
+    }
+
+
     //Register Page
     @GetMapping("/registration")
     public String registrationPage(Model model){
@@ -93,7 +112,8 @@ public class VisitorController {
 
     //Create User
     @PostMapping("/registration")
-    public String createUser(@ModelAttribute RegisterFormDTO registerFormDTO, RedirectAttributes redirectAttributes){
+    public String createUser(@ModelAttribute RegisterFormDTO registerFormDTO,
+                             RedirectAttributes redirectAttributes){
         try {
             boolean res = userService.saveUser(registerFormDTO);
             if (res){
@@ -178,7 +198,18 @@ public class VisitorController {
         return "visitor-packages";
     }
 
-    @PostMapping("/message")
+    @GetMapping("/package/order/{packageId:.*}")
+    public String packageOrderPage(@PathVariable("packageId") long packageId,
+                                   Model model,
+                                   RedirectAttributes redirectAttributes){
+        System.out.println(packageId);
+        model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        model.addAttribute("message", new VisitorMessageDTO());
+        return "visitor-package-order";
+    }
+
+
+    @PostMapping("/message")        //footer visitor message
     public String visitorMessage(RedirectAttributes redirectAttributes,
                                  @ModelAttribute VisitorMessageDTO visitorMessage,
                                  HttpServletRequest httpServletRequest){
@@ -194,6 +225,11 @@ public class VisitorController {
         return "redirect:/";
     }
 
-
+    @GetMapping("/terms-use")       //terms use page
+    public String termOfUse(Model model){
+        model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        return "visitor-terms-of-use";
+    }
 
 }

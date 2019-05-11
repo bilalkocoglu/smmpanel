@@ -9,6 +9,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,8 +23,16 @@ public class AuthFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         log.info("Auth Failure ! IP -> " + request.getRemoteAddr());
-        request.setAttribute("errormessage", "Kullanıcı adı veya şifre hatalı !");
-        String url = "/login-failure";
+        //User is disabled
+        //Bad credentials
+        String url = "";
+        if (exception.getMessage().equals("User is disabled")){
+            url = "/login-failure/1";
+        }
+        else{
+            url = "/login-failure/2";
+        }
+
         redirectStrategy.sendRedirect(request, response, url);
     }
 }

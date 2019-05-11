@@ -41,7 +41,8 @@
                                                   <td th:text="${payment.getId()}"></td>
                                                   <td th:text="${payment.getUser().getId() + '-' + payment.getUser().getName() + ' ' + payment.getUser().getSurname()}"></td>
                                                   <td th:text="${payment.getAmount()}"></td>
-                                                  <td th:text="${payment.getLocalDateTime().toString().replace('T', ' ')}"></td>
+                                                  <td th:text="${payment.getDate()}"></td>
+                                                  <td th:text="${payment.getIyzipayToken()}"></td>
                                               </tr>
                                           </tbody>
                                           <tfoot>

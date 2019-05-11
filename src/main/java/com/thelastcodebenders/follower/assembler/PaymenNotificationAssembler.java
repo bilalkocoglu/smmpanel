@@ -13,15 +13,14 @@ import java.time.format.DateTimeFormatter;
 public class PaymenNotificationAssembler {
     public PaymentNotification convertFormDtoToPaymentNtf(PaymentNotificationFormDTO paymentNtfForm){
         return PaymentNotification.builder()
-                .time(convertTime(paymentNtfForm.getTime()))
                 .fullname(paymentNtfForm.getFullName())
-                .date(convertDate(paymentNtfForm.getDate()))
+                .date(convertDate(paymentNtfForm.getDate(), paymentNtfForm.getTime()))
                 .confirmation(false)
                 .amount(paymentNtfForm.getAmount())
                 .build();
     }
 
-    private LocalDate convertDate(String dateString){
+    private String convertDate(String dateString, String timeString){
         String[] dataParses = dateString.split(" ");
         if (dataParses[0].length() == 1){
             dataParses[0] = '0'+dataParses[0];
@@ -33,7 +32,15 @@ public class PaymenNotificationAssembler {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM, yyyy");
         LocalDate localDate = LocalDate.parse(dateString, formatter);
-        return localDate;
+        DateTimeFormatter endDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        dateString = localDate.format(endDateFormatter);
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime localTime = LocalTime.parse(timeString, timeFormatter);
+        DateTimeFormatter endTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        timeString = localTime.format(endTimeFormatter);
+
+        return dateString + ' ' + timeString;
     }
 
     private LocalTime convertTime(String timeString){

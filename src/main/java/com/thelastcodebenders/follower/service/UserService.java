@@ -146,22 +146,6 @@ public class UserService {
 
 
 
-    public double getAuthUserBalance() throws LoginException {
-        User user = getAuthUser();
-
-        if (user == null){
-            log.error("User Service Auth User Balance Error -> user = null !");
-            return -1;
-        }
-        else
-            return Double.parseDouble(String.format("%.2f", user.getBalance()));
-    }
-
-    public String getAuthUserName() throws LoginException {
-        User user = getAuthUser();
-        return user.getName() + ' ' + user.getSurname();
-    }
-
     public User getAuthUser() throws LoginException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = findUserByMail(auth.getName());
@@ -224,8 +208,12 @@ public class UserService {
             return false;
         }
 
+        if (!registerForm.isTermsUse()){
+            throw new RuntimeException("Kayıt olabilmek için kullanım koşullarını kabul etmelisiniz.");
+        }
+
         if ( !registerForm.getPassword().equals(registerForm.getRepairPass()) ){
-            return false;
+            throw new RuntimeException("Şifreleriniz eşleşmiyor lütfen tekrar deneyin.");
         }
 
         if ( registerForm.getPassword().length()<PASSLENGTH){
@@ -266,6 +254,23 @@ public class UserService {
             return false;
         }
     }
+
+    public void accountActivateMailAgain(String email){
+        if (isNullOrEmpty(email)){
+            throw new RuntimeException("Doğru bir mail adresi giriniz !");
+        }
+
+        User user = findUserByMail(email);
+
+        if (user == null){
+            throw new RuntimeException("Böyle bir üyelik mevcut değil !");
+        }else if (user.isState()){
+            throw new RuntimeException("Hesap zaten aktif !");
+        }
+
+        accountActivationService.sendKeyAgain(user);
+    }
+
 
     public boolean resetPassword(String email){
         try {

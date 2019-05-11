@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div th:replace="visitor-template :: mobile-header"></div>
+
+		<header th:replace="visitor-template :: header"></header>
+		<h1 class="sr-only">SMM PANEL</h1>
+	<div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="/visitor/img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css">
+		<span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+		<div class="breadcrumbs__wrapper">
+			<div class="container">
+				<div class="row align-items-center">
+					<div class="col-12 col-lg-6">
+						<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+							<h2 class="brk-white-font-color font__weight-semibold font__size-48 line__height-68 font__family-montserrat">Kullanım Koşulları</h2>
+						</div>
+					</div>
+					<div class="col-12 col-lg-6">
+						<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+							<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">LÜTFEN DİKKATLE OKUYUN</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="main-wrapper">
+		<main class="main-container mb-70 mt-md-50">
+			<section>
+				<div class="container">
+					<div class="brk-tabs brk-tabs-bottom-top" data-hash="true" data-brk-library="component__tabs">
+                          <ul class="brk-tabs-nav font__family-montserrat">
+                            <li class="brk-tab"><i class="far fa-gem" aria-hidden="true"></i><span>KULLANIM MADDELERİ</span></li>
+                            <li class="brk-tab"><i class="fab fa-delicious" aria-hidden="true"></i><span>KULLANIM KURALLARI</span></li>
+                            <li class="brk-tab"><i class="fab fa-gg" aria-hidden="true"></i><span>KULLANIM SÖZLEŞMESİ</span></li>
+                          </ul>
+						<div class="brk-tabs-content">
+							<div id="tab-1" class="brk-tab-item active text-center">
+								<div class="row">
+									<div class="col-lg-12 "><span class="font__family-montserrat font__weight-light text-uppercase font__size-28 mt-10 mb-50">KULLANIM MADDELERİ</span>
+                                        <ul class="list-inline-5" data-brk-library="component__list">
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>
+                                              <a>Verdiğiniz sipariş devam ederken aynı linke bir sipariş daha girerseniz sistem hata verir ve bakiyeniz yanar. </a>
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Profiliniz gizli konumundayken sipariş verirseniz sistem sipariş durumunu tamamlandı yapar ve işlem ücretini iade etmez! 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Eğer siparişinizin bir kısmı tamamlanır yada iptal edilirse (Madde 2 hariç) paranız iade edilir.
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Bir sipariş bitmeden aynı adrese başka sipariş girmemelisiniz. 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Bot takipçi işlemlerinin hiç bir şekilde garantisi yoktur bakım yapılacak süre belli olmamakla birlikte gelen takipçiler ertesi gün bile silinebilir. 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Verdiğiniz sipariş maksimum 48 saat içerisinde başlar. 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>+18,adult,iddaa kupon satış hesabı yada yasa dışı kumar vb hesaplara üye çekimi yasaktır.  
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Sisteme giren bakiye kesinlikle iade edilmemektedir lakin bizimle bir hizmet konusunda anlaştığımızda o hizmet problem yaşayıp kaldırılırsa iade yapılmaktadır. 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Siparişinizi verdikten sonra hesap, gönderi vs. ID'lerini değiştirmeyin, gizlemeyin ve sipariş tamamlanmadan başka yerden çekim yapmayınız
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>İşlem hatalı sonuçlanır yada gönderim yapmadan tamamlandı sonucu verirse bizden yanıt gelene kadar başka yerlerden işlem girmeyiniz!
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Sistemimize kayıt olup sipariş vermiş olan herkes bu kuralları kabul etmiş olur ve herhangi bir aksaklıkta şikayetci olamaz ve hak talep edemezler. 
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>Servis açıklamalarında yazan veriler güncel olmamakla birlikte bu sözleşmede geçerli olmaktadır çünkü hiç bir servisin anlık olarak ne veriler yansıttığını bilemediğimiz için servis açıklamaları sadece ön bilgidir garanti ve başlangıç süreleri geçerli değildir.
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                            <li class="font__family-montserrat font__size-12 font__weight-bold list-counter">
+                                              <span class="before"></span>sosyaltrend.net bildirimde bulunmaksızın yukarıdaki maddeleri değiştirme hakkını saklı tutar.
+                                              <img src="/visitor/img/shape-1.png" alt="alt" class="list-shape">
+                                              <span class="after"></span>
+                                            </li>
+                                          </ul>
+									</div>
+								</div>
+							</div>
+							<div id="tab-2" class="brk-tab-item text-center">
+								<div class="row">
+									<div class="col-lg-12">
+                                        <span class="font__family-montserrat font__weight-light text-uppercase font__size-28 pb-25 mt-10">KULLANIM KURALLARI</span><br>
+                                        <span class="font__family-montserrat font__weight-light text-uppercase font__size-15 mt-10">Yapacağınız alışverişlerde aşağıdaki maddeleri kabul etmiş olursunuz.</span><br><br>
+                                        <p class="text-center">• Sipariş geçilmeden önce mutlaka kullanıcının profil herkese açık hale getirilmelidir.<br><br>
+                                        • Sosyal medya sistemleri sürekli güncellenmektedir takipçi vb işlemlerde hesabınız kapatılabilir lütfen "Yeni Açılmış","Telif İçerikli","Sms ve Mail Onaysız" Hesaplara Takipçi Almayınız.Aynı zamanda sıradan bir hesabın kapanma riski de bulunmaktadır. Lütfen bunları göz önünde bulundurunuz sorumluluk kabul edememekteyiz.<br><br>
+                                        • Bir sipariş bitmeden aynı adrese başka sipariş girmemelisiniz.<br><br>
+                                        • Kapanan hesap,silinen takipçi, ve her türlü sipariş eksikliği konusunda sosyaltrend.nnet garanti vermemektedir.<br><br>
+                                        • sosyaltrend.nnet bütün işlemlerde aktiflik & düşmeme garantilemez sadece alınan miktarın yüklemesinde sorumludur. Eğer eksik yükleme olursa sistem otomatik şekilde eksik kısmın ücretini iade etmektedir.<br><br>
+                                        • sosyaltrend.nnet üzerinden alım&satım yapanlar siparişlerinde kendisi sorumludur.<br><br>
+                                        • Twitter yabancı bot işlemlerinde lütfen sipariş tamamlandıktan sonra en az 6 saat bekleyip öyle başka bir sipariş geçiniz.<br><br>
+                                        • Bot takipçi işlemlerinin hiç bir şekilde garantisi yoktur bakım yapılacak süre belli olmamakla birlikte gelen takipçiler ertesi gün bile silinebilir.<br><br>
+                                        • Verdiğiniz sipariş maksimum 48 saat içerisinde başlar.<br><br>
+                                        • Gizli hesaplara verilen siparişlerin durumu "Tamamlandı" olursa geri iade yapılamamaktadır.<br><br>
+                                        • +18,adult,iddaa kupon satış hesabı yada yasa dışı kumar vb. hesaplara üye çekimi yasaktır.<br><br>
+                                        • Sistem üzerinden geçilen siparişlerin başlama süresi sistemsel yoğunluğa göre değişebilir , ertelenebilir , uzatılabilir.<br><br>
+                                        • Sisteme giren bakiye kesinlikle iade edilmemektedir lakin bizimle bir hizmet konusunda anlaştığımızda o hizmet problem yaşayıp kaldırılırsa iade yapılmaktadır.<br><br>
+                                        • Siparişinizi verdikten sonra hesap, gönderi vs. ID'lerini değiştirmeyin, gizlemeyin ve sipariş tamamlanmadan başka yerden çekim yapmayınız.<br><br>
+                                        • Bu hususlara dikkat etmezseniz yaşanacak durumlardan dolayı sorumluluk bize ait değildir.<br><br>
+                                        • Sistemimize kayıt olup sipariş vermiş olan herkes bu kuralları kabul etmiş olur ve herhangi bir aksaklıkta şikayetçi olamaz ve hak talep edemezler.<br>
+                                        • sosyaltrend.net bildirimde bulunmaksızın yukarıdaki maddeleri değiştirme hakkını saklı tutar.</p>
+									</div>
+								</div>
+							</div>
+							<div id="tab-3" class="brk-tab-item text-center">
+								<div class="row">
+									<div class="col-lg-12">
+                                        <span class="font__family-montserrat font__weight-light text-uppercase font__size-28 mt-10 mb-50">KULLANIM SÖZLEŞMESİ</span><br>
+                                        <span class="font__family-montserrat font__weight-light text-uppercase font__size-15 mt-10 mb-50">Yapacağınız alışverişlerde aşağıdaki maddeleri kabul etmiş olursunuz.</span><br>
+                                        Site kullanımı ile ilgili genel kurallar ve yasal sorumluluklar aşağıda belirtilen şartları, kurallar ve yasal sorumlulukları içeren Kullanıcı Sözleşmesi’nin sosyaltrend.net sitesi kullanılmadan önce okunması tavsiye edilir.<br><br>
+
+                                        - Belirtilen şartların sizin için uygun olmaması halinde lütfen sosyaltrend.net sitesine bakiye yüklemeyiniz ve kullanmayınız.<br><br>
+                                        - Siteyi kullanarak ve kişisel bilgilerinizin yer aldığı üyelik formunu doldurarak bu sayfalarda yazılı şartları kabul etmiş sayılmaktasınız.<br><br>
+                                        - sosyaltrend.net işbu site ve site uzantısında mevcut her tür hizmet, ürün, kullanma koşulları ile sitede sunulan bilgileri önceden bir ihtara gerek olmaksızın değiştirme, yeniden organize etme, yayını durdurma hakkını saklı tutar.<br><br>
+                                        - Değişiklikler sitede yayın tarihinde yürürlüğe girer.<br><br>
+                                        - sosyaltrend.net kullanıcılarına siteye her girişte kullanıcı sözleşmesi, hizmet şartları ve iptal / iade koşulları sayfalarını ziyaret etmelerini tavsiye etmektedir.<br><br>
+                                        - Bu koşullar link verilen diğer web sayfaları için de geçerlidir.Kullanıcı sözleşmesi, hizmet şartları ve iptal / iade koşulları sosyaltrend.net ’un tüm üyelerine açıktır.<br><br>
+                                        - Site üzerinde verilen hizmetlerin tamamı ücretlidir.Aşağıdaki yazılı durumlarda, site yönetimi kullanıcının site kullanımını engelleyebilir ve aşağıdaki girişimlere karışan kişi veya kişiler hakkında kanuni haklarını saklı tutar:<br><br>
+
+
+                                        1.a. Yanlış, düzensiz, eksik ve yanıltıcı bilgiler, genel ahlak kurallarına uygun olmayan ifadeler içeren ve Türkiye Cumhuriyeti yasalarıyla ters düşen bilgilerin siteye kaydedilmesi,<br><br>
+
+                                        1.b. Site içeriğinin izinsiz olarak kısmen veya tümüyle kopyalanması,<br><br>
+
+                                        1.c. Kullanıcılara verilen ya da kendi belirledikleri kullanıcı adı, şifre gibi bilgilerin, kullanım haklarının, üçüncü kişi ya da kuruluşlarla paylaşılmasından (bu bilgilerin kullanıcı dışındaki kişiler tarafından kullanılmasından) kaynaklanacak her türlü zarardan doğrudan Kullanıcı sorumludur. Aynı şekilde Kullanıcı, internet ortamında bir başkasına ait IP adresi, elektronik posta adresi, kullanıcı adı gibi kişisel bilgileri kullanamayacağı gibi diğer kullanıcıların özel bilgilerine de izinsiz olarak ulaşamaz veya bunları kullanamaz. Kullanıcı bu şekilde bir kullanımdan dolayı doğabilecek her türlü hukuki ve cezai yükümlülüğü kabul etmiş sayılmaktadır.<br><br>
+
+                                        1.d. Sitenin güvenliğini tehdit edecek, sitenin çalışmasını engelleyecek yazılımların kullanılması, faaliyetlerin yapılması, yapılmaya çalışılması ve bilgilerin alınması, silinmesi, değiştirilmesi.<br><br>
+
+                                        <span class="font__family-montserrat font__weight-bold text-uppercase font__size-18 mt-10">KULLANIM</span><br>
+
+                                        2.a. sosyaltrend.net bu internet sitesi genel görünüm ve dizaynı ile internet sitesinde tüm bilgi, sosyaltrend.net markası ve diğer markalar, sosyaltrend.net alan adı, logo, ikon, demonstratif, yazılı, elektronik, grafik veya makinede okunabilir şekilde sunulan teknik veriler, bilgisayar yazılımları, uygulanan satış sistemi, iş metodu ve iş modeli de dahil tüm materyallerin (“Materyaller”) ve bunlara ilişkin fikri ve sınai mülkiyet haklarının sahibi veya lisans sahibidir ve yasal koruma altındadır. Internet sitesinde bulunan hiçbir Materyal; önceden izin alınmadan ve kaynak gösterilmeden, kod ve yazılım da dahil olmak üzere, değiştirilemez, kopyalanamaz, çoğaltılamaz, başka bir lisana çevrilemez, yeniden yayımlanamaz, başka bir bilgisayara yüklenemez, postalanamaz, iletilemez, sunulamaz ya da dağıtılamaz.
+                                        Internet sitesinin veya mobil uygulamanın bütünü veya bir kısmı başka bir internet sitesinde izinsiz olarak kullanılamaz. Aksine hareketler hukuki ve cezai sorumluluğu gerektirir. sosyaltrend.net 'un burada açıkça belirtilmeyen diğer tüm hakları saklıdır.<br><br>
+
+                                        2.b.sosyaltrend.net ’a iletilen tüm eleştirilerin hakkı sosyaltrend.net a aittir, istenildiği taktirde sosyaltrend.net tarafından pazarlama amacıyla kullanılabilir.<br><br>
+
+                                        <span class="font__family-montserrat font__weight-bold text-uppercase font__size-18 mt-10">SORUMLULUKLAR</span><br>
+                                        
+                                        3.a. sosyaltrend.net u ziyaret eden kullanıcıların bilgileri (ziyaret süresi, zamanı, görüntülenen sayfalar) onlara daha iyi hizmet edebilmek amacı ile takip edilebilir.<br><br>
+                                        3.b. Kullanıcı, diğer kullanıcıların ve ziyaretçilerin sosyaltrend.net uygulamasını kullanmasını önleyici veya zorlaştırıcı hareketlerde bulunamaz, sunucuları ya da veritabanlarını otomatik programlar yükleyip zorlayamaz/kilitleyemez. Hile girişimlerinde bulunamaz. Bulunması halinde üyeliğinin sonlandırılacağını ve durumdan doğabilecek her türlü hukuki, cezai sorumluluğu kabul eder.<br><br>
+
+                                        3.c. sosyaltrend.net yönetimi ile yapılan mesajlaşmaların yedeğinin alınması kişilerin sorumluluğundadır ve sosyaltrend.net tarafından önerilmektedir. Mesajlaşmaların yedeklerinin alınmaması nedeniyle kaybolmasından, silinmesinden veya hasar görmesinden sosyaltrend.net sorumlu tutulamaz.<br><br>
+
+                                        3.d. Üyelik iptali ve hesap silme işlemi, kullanıcı tarafından destek talebi oluşturularak yapılabilir. Üyeliğini bitiren kullanıcının siteye giriş yetkisi iptal edilecektir. Üyeliğini iptal eden kişi bu işlemin geri dönüşü olmadığını kabul eder. sosyaltrend.net a da kullanıcının kendisi tarafından sonlandırılan kullanıcı hesabına ait her türlü kaydı silip silmeme kararı sosyaltrend.net ya aittir. Kullanıcı silinen kayıtlarla ilgili herhangi bir hak veya tazminat talebinde bulunamaz.<br><br>
+
+                                        3.e. Bu internet sitesi sosyaltrend.net kontrolü altında olmayan başka internet sitelerinde bağlantı veya referans içerebilir. sosyaltrend.net, bu sitelerin içeriklere veya içerdikleri diğer bağlantılardan sorumlu değildir.<br><br>
+
+                                        3.f. sosyaltrend.net, kullanıcı tarafından siteye ya da mobil uygulamaya kayıt formunda belirtilen veya daha sonra kendisi tarafından güncellenen adresi, e-posta adresi, sabit ve mobil telefon hatları ve diğer iletişim bilgileri üzerinden mektup, e-posta, SMS, telefon görüşmesi ve diğer yollarla kullanıcıya iletişim, pazarlama, bildirim ve diğer amaçlarla kullanıcıya ulaşma hakkı bulunmaktadır. Kullanıcı işbu sözleşmeyi kabul etmekle aksine bir yazılı bildirimi olmadığı müddetçe sosyaltrend.net nın kendisi<br><br>ne yönelik yukarıda belirtilen iletişim faaliyetlerinde bulunabileceğini kabul ve beyan etmektedir.
+
+                                        3.g. Sitenin belirli yerlerinde o bölüme özel farklı kurallar ve yükümlülükler belirtilebilir. Bu bölümleri kullanan kişi ve kuruluşlar peşinen belirtilen bu kuralları kabul etmiş sayılır.<br><br>
+
+                                        3.h. Kullanıcılarımızın kişisel bilgilerini ve gizliliklerini korumak için aldığımız önlemler ve bu konudaki genel politikamızı okumak için, lütfen “Kullanım Sözleşmesi” sayfasını okuyunuz. Kullanıcı, servisten faydalanmaya başlandığı andan itibaren bu katılım sözleşmesinin tüm hükümlerini kabul etmiş sayılacağını ve sözleşmenin kendisi hakkında hüküm ifade edeceğini kabul eder. Kullanıcı işbu sözleşme ile üstlenmiş olduğu yükümlülüklere aykırı hareketi nedeniyle sosyaltrend.net nın uğrayacağı her türlü zararı aynen tazmin etmeyi kabul eder. sosyaltrend.net 'un, kullanıcının sözleşmeye aykırı davranışları nedeniyle kamu kurumlarına ve/veya üçüncü şahıslara ödemek zorunda kalabileceği her türlü tazminat ve/veya idari/adli para cezaları için kullanıcıya aynen rücu hakkına sahiptir.<br><br>
+
+                                        <span class="font__family-montserrat font__weight-bold text-uppercase font__size-18 mt-10">HİZMET SÜREKLİLİĞİ</span><br>
+                                        
+                                        4.a sosyaltrend.net taahhüt ettiği hizmetlerin sürekliliğini sağlamak için, işbu sözleşmede herhangi bir bildirimde bulunmaksızın tek taraflı değişiklik yapabilir.
+                                        sosyaltrend.net 'un her zaman herhangi bir gerekçe göstermeksizin, tek taraflı olarak verdiği hizmeti sürekli veya geçici olarak durdurma, servisin içeriğini değiştirme veya iptal etme hakkı vardır.
+                                        Kullanıcı işbu hakkı kabul eder. sosyaltrend.net, herhangi bir değişiklik olması halinde güncel kullanım şartlarını aynı link altında yeni tarih güncellemesi ile sitesinde yayınlanacak, gerek görmesi halinde elektronik posta yada sms ile kullanıcılarına bildirilecektir.
+                                        Yenilenmiş güncel kullanım şartları, sosyaltrend.net da yayınlandığı andan itibaren geçerli olacak ve sosyaltrend.net sitesinin hizmetlerinin kullanımı o andan itibaren yenilenmiş kullanım şartlarına bağlı olacaktır.İşbu sözleşme hükümlerine aykırı materyalleri sosyaltrend.net sitesine ya da mobil uygulamasına göndermiş olan üyenin üyeliği, herhangi bir bildirim yapılmaksızın sosyaltrend.net tarafından tek taraflı olarak sona erdirilebilir.<br><br>
+
+                                        4.b Sözleşmenin Yürürlüğe Girmesi Kullanıcı, kayıt formunu doldurup onayladığı ya da bu sistemi kullanarak herhangi bir hizmet aldığı ya da sipariş verdiği andan itibaren sosyaltrend.net sözleşmesine uymayı taahhüt etmiş kabul edilir. Sözleşme, üyeliğin sona ermesi ile veya işbu sözleşmede sayılan fesih hallerinden herhangi birinin gerçekleşmesi ile hiçbir uyarıya gerek kalmaksızın kendiliğinden hükümsüz kalacaktır.<br><br>
+
+                                        <span class="font__family-montserrat font__weight-bold text-uppercase font__size-18 mt-10">GİZLİLİK SÖZLEŞMESİ</span><br>
+
+
+                                        sosyaltrend.net üyelerinin site üzerinde yaptığı işlemlerin kayıtları kesinlikle gizli tutulmakta ve kesinlikle 3. şahıs ve kurumlar ile paylaşılmamaktadır.<br><br>
+
+                                        Vermiş olduğunuz siparişler servis sağlayıcıları ile paylaşılmaktadır. Ancak resmi devlet kurumları tarafın talep edilmesi halinde kayıtlar resmi devlet kurumu görevlilerine sunulabilir.<br><br>
+
+                                        Ödeme sayfasında istenen kredi kartı bilgileri, siteye bakiye yükleyen müşterilerimizin güvenliğini en üst seviyede tutmak amacıyla hiçbir şekilde sosyaltrend.net ve ona hizmet veren şirketlerin sunucularında tutulmamaktadır.<br><br>
+
+                                        Bu şekilde ödemeye yönelik tüm işlemlerin sosyaltrend.net ara yüzü üzerinden banka, paytr ödeme sistemleri ve bilgisayarınız ya da telefonunuz arasında gerçekleşmesi sağlanmaktadır.<br><br>
+
+                                        Bizlere her zaman aşağıda belirtilen iletişim bilgilerinden yararlanarak ulaşabilirsiniz. Müşterinin sisteme girdiği tüm bilgilere sadece müşteri ulaşabilmekte ve bu bilgileri sadece müşteri değiştirebilmektedir.<br><br>
+
+                                        Bir başkasının bu bilgilere ulaşması ve bunları değiştirmesi mümkün değildir.<br><br>
+
+                                        sosyaltrend.net adresli web sitemizden başarılı bir sipariş oluşturmanız sitemize e-posta adresinize ve telefon numaranıza duyurularımızı ulaştırma izni vermeniz anlamına gelmektedir.<br><br>
+
+                                        sosyaltrend.net ’dan gönderilen e-mail ve sms duyurularından haberdar olmak istemiyorsanız aşağıdaki email adresimize konuyu bildiren bir eposta göndermeniz gerekmektedir.<br><br>
+
+                                        E-posta gönderiminizi takiben email adresiniz ve telefon numaranız mesaj listemizden çıkartılacaktır.<br><br>
+
+
+                                        <span class="font__family-montserrat font__weight-bold text-uppercase font__size-18 mt-10">GERİ ÖDEME POLİTİKASI</span><br>
+
+
+                                        • Geri ödeme yapılmamaktadır, kalan bakiye sosyaltrend.net içerisinde kullanılmalıdır.<br><br>
+                                        • Instagram/Twitter/Facebook vb. servislerin ne zaman güncelleme yapabileceğini bilemeyiz, herhangi bir düşüş yaşanması halinde servis sağlayıcısı telafi yapmadığı sürece iade yapılamaz.<br><br>
+                                        • sosyaltrend.net sistem yöneticisine karşı yapılacak hakaret veya kötüye kullanım tespit edilirse bakiyeye el konulup gönderilen takipçi veya beğeni işlemlerinin geri alınma hakkını gizli tutar.<br><br>
+                                        • Çalıntı kredi kartı yada farklı yöntemler ile başkasının adına ödeme yapılırsa hesap feshedilecektir istisnasız.<br><br>
+                                        • Siparişler sisteme girildikten sonra iptal/iade talebiniz kabul edilmeyecektir. Eğer sipariş tamamlanmazsa/kısmen tamamlanırsa sistem otomatik olarak geri ödeme yapacaktır.<br><br>
+                                        
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+    </div>
+	<footer th:replace="visitor-template :: footer"></footer>
+    <a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+</body>
+
+</html>

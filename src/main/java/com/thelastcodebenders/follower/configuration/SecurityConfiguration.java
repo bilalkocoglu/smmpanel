@@ -52,8 +52,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
-                .antMatchers("/","/login", "/forgot-password" ,"/login-failure", "/registration", "/account-activate/**",
-                        "/all-packages", "/package/**", "/message", "/iyzico/callback").permitAll()
+                .antMatchers("/",
+                        "/login",
+                        "/forgot-password" ,
+                        "/login-failure/**",
+                        "/registration",
+                        "/account-activate/**",
+                        "/all-packages",
+                        "/package/**",
+                        "/message",
+                        "/terms-use").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()

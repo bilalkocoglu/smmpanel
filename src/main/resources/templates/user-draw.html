@@ -26,10 +26,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/vendors/css/prism.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/vendors/css/pickadate/pickadate.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/vendors/css/bootstrap-clockpicker.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/clockutil.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/clockmain.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/vendors/animate/animate.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/vendors/select2/select2.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/flipclock.css}">
 </head>
 
 
@@ -74,26 +71,9 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div th:if="${drawCount > 0 && countDown != null}" class="flex-w flex-c cd100 wsize1 bor1">
-                                    <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 days">-</span>
-                                        <span class="s1-txt1">Gün</span>
-                                    </div>
-
-                                    <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 hours">-</span>
-                                        <span class="s1-txt1">Saat</span>
-                                    </div>
-
-                                    <div class="flex-col-c-m size2 bg0 bor2">
-                                        <span class="l1-txt3 p-b-7 minutes">-</span>
-                                        <span class="s1-txt1">Dakika</span>
-                                    </div>
-
-                                    <div class="flex-col-c-m size2 bg0">
-                                        <span class="l1-txt3 p-b-7 seconds">-</span>
-                                        <span class="s1-txt1">Saniye</span>
-                                    </div>
+                                <div th:if="${drawCount > 0 && countDown != null}">
+                                    <div class="clock" style="margin:2em;"></div>
+                                    <div class="message"></div>
                                 </div>
                                 <div th:if="${drawCount > 0 && countDown == null}">
                                     <div class="form-group">
@@ -196,13 +176,7 @@
     <script th:src="@{/js/customizer.js}" type="text/javascript"></script>
     <script th:src="@{/vendors/js/datatable/datatables.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/data-tables/datatable-styling.js}" type="text/javascript"></script>
-    <script th:src="@{/vendors/countdowntime/moment.min.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/vendors/countdowntime/moment-timezone.min.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/vendors/countdowntime/moment-timezone-with-data.min.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/vendors/countdowntime/countdowntime.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/vendors/tilt/tilt.jquery.min.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/js/main.js}" type="257e82ca5a041335e6c37e2a-text/javascript"></script>
-    <script th:src="@{/js/rocket-loader.min.js}" data-cf-settings="257e82ca5a041335e6c37e2a-|49" defer=""></script>
+    <script th:src="@{/js/flipclock.js}" type="text/javascript"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
 
@@ -211,28 +185,22 @@
 
         /*]]>*/
     </script>
-    <script type="257e82ca5a041335e6c37e2a-text/javascript">
-        console.log(countDown);
+    <script type="text/javascript">
+        var clock;
 
-		$('.cd100').countdown100({
-			// Set Endtime here
-			// Endtime must be > current time
-			endtimeYear: 0,
-			endtimeMonth: 0,
-			endtimeDate: 0,
-			endtimeHours: countDown.endtimeHours,
-			endtimeMinutes: countDown.endtimeMinutes,
-			endtimeSeconds: 0,
-			timeZone: ""
-			// ex:  timeZone: "America/New_York", can be empty
-			// go to " http://momentjs.com/timezone/ " to get timezone
-		});
-	</script>
-    <script type="257e82ca5a041335e6c37e2a-text/javascript">
-		$('.js-tilt').tilt({
-			scale: 1.1
-		})
-	</script>
+        $(document).ready(function() {
+
+            clock = $('.clock').FlipClock({
+                clockFace: 'HourlyCounter',
+                language: 'tr'
+            });
+            console.log(countDown);
+            clock.setTime(countDown.endtimeSeconds);
+            //600 sn -->10dk
+            clock.setCountdown(true);
+            clock.start();
+        });
+    </script>
     </body>
 
 </html>

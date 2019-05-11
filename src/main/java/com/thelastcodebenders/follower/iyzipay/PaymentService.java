@@ -1,4 +1,4 @@
-package com.thelastcodebenders.follower.iyzico;
+package com.thelastcodebenders.follower.iyzipay;
 
 import com.iyzipay.Options;
 import com.iyzipay.model.*;
@@ -48,7 +48,7 @@ public class PaymentService {
         buyer.setId(user.getId().toString());
         buyer.setName(user.getName());
         buyer.setSurname(user.getSurname());
-        buyer.setIdentityNumber("1111111111");
+        buyer.setIdentityNumber("user" + user.getId());
         buyer.setEmail(user.getMail());
         buyer.setCity("Istanbul");
         buyer.setGsmNumber("05347756260");
@@ -63,7 +63,7 @@ public class PaymentService {
         shippingAddress.setContactName(user.getName());
         shippingAddress.setCity("Istanbul");
         shippingAddress.setCountry("Turkey");
-        shippingAddress.setAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
+        shippingAddress.setAddress("Beşiktaş");
 
         createCheckoutFormInitializeRequest.setShippingAddress(shippingAddress);
 
@@ -71,17 +71,16 @@ public class PaymentService {
         billingAddress.setContactName(user.getName());
         billingAddress.setCity("Istanbul");
         billingAddress.setCountry("Turkey");
-        billingAddress.setAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
+        billingAddress.setAddress("Beşiktaş");
 
         createCheckoutFormInitializeRequest.setBillingAddress(billingAddress);
 
         List<BasketItem> basketItems = new ArrayList<BasketItem>();
         BasketItem firstBasketItem = new BasketItem();
-        firstBasketItem.setId("BI101");
-        firstBasketItem.setName("Binocular");
-        firstBasketItem.setCategory1("Collectibles");
-        firstBasketItem.setCategory2("Accessories");
-        firstBasketItem.setItemType(BasketItemType.PHYSICAL.name());
+        firstBasketItem.setId("100001");
+        firstBasketItem.setName("Bakiye");
+        firstBasketItem.setCategory1("Media");
+        firstBasketItem.setItemType(BasketItemType.VIRTUAL.name());
         firstBasketItem.setPrice(new BigDecimal(price));
         basketItems.add(firstBasketItem);
 
@@ -94,7 +93,7 @@ public class PaymentService {
     public CheckoutForm infoPayment(String token, String conversationId){
         RetrieveCheckoutFormRequest request = new RetrieveCheckoutFormRequest();
         request.setLocale(Locale.TR.getValue());
-        request.setConversationId(conversationId);
+        //request.setConversationId(conversationId);
         request.setToken(token);
 
 

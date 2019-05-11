@@ -16,4 +16,5 @@ public class RegisterFormDTO {
     private String number;
     private String password;
     private String repairPass;
+    private boolean termsUse;
 }

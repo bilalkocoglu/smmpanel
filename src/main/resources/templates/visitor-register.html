@@ -32,7 +32,10 @@
 									<div class="row justify-content-lg-start justify-content-center">
 										<div class="col-lg-2 d-none d-lg-block"></div>
 										<div class="col-12 col-lg-10">
-											<h1 class="font__family-montserrat font__weight-bold font__size-42 line__height-42 mt-0 mb-45 text-center text-lg-left">KAYIT OL</h1>
+											<h1 class="font__family-montserrat font__weight-bold font__size-42 line__height-42 mt-0 mb-45 text-center text-lg-left"
+												style="margin-bottom: 0px !important;">
+												KAYIT OL
+											</h1>
 											<form id="form" th:action="@{/registration}" th:object="${userform}" method="post" class="brk-form brk-form-strict maxw-570 mx-auto mx-lg-0" data-brk-library="component__form">
                                                 <input th:field="*{name}" id="name" required autocomplete="off" type="text" placeholder="Adınız">
 												<input th:field="*{surname}" id="surname" required autocomplete="off" type="text" placeholder="Soyadınız">
@@ -40,6 +43,14 @@
                                                 <!--<input th:field="*{number}" id="number" required autocomplete="off"  type="text" placeholder="Telefon Numaranızı Giriniz" class="form-control"> -->
                                                 <input th:field="*{password}" id="password" required autocomplete="off" type="password" placeholder="Şifreniz">
                                                 <input th:field="*{repairPass}" id="repairpass" required autocomplete="off" type="password" placeholder="Şifrenizi Tekrar Yazın">
+												<div class="no-margin pl-10 pr-10 mb-10 mt-15 d-flex flex-wrap justify-content-between align-items-center">
+													<div>
+														<input id="termsuse-checkbox" name="termsUse" type="checkbox" value="1" checked="checked">
+														<label class="brk-form-checkbox-label" for="termsuse-checkbox">
+															<a href="/terms-use">Kullanım koşullarını </a> kabul ediyorum.
+														</label>
+													</div>
+												</div>
 												<div class="d-flex flex-wrap justify-content-between align-items-center flex-column flex-lg-row">
 													<button type="submit" class="btn-backgrounds btn-backgrounds btn-backgrounds_280 btn-backgrounds_white btn-backgrounds_left-icon font__family-montserrat font__weight-bold text-uppercase font__size-13 z-index-2 text-center letter-spacing-20 mt-10" data-brk-library="component__button">
 														<span class="text">ALIN BENİ İÇERİ</span>
@@ -64,7 +75,8 @@
 				</div>
 			</section>
 		</main>
-	</div><a href="#top" id="toTop"></a>
+	</div>
+	<a href="#top" id="toTop"></a>
 	<script th:src="@{/visitor/js/scripts.js}"></script>
     <script th:src="@{/visitor/js/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/visitor/js/components/alerts.js}"></script>
@@ -74,9 +86,26 @@
         // $('#number').inputmask("(999) 999-9999");
 
         $('#form').submit(function (e) {
+			console.log("form submit");
+			console.log($('#password').val());
+			console.log($('#repairpass').val());
+			console.log($('#password').val().equals($('#repairpass').val()));
+			console.log($('#termsuse-checkbox').val());
+
+			alert("Kullanım koşullarını kabul etmelisiniz !");
+			e.preventDefault();
+			return;
+
 
 			if ( $('#password').val().equals($('#repairpass').val())){
 				alert("Girdiğiniz şifreler eşleşmiyor !");
+				e.preventDefault();
+				return;
+			}
+
+
+			if ($('#termsuse-checkbox').val() != '1'){
+				alert("Kullanım koşullarını kabul etmelisiniz !");
 				e.preventDefault();
 				return;
 			}

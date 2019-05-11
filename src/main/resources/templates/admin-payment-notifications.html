@@ -45,7 +45,7 @@
                                                   <td th:text="${payment.getBankAccount().getBankName()}"></td>
                                                   <td th:text="${payment.getFullname()}"></td>
                                                   <td th:text="${payment.getAmount()}"></td>
-                                                  <td th:text="${payment.getDate() + '-' + payment.getTime()}"></td>
+                                                  <td th:text="${payment.getDate()}"></td>
                                                   <td>
                                                       <a style="cursor: auto;" th:if="${payment.isConfirmation()}" class="success p-0" href="#" data-original-title="" title="">
                                                           Onaylanmış
@@ -71,8 +71,6 @@
               </section>
           </div>
         </div>
-
-
       </div>
     </div>
     <script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>

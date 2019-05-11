@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div th:replace="visitor-template :: mobile-header"></div>
+
+		<header th:replace="visitor-template :: header"></header>
+		<h1 class="sr-only">SMM PANEL</h1>
+		<div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css"><span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+			<div class="breadcrumbs__wrapper">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-12 col-lg-6">
+							<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+								<h2 class="brk-white-font-color font__weight-semibold font__size-32 line__height-68 font__family-montserrat">İnstagram Takipçi Satın Al</h2>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6">
+							<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+								<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">İNSTAGRAM TAKİPÇİ</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main-wrapper">
+			<div th:replace="visitor-template :: messages"></div>
+			<main class="main-container mt-100 mt-md-50">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8 col-sm-12">
+							<div class="brk-form brk-form-strict" data-brk-library="component__form">
+
+								<form action="#" class="brk-form-strict" data-brk-library="component__form">
+									<div class="container">
+										<article class="brk-checkout-order" data-brk-library="component__checkout">
+											<header class="brk-checkout-order__header d-flex align-items-center justify-content-between">
+												<p class="font__family-montserrat font__size-21 line__height-24 font__weight-bold">Sipariş Ver</p>
+											</header>
+											<div class="row mr-50 ml-50 pb-50">
+												<div class="col-md-12">
+													<input type="text" placeholder="İnstagram Kullanıcı Adınız" required>
+												</div>
+												<div class="col-md-6">
+													<input type="text" placeholder="İsim" required>
+												</div>
+												<div class="col-md-6">
+													<input type="text" placeholder="Soyisim" required>
+												</div>
+												<div class="col-md-6">
+													<input type="text" placeholder="Eposta" required>
+												</div>
+												<div class="col-md-6">
+													<input type="text" placeholder="Cep Telefonu" required>
+												</div>
+												<div class="col-xl-6 col-md-6 pt-20 text-left"><input id="checkbox-strict-1" name="checkbox" type="checkbox" value="1" checked="checked"> <label class="brk-form-checkbox-label" for="checkbox-strict-1">Kullanım Şartları'nı kabul ediyorum</label></div>
+											</div>
+											<footer class="brk-checkout-order__footer">
+												<section class="brk-checkout-order__footer-section">
+													<h3 class="font__family-montserrat"><span class="font__size-14 font__weight-bold pr-2">Tutar:</span><span class="font__size-24 font__weight-bold brk-base-font-color">₺ 10</span></h3>
+												</section>
+											</footer><span class="brk-checkout-order__after"></span>
+										</article>
+										<div class="text-center translate-top-50"><a href="#" class="btn btn-inside-out btn-lg border-radius-25 btn-shadow pl-50 pr-50" data-brk-library="component__button"><span class="before">ÖDEME İŞLEMİNE GEÇ</span><span class="text">GÜVENLİ ÖDEME</span><span class="after">ÖDEME İŞLEMİNE GEÇ</span></a></div>
+									</div>
+								</form>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-12">
+							<div class="pl-15 pr-15" >
+								<div class="brk-pricing-strict text-center" data-brk-library="component__pricing_table,component__button">
+									<div class="brk-pricing-strict__content">
+										<div class="brk-pricing-strict__title font__family-open-sans font__weight-bold"><span class="before brk-bg-grad"></span> <span>İNSTAGRAM 200 BEĞENİ</span></div>
+										<div class="brk-pricing-strict__price font__family-montserrat"><span class="st-sign">₺</span> <span class="st-price font__weight-ultralight">100</span></div>
+										<div class="brk-pricing-strict__description">
+											<ul class="font__family-open-sans font__size-14 line__height-48">
+												<li>Some item list goes here</li>
+												<li>Some item list goes here large title</li>
+												<li>Some item list goes here</li>
+												<li>Some item list goes here large title</li>
+												<li>Some item list goes here</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+	<footer th:replace="visitor-template :: footer"></footer>
+	<a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+	</body>
+</html>

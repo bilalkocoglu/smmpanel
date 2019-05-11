@@ -109,24 +109,24 @@ public class DrawService {
 
         List<DrawVisit> drawVisits = drawVisitRepository.findByUser(user, new Sort(Sort.Direction.DESC, "date"));
 
+/*
+        System.out.println("-------------------Draw Visits");
+        for (DrawVisit d: drawVisits) {
+            System.out.println(d.toString());
+        }
+*/
         if (drawVisits.isEmpty()){
             return null; //Çekiliş yapabilir !
         }else {
 
             DrawVisit endVisit = drawVisits.get(0);
             Duration duration = Duration.between(endVisit.getDate(), LocalDateTime.now());
-            //System.out.println(duration.toString());
-            if ( duration.toDays() > 1)
+            long durationMinutes = (24*60) - duration.toMinutes();
+            if ( durationMinutes < 0)
                 return null;
             else {
-                //1 gün - geçen süre
-                long durationMinutes = (24*60) - duration.toMinutes();
-                int hours = (int) (durationMinutes/60);
-                int minute = (int) durationMinutes % 60;
                 return CountDownDTO.builder()
-                        .endtimeHours(hours)
-                        .endtimeMinutes(minute)
-                        .endtimeSeconds(0)
+                        .endtimeSeconds((int) (durationMinutes * 60))
                         .build();
             }
         }
@@ -139,8 +139,10 @@ public class DrawService {
             if (countDownDTO == null)
                 return true;
             else
-                return false;
+                throw new RuntimeException("Yeni bir çekilişe katılmak için biraz daha zamana ihtiyacınız var !");
         }catch (Exception e){
+            if ( e instanceof RuntimeException)
+                throw e;
             log.error("DrawService DrawActionPermission Error -> " + e.getMessage());
             return false;
         }

@@ -26,5 +26,8 @@ public class CardPayment {
     private User user;
 
     private double amount;
-    private LocalDateTime localDateTime;
+
+    private String date;
+
+    private String iyzipayToken;
 }
