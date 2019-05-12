@@ -1,6 +1,5 @@
 package com.thelastcodebenders.follower.dto;
 
-import com.thelastcodebenders.follower.model.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserPagePackageDTO {
-    private long id;
+public class PackageOrderPaymentFormDTO {
+    private String url;
     private String name;
-    private int quantity;
-    private double price;
-    private String description;
-    private SubCategory subCategory;
+    private String surname;
+    private String email;
+    private String number;
+    private boolean checkbox;
 }

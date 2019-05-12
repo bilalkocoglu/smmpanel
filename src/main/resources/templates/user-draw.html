@@ -71,10 +71,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div th:if="${drawCount > 0 && countDown != null}">
-                                    <div class="clock" style="margin:2em;"></div>
-                                    <div class="message"></div>
-                                </div>
+                                <div th:if="${drawCount > 0 && countDown != null}" class="clock"></div>
                                 <div th:if="${drawCount > 0 && countDown == null}">
                                     <div class="form-group">
                                         <a href="/user/draw/action" class="btn btn-block btn-raised gradient-indigo-purple white">

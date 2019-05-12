@@ -32,6 +32,7 @@ public class PackageAssembler {
                 .name(pkg.getCategory().getName() + " - " +pkg.getName())
                 .price(pkg.getPrice())
                 .quantity(pkg.getQuantity())
+                .subCategory(pkg.getService().getSubCategory())
                 .build();
     }
 }

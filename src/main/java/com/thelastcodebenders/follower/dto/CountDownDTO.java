@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class CountDownDTO {
-    private int endtimeSeconds;
+    private long endtimeSeconds;
 }

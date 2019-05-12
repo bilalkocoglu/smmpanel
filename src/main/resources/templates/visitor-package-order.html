@@ -18,12 +18,16 @@
 					<div class="row align-items-center">
 						<div class="col-12 col-lg-6">
 							<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
-								<h2 class="brk-white-font-color font__weight-semibold font__size-32 line__height-68 font__family-montserrat">İnstagram Takipçi Satın Al</h2>
+								<h2 class="brk-white-font-color font__weight-semibold font__size-32 line__height-68 font__family-montserrat">
+									<span th:text="${pkg.getSubCategory().getCategory().getName() + ' ' + pkg.getSubCategory().getName() + ' Satın Al'}">
+								</h2>
 							</div>
 						</div>
 						<div class="col-12 col-lg-6">
 							<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
-								<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">İNSTAGRAM TAKİPÇİ</h3>
+								<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">
+									<span th:text="${pkg.getSubCategory().getCategory().getName() + ' ' + pkg.getSubCategory().getName()}"></span>
+								</h3>
 							</div>
 						</div>
 					</div>
@@ -38,37 +42,59 @@
 						<div class="col-md-8 col-sm-12">
 							<div class="brk-form brk-form-strict" data-brk-library="component__form">
 
-								<form action="#" class="brk-form-strict" data-brk-library="component__form">
+								<form th:action="@{'/package/order/' + ${pkg.getId()} +'/payment'}"
+									  method="post"
+									  id="packageOrderForm"
+									  class="brk-form-strict"
+									  data-brk-library="component__form">
 									<div class="container">
 										<article class="brk-checkout-order" data-brk-library="component__checkout">
 											<header class="brk-checkout-order__header d-flex align-items-center justify-content-between">
-												<p class="font__family-montserrat font__size-21 line__height-24 font__weight-bold">Sipariş Ver</p>
+												<p class="font__family-montserrat font__size-21 line__height-24 font__weight-bold">
+													Sipariş Ver
+												</p>
 											</header>
 											<div class="row mr-50 ml-50 pb-50">
 												<div class="col-md-12">
-													<input type="text" placeholder="İnstagram Kullanıcı Adınız" required>
+													<input type="text" name="url" autocomplete="off" placeholder="URL" required>
 												</div>
 												<div class="col-md-6">
-													<input type="text" placeholder="İsim" required>
+													<input type="text" name="name" autocomplete="off" placeholder="İsim" required>
 												</div>
 												<div class="col-md-6">
-													<input type="text" placeholder="Soyisim" required>
+													<input type="text" name="surname" autocomplete="off" placeholder="Soyisim" required>
 												</div>
 												<div class="col-md-6">
-													<input type="text" placeholder="Eposta" required>
+													<input type="email" name="email" autocomplete="off" placeholder="Eposta" required>
 												</div>
 												<div class="col-md-6">
-													<input type="text" placeholder="Cep Telefonu" required>
+													<input id="number" name="number" required autocomplete="off" type="text" placeholder="Cep Telefonu" >
 												</div>
-												<div class="col-xl-6 col-md-6 pt-20 text-left"><input id="checkbox-strict-1" name="checkbox" type="checkbox" value="1" checked="checked"> <label class="brk-form-checkbox-label" for="checkbox-strict-1">Kullanım Şartları'nı kabul ediyorum</label></div>
+												<div class="col-xl-6 col-md-6 pt-20 text-left">
+													<input id="checkbox-strict-1" name="checkbox" type="checkbox" >
+													<label class="brk-form-checkbox-label" for="checkbox-strict-1">
+														<a href="/terms-use">Kullanım Şartları'nı</a> kabul ediyorum.
+													</label>
+												</div>
 											</div>
 											<footer class="brk-checkout-order__footer">
 												<section class="brk-checkout-order__footer-section">
-													<h3 class="font__family-montserrat"><span class="font__size-14 font__weight-bold pr-2">Tutar:</span><span class="font__size-24 font__weight-bold brk-base-font-color">₺ 10</span></h3>
+													<h3 class="font__family-montserrat">
+														<span class="font__size-14 font__weight-bold pr-2">Tutar:</span>
+														<span class="font__size-24 font__weight-bold brk-base-font-color">
+															₺ <span th:text="${pkg.getPrice()}"></span>
+														</span>
+													</h3>
 												</section>
 											</footer><span class="brk-checkout-order__after"></span>
 										</article>
-										<div class="text-center translate-top-50"><a href="#" class="btn btn-inside-out btn-lg border-radius-25 btn-shadow pl-50 pr-50" data-brk-library="component__button"><span class="before">ÖDEME İŞLEMİNE GEÇ</span><span class="text">GÜVENLİ ÖDEME</span><span class="after">ÖDEME İŞLEMİNE GEÇ</span></a></div>
+										<div class="text-center translate-top-50">
+											<button type="submit" class="btn btn-inside-out btn-lg border-radius-25 btn-shadow pl-50 pr-50" data-brk-library="component__button">
+												<span class="before">ÖDEME İŞLEMİNE GEÇ</span>
+												<span class="text">GÜVENLİ ÖDEME</span>
+												<span class="after">ÖDEME İŞLEMİNE GEÇ</span>
+											</button>
+										</div>
 									</div>
 								</form>
 							</div>
@@ -77,17 +103,13 @@
 							<div class="pl-15 pr-15" >
 								<div class="brk-pricing-strict text-center" data-brk-library="component__pricing_table,component__button">
 									<div class="brk-pricing-strict__content">
-										<div class="brk-pricing-strict__title font__family-open-sans font__weight-bold"><span class="before brk-bg-grad"></span> <span>İNSTAGRAM 200 BEĞENİ</span></div>
-										<div class="brk-pricing-strict__price font__family-montserrat"><span class="st-sign">₺</span> <span class="st-price font__weight-ultralight">100</span></div>
-										<div class="brk-pricing-strict__description">
-											<ul class="font__family-open-sans font__size-14 line__height-48">
-												<li>Some item list goes here</li>
-												<li>Some item list goes here large title</li>
-												<li>Some item list goes here</li>
-												<li>Some item list goes here large title</li>
-												<li>Some item list goes here</li>
-											</ul>
+										<div class="brk-pricing-strict__title font__family-open-sans font__weight-bold">
+											<span class="before brk-bg-grad"></span> <span th:text="${pkg.getName()}"></span></div>
+										<div class="brk-pricing-strict__price font__family-montserrat"><span class="st-sign">
+											₺</span> <span class="st-price font__weight-ultralight" th:text="${pkg.getPrice()}"></span>
 										</div>
+										<div class="brk-pricing-strict__description" th:utext="${pkg.getDescription()}">
+											</div>
 									</div>
 								</div>
 							</div>
@@ -99,5 +121,20 @@
 	<footer th:replace="visitor-template :: footer"></footer>
 	<a href="#top" id="toTop"></a>
 	<script th:src="@{/visitor/js/scripts.js}"></script>
+	<script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+	<script src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+	<script>
+		$('#number').inputmask("(999) 999-9999");
+
+		$('#packageOrderForm').submit(function (event) {
+			var ceptel = $('#number').val();
+
+			if (ceptel.length < 14){
+				alert("Cep telefonunuzu eksiksiz girmelisiniz.");
+				event.preventDefault();
+			}
+		})
+	</script>
+
 	</body>
 </html>

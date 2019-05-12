@@ -121,12 +121,12 @@ public class DrawService {
 
             DrawVisit endVisit = drawVisits.get(0);
             Duration duration = Duration.between(endVisit.getDate(), LocalDateTime.now());
-            long durationMinutes = (24*60) - duration.toMinutes();
-            if ( durationMinutes < 0)
+            long durationSeconds = (24*60*60) - duration.toSeconds();
+            if ( durationSeconds < 0)
                 return null;
             else {
                 return CountDownDTO.builder()
-                        .endtimeSeconds((int) (durationMinutes * 60))
+                        .endtimeSeconds(durationSeconds)
                         .build();
             }
         }

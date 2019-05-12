@@ -1,9 +1,12 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.thelastcodebenders.follower.dto.PackageOrderPaymentFormDTO;
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
+import com.thelastcodebenders.follower.dto.UserPagePackageDTO;
 import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
 import com.thelastcodebenders.follower.iyzipay.PaymentService;
 import com.thelastcodebenders.follower.model.Category;
+import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,10 +205,28 @@ public class VisitorController {
     public String packageOrderPage(@PathVariable("packageId") long packageId,
                                    Model model,
                                    RedirectAttributes redirectAttributes){
-        System.out.println(packageId);
+        UserPagePackageDTO pkg = packageService.createUserPageServiceFormat(packageId);
+        if ( pkg == null){
+            redirectAttributes.addFlashAttribute("errormessage", "Böyle bir paket bulunamadı !");
+            return "redirect:/all-packages";
+        }
+        model.addAttribute("pkg", pkg);
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
         return "visitor-package-order";
+    }
+
+    @PostMapping("/package/order/{packageId:.*}/payment")
+    public String packageOrderPaymentPage(RedirectAttributes redirectAttributes,
+                                          @PathVariable("packageId") long packageId,
+                                          @ModelAttribute PackageOrderPaymentFormDTO packageOrderPaymentForm){
+        //validation
+        //create visit user
+        //create iyzipay payment page
+        //success ? new order , error
+        //new order canceled ? para iade
+        System.out.println(packageOrderPaymentForm.toString());
+        return "redirect:/package/order/" + packageId;
     }
 
 
