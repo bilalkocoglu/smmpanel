@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.assembler;
 
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
+import com.thelastcodebenders.follower.dto.VisitorPageOrderDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.model.Order;
 import com.thelastcodebenders.follower.model.Package;
@@ -101,5 +102,62 @@ public class OrderAssembler {
         }
 
         return userPageOrders;
+    }
+
+    public UserPageOrderDTO convertOrderToUserTypeOrder(Order order){
+        UserPageOrderDTO userPageOrder = UserPageOrderDTO.builder()
+                .customPrice(order.getCustomPrice())
+                .date(order.getDate())
+                .destUrl(order.getDestUrl())
+                .quantity(order.getQuantity())
+                .remain(order.getRemain())
+                .remainBalance(order.getRemainBalance())
+                .serviceName(order.getService().getSubCategory().getCategory().getName() + ' ' + order.getService().getCustomName())
+                .startCount(order.getStartCount())
+                .status(order.getStatus())
+                .id(order.getId())
+                .build();
+
+
+        return userPageOrder;
+    }
+
+    public VisitorPageOrderDTO convertOrderToVisitorPage(Order order){
+        VisitorPageOrderDTO visitorPageOrder = VisitorPageOrderDTO.builder()
+                .id(order.getId())
+                .name(order.getPackagee().getName())
+                .quantity(order.getQuantity())
+                .status(order.getStatus())
+                .url(order.getDestUrl())
+                .build();
+
+        return visitorPageOrder;
+    }
+
+    public Order convertVisitorInfoToOrder(Package pkg, User user, String url){
+        String date = dateTimeNow();
+
+        double apiPrice = pkg.getQuantity() * (pkg.getService().getApiPrice() / 1000);
+        double customPrice = pkg.getPrice();
+
+        apiPrice = Double.parseDouble(String.format("%.2f", apiPrice));
+        customPrice = Double.parseDouble(String.format("%.2f", customPrice));
+
+        Order order = Order.builder()
+                .destUrl(url)
+                .service(pkg.getService())
+                .quantity(pkg.getQuantity())
+                .user(user)
+                .date(date)
+                .customPrice(customPrice)
+                .apiPrice(apiPrice)
+                .closed(false)
+                .packagee(pkg)
+                .remain(0)
+                .remainBalance(0)
+                .startCount(0)
+                .status(OrderStatusType.PENDING)
+                .build();
+        return order;
     }
 }

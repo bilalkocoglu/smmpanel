@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.Category;
 import com.thelastcodebenders.follower.model.CategoryArticle;
 import com.thelastcodebenders.follower.repository.CategoryArticleRepository;
@@ -32,12 +33,12 @@ public class CategoryArticleService {
         Category category = categoryService.findCategoryById(categoryId);
 
         if (category == null)
-            throw new RuntimeException("Böyle bir kategori bulunamadı !");
+            throw new DetectedException("Böyle bir kategori bulunamadı !");
 
         List<CategoryArticle> categoryArticles = categoryArticleRepository.findByCategory(category);
 
         if (categoryArticles.isEmpty())
-            throw new RuntimeException("Böyle bir yazı bulunamadı !");
+            throw new DetectedException("Böyle bir yazı bulunamadı !");
 
         return categoryArticles.get(0);
     }
@@ -46,7 +47,7 @@ public class CategoryArticleService {
         Optional<CategoryArticle> opt = categoryArticleRepository.findById(id);
         if(!opt.isPresent()){
             log.error("Category Article Service FindById Error -> Not Found !");
-            throw new RuntimeException("Böyle bir yazı bulunamadı !");
+            throw new DetectedException("Böyle bir yazı bulunamadı !");
         }else
             return opt.get();
     }
@@ -73,13 +74,13 @@ public class CategoryArticleService {
     public boolean save(CategoryArticle categoryArticle){
         if (!isValidate(categoryArticle)){
             log.error("Category Article Service Save Error => CategoryArticle is Not Validate !");
-            throw new RuntimeException("İşleminiz gerçekleştirilemedi !");
+            throw new DetectedException("İşleminiz gerçekleştirilemedi !");
         }
 
         Category category = categoryService.findCategoryByName(categoryArticle.getCategory().getName());
 
         if (category == null){
-            throw new RuntimeException("İşleminiz gerçekleştirilemedi !");
+            throw new DetectedException("İşleminiz gerçekleştirilemedi !");
         }
 
         if (categoryArticleRepository.countByCategory(category)>0){

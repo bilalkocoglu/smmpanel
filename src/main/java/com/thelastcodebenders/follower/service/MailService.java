@@ -65,6 +65,28 @@ public class MailService {
     }
 
     @Async
+    public void asyncSendVisitorOrderMail(String mail, String orderId, String name, String surname){
+        try {
+            Map model = new HashMap();
+            Template template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
+            String subject = "Siparişiniz Alındı !";
+
+            model.put("button_message", "Merhaba " + name + " " + surname + ", aramıza hoşgeldiniz ! Ödemeniz ve siparişiniz alınmıştır. Aşağıdaki sipariş numaranız ile sipariş durumunuzu kontrol edebilirsiniz !");
+            model.put("button_text", orderId);
+            model.put("button_href", HOST + "/");
+            model.put("title", "Sosyal Trend");
+            model.put("create_order_link", HOST + "/all-packages");
+            model.put("terms_use_link", HOST+"/terms-use");
+
+            String body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+            sendMail(subject, mail, body);
+        }catch (Exception e){
+            log.error("Mail Service asyncSendVisitorOrderMail Error => " + e.getMessage());
+        }
+    }
+
+    @Async
     public void asyncSendMail(String subject, String destination, String body){
         sendMail(subject,destination,body);
     }
@@ -81,22 +103,22 @@ public class MailService {
                 subject = "Yeni Destek Talebi !";
                 model.put("button_message", fromUser.getName() + " " + fromUser.getSurname() +" tarafından cevaplamanız gereken yeni bir destek talebi oluşturuldu! Aşağıdaki butona tıklayarak cevaplayabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
-                model.put("button_href", HOST + "/login");
+                model.put("button_href", HOST + "/");
             }else if (asyncMailType == AsyncMailType.RESPONSETICKET){
                 subject = "Destek Talebiniz Yanıtlandı !";
                 model.put("button_message", "Destek talebiniz yanıtlandı! Cevaplamak için aşağıdaki butona basabilirsiniz.");
                 model.put("button_text", "CEVAPLA");
-                model.put("button_href", HOST + "/login");
+                model.put("button_href", HOST + "/");
             }else if (asyncMailType == AsyncMailType.PAYMENTNTFREQ){
                 subject = "Yeni Ödeme Bildirimi !";
                 model.put("button_message", fromUser.getName() + ' ' + fromUser.getSurname() + " Kullanıcısı tarafından yeni bir ödeme bildirimi oluşturuldu !");
                 model.put("button_text", "CEVAPLA");
-                model.put("button_href", HOST + "/login");
+                model.put("button_href", HOST + "/");
             }else if (asyncMailType == AsyncMailType.PAYMENTNTFRES){
                 subject = "Ödeme Bildiriminiz Onaylandı !";
                 model.put("button_message","Ödeme bildiriminiz onaylandı ve bakiyeniz güncellendi. Şimdi özgürce alışveriş yapabilirsiniz !");
                 model.put("button_text", "CEVAPLA");
-                model.put("button_href", HOST + "/login");
+                model.put("button_href", HOST + "/");
             }else if(asyncMailType == AsyncMailType.ACCOUNTACTIVATE) {
                 subject = "SosyalTrend'e Hoşgeldiniz !";
                 model.put("button_message","Aramıza hoşgeldin ! Hesabını aktifleştirmek ve sosyal medyada yeni bir yüz olmak için butona tıkla !");
@@ -106,8 +128,9 @@ public class MailService {
                 return;
             }
 
-
-            model.put("title", "Social XXX");
+            model.put("create_order_link", HOST + "/all-packages");
+            model.put("terms_use_link", HOST+"/terms-use");
+            model.put("title", "Sosyal Trend");
 
             template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
             body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
@@ -134,7 +157,9 @@ public class MailService {
             else
                 return false;
 
-            model.put("title", "Social XXX");
+            model.put("create_order_link", HOST + "/all-packages");
+            model.put("terms_use_link", HOST+"/terms-use");
+            model.put("title", "Sosyal Trend");
 
             template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
             body = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);

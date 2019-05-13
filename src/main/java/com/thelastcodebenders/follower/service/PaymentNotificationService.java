@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.assembler.PaymenNotificationAssembler;
 import com.thelastcodebenders.follower.dto.PaymentNotificationFormDTO;
 import com.thelastcodebenders.follower.enums.AsyncMailType;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.model.PaymentNotification;
 import com.thelastcodebenders.follower.model.User;
@@ -115,6 +116,10 @@ public class PaymentNotificationService {
     }
 
     public boolean createPaymentNotification(PaymentNotificationFormDTO paymentNtfForm) throws LoginException {
+        if (!validatePaymentNtfForm(paymentNtfForm)){
+            throw new DetectedException("Tüm alanları eksiksiz doldurmalısınız !");
+        }
+
         PaymentNotification paymentNotification = paymenNotificationAssembler.convertFormDtoToPaymentNtf(paymentNtfForm);
         paymentNotification.setUser(userService.getAuthUser());
 
@@ -134,4 +139,20 @@ public class PaymentNotificationService {
             return false;
         }
     }
+
+    private boolean validatePaymentNtfForm(PaymentNotificationFormDTO paymentNotificationForm){
+        if (isNullOrEmpty(paymentNotificationForm.getFullName()) || isNullOrEmpty(paymentNotificationForm.getDate()) || isNullOrEmpty(paymentNotificationForm.getTime())){
+            throw new DetectedException("Tüm alanları eksiksiz doldurmalısınız !");
+        }else if (paymentNotificationForm.getFullName().length()>80 || paymentNotificationForm.getDate().length()>80 || paymentNotificationForm.getTime().length()>80){
+            throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+        }
+        return true;
+    }
+
+    private static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.enums.AsyncMailType;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.AccountActivation;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.AccountActivationRepository;
@@ -81,7 +82,7 @@ public class AccountActivationService {
 
         if (accountActivations.isEmpty()){
             log.error("Account Activation Service getKeyByUser Error -> " +user.getId() + " kullanıcısına tanımlanmış anahtar yok !");
-            throw new RuntimeException("Bu kullanıcıya ait anahtar yok !");
+            throw new DetectedException("Bu kullanıcıya ait anahtar yok !");
         }else {
             return accountActivations.get(0).getSecretkey();
         }

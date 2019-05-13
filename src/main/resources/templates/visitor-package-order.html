@@ -19,7 +19,7 @@
 						<div class="col-12 col-lg-6">
 							<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
 								<h2 class="brk-white-font-color font__weight-semibold font__size-32 line__height-68 font__family-montserrat">
-									<span th:text="${pkg.getSubCategory().getCategory().getName() + ' ' + pkg.getSubCategory().getName() + ' Satın Al'}">
+									<span th:text="${pkg.getSubCategory().getCategory().getName() + ' ' + pkg.getSubCategory().getName() + ' Satın Al'}"></span>
 								</h2>
 							</div>
 						</div>
@@ -35,9 +35,10 @@
 			</div>
 		</div>
 		<div class="main-wrapper">
-			<div th:replace="visitor-template :: messages"></div>
 			<main class="main-container mt-100 mt-md-50">
 				<div class="container">
+					<div th:replace="visitor-template :: messages"></div>
+
 					<div class="row">
 						<div class="col-md-8 col-sm-12">
 							<div class="brk-form brk-form-strict" data-brk-library="component__form">
@@ -71,7 +72,7 @@
 													<input id="number" name="number" required autocomplete="off" type="text" placeholder="Cep Telefonu" >
 												</div>
 												<div class="col-xl-6 col-md-6 pt-20 text-left">
-													<input id="checkbox-strict-1" name="checkbox" type="checkbox" >
+													<input id="checkbox-strict-1" name="checkbox" type="checkbox" checked>
 													<label class="brk-form-checkbox-label" for="checkbox-strict-1">
 														<a href="/terms-use">Kullanım Şartları'nı</a> kabul ediyorum.
 													</label>

@@ -6,6 +6,7 @@ import com.thelastcodebenders.follower.dto.UserPageServiceDTO;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListItem;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListSubItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.repository.PackageRepository;
@@ -73,10 +74,10 @@ public class ServiceService {
                 return opt.get();
             else {
                 log.error("Service Service Find By Id Error");
-                throw new RuntimeException("Servis bulunamadı !");
+                throw new DetectedException("Servis bulunamadı !");
             }
         }catch (Exception e){
-            if ((e instanceof RuntimeException)){
+            if ((e instanceof DetectedException)){
                 throw e;
             }
             log.error("Service Service Find By Id Error -> " + e.getMessage());
@@ -124,17 +125,17 @@ public class ServiceService {
                     return false;
 
                 if (serviceForm.getCustomMin() < service.getApiMinPiece() || serviceForm.getCustomMax()>service.getApiMaxPiece()){
-                    throw new RuntimeException("Max-Min değerleri belirtilen aralıkta olmak zorundadır !");
+                    throw new DetectedException("Max-Min değerleri belirtilen aralıkta olmak zorundadır !");
                 }
 
                 if (service.getState() == ServiceState.DELETED){
-                    throw new RuntimeException("Silinmiş bir servisi güncelleyemezsiniz !");
+                    throw new DetectedException("Silinmiş bir servisi güncelleyemezsiniz !");
                 }
 
                 if (serviceForm.isActive() &&
                         (service.getState() == ServiceState.PASSIVE || service.getState() == ServiceState.DELETED) &&
                                 !service.getApi().isState()){
-                    throw new RuntimeException("Aktif etmek istediğiniz servisin bağlı olduğu API pasif durumda !");
+                    throw new DetectedException("Aktif etmek istediğiniz servisin bağlı olduğu API pasif durumda !");
                 }
 
                 if (!serviceForm.isActive() && service.getState() == ServiceState.ACTIVE){
@@ -158,10 +159,10 @@ public class ServiceService {
                 serviceRepository.save(service);
                 return true;
             }else {
-                throw new RuntimeException("Hatalı veri girdiniz. Bu şekilde güncelleme yapamazsınız !");
+                throw new DetectedException("Hatalı veri girdiniz. Bu şekilde güncelleme yapamazsınız !");
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException){
+            if (e instanceof DetectedException){
                 throw e;
             }
             log.error("Service Service Update Error -> " + e.getMessage());

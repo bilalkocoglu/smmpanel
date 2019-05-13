@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.repository.BankAccountRepository;
 import com.thelastcodebenders.follower.repository.PaymentNotificationRepository;
@@ -44,13 +45,13 @@ public class BankAccountService {
                 return false;
 
             if (paymentNotificationRepository.countByBankAccount(bankAccount)>0){
-                throw new RuntimeException("Bu banka hesabına bağlı olarak oluşturulmuş ödeme bildirimleri mevcut, bu yüzden silinemez !");
+                throw new DetectedException("Bu banka hesabına bağlı olarak oluşturulmuş ödeme bildirimleri mevcut, bu yüzden silinemez !");
             }
 
             bankAccountRepository.deleteById(id);
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Delete account exception ! - " + e.getMessage());
             return false;

@@ -7,15 +7,14 @@ import com.thelastcodebenders.follower.dto.UserPagePackageDTO;
 import com.thelastcodebenders.follower.dto.VisitorPackagesItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.repository.PackageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,7 +38,7 @@ public class PackageService {
     }
 
     public List<String> packageColumns(){
-        return Stream.of("Paket Adı", "Kategori", "Servis", "Miktar", "Fiyat", "Durum", "Action").collect(Collectors.toList());
+        return Stream.of("Paket Adı", "Kategori", "Servis", "Miktar", "Api Fiyatı" , "Fiyat", "Durum", "Action").collect(Collectors.toList());
     }
 
     public boolean save(PackageFormDTO packageFormDTO){
@@ -79,6 +78,26 @@ public class PackageService {
         return packageRepository.findAll();
     }
 
+    public List<Package> activePackagesTop12(){
+        List<Package> packages = packageRepository.findByState(true);
+
+        if (packages.size() <= 12){
+            return packages;
+        }else {
+            Random rnd = new Random();
+            List<Package> randompackages = new ArrayList<>();
+
+            while (randompackages.size() < 12){
+                int rndIntex = rnd.nextInt(packages.size()-1);
+                randompackages.add(packages.remove(rndIntex));
+            }
+
+            return randompackages;
+        }
+    }
+
+
+
     public boolean changeState(long id, UserAction action){
         try {
             Optional<Package> opt = packageRepository.findById(id);
@@ -91,7 +110,7 @@ public class PackageService {
             Package pkg = opt.get();
             if (action == UserAction.ACTIVATE){
                 if (pkg.getService().getState()== ServiceState.PASSIVE || pkg.getService().getState()== ServiceState.DELETED){
-                    throw new RuntimeException("Aktifleştirmek istediğiniz paketin bağlı olduğu servis pasif !");
+                    throw new DetectedException("Aktifleştirmek istediğiniz paketin bağlı olduğu servis pasif !");
                 }
                 pkg.setState(true);
             }
@@ -101,7 +120,7 @@ public class PackageService {
             pkg = packageRepository.save(pkg);
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Package Service Change State Error - " + e.getMessage());
             return false;
@@ -112,8 +131,10 @@ public class PackageService {
         if (packageRepository.countByCategoryAndState(category, true)>0)
             return true;
         else
-            throw new RuntimeException("Geçersiz Kategori !");
+            throw new DetectedException("Geçersiz Kategori !");
     }
+
+
 
     public List<Category> visitorAllPackageCategories(){
         List<Category> categories = categoryService.allCategory();
@@ -141,6 +162,8 @@ public class PackageService {
         }
         return popularCategories;
     }
+
+
 
     public UserPagePackageDTO createUserPageServiceFormat(long id){
         Package pkg = findById(id);

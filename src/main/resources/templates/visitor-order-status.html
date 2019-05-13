@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+
+<body class="brk-bordered-theme brk-base-bg-gradient-5" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div th:replace="visitor-template :: mobile-header"></div>
+
+		<header th:replace="visitor-template :: header"></header>
+		<h1 class="sr-only">SMM PANEL</h1>
+	
+	<div class="main-wrapper pt-100">
+		<main class="main-container">
+			
+			<section class="brk-bg-center-cover pt-120 pb-100">
+				<div class="container mb-100">
+					<div class="text-center">
+						<h3 class="font__family-montserrat font__size-40 font__weight-bold all-light">SİPARİŞ TAKİP</h3>
+					</div>
+				</div>
+				<div class="container">
+					<div th:replace="visitor-template :: messages"></div>
+
+					<div class="brk-form brk-form-transparent" data-brk-library="component__form">
+						<form action="/package/order/status" method="post">
+							<div class="row">
+								<div class="col-xl-12 col-md-12 mb-40">
+                                    <label class="brk-form-label font__family-montserrat font__weight-bold all-light" for="brk-email-form-1">Takip No:</label>
+                                    <input autocomplete="off" required id="brk-email-form-1" class="brk-form-input-transparent" name="orderId" type="text" placeholder="Takip numaranızı girin.">
+                                     <button type="submit" class="btn btn-inside-out mt-35 btn-lg btn-block ml-0 mr-0 pl-70 pr-70 btn-inside-out-invert btn-no-shadow border-radius-25" data-brk-library="component__button">
+										 <span class="before">SORGULA</span>
+										 <span class="text">NERDE KALDI BENİM SİPARİŞİM?</span>
+										 <span class="after">SORGULA</span>
+									 </button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+                <div th:if="${order != null}" class="container ">
+					<div class="brk-tables brk-tables-trend brk-base-bg-gradient-99  font__family-montserrat" data-brk-library="component__tables">
+						<table>
+							<thead>
+								<tr>
+									<th  scope="col">Takip No</th>
+									<th scope="col">Paket Adı</th>
+									<th scope="col">Miktar</th>
+                                    <th scope="col">Adres</th>
+									<th class="brk-tables_active" scope="col">Durum</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr style="padding: 5px;">
+									<td data-title="Takip No" th:text="${order.getId()}"></td>
+									<td data-title="Paket Adı" th:text="${order.getName()}"></td>
+									<td data-title="Miktar" th:text="${order.getQuantity()}"></td>
+                                    <td data-title="Adres" th:text="${order.getUrl()}"></td>
+									<td data-title="Durum">
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}">
+											Sipariş Alındı
+										</span>
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}">
+											Yükleniyor
+										</span>
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}">
+											Tamamlandı
+										</span>
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}">
+											Bir Kısmı Tamamlandı
+										</span>
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}">
+											Gönderim Sırasında
+										</span>
+										<span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}">
+											İptal Edildi
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+		</main>
+	</div>
+    </div>
+	<footer th:replace="visitor-template :: footer"></footer>
+    <a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+</body>
+
+</html>

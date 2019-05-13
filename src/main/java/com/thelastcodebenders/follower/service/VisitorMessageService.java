@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.model.VisitorMessage;
 import com.thelastcodebenders.follower.repository.VisitorMessageRepository;
@@ -33,6 +34,9 @@ public class VisitorMessageService {
         if (isNullOrEmpty(messageDTO.getEmail()) || isNullOrEmpty(messageDTO.getMessage()) || isNullOrEmpty(messageDTO.getName())){
             return false;
         }
+        if ( messageDTO.getEmail().length() > 80 || messageDTO.getMessage().length() > 1000 || messageDTO.getName().length() > 100){
+            throw new DetectedException("Çok uzun değer girdiniz !");
+        }
         return true;
     }
 
@@ -48,7 +52,7 @@ public class VisitorMessageService {
 
             if (!mesageDTOvalidate(visitorMessageDTO) || userip == null){
                 log.error("Visitor Message Service sendVisitorMessage Error => Request Not Valid !");
-                throw new RuntimeException("Tüm alanları doldurmalısınız !");
+                throw new DetectedException("Tüm alanları doldurmalısınız !");
             }
 
             List<VisitorMessage> visitorMessages = visitorMessageRepository.findByIpAddr(userip);
@@ -61,7 +65,7 @@ public class VisitorMessageService {
                 LocalDateTime timeOutDate = LocalDateTime.now().minus(TIME_OUT, ChronoUnit.MINUTES);
                 if (visitorMessage.getLocalDateTime().compareTo(timeOutDate)>0){
                     log.error("Visitor Message Service Send Visitor Message Error -> Not Time Out !");
-                    throw new RuntimeException(TIME_OUT + " Dakikada bir yalnızca bir mesaj gönderebilirsiniz !");
+                    throw new DetectedException(TIME_OUT + " Dakikada bir yalnızca bir mesaj gönderebilirsiniz !");
                 }
             }
 
@@ -79,11 +83,11 @@ public class VisitorMessageService {
             visitorMessageRepository.save(visitorMessage);
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             else{
                 log.error("Visitor Message Service sendVisitorMessage Error => " + e.getMessage());
-                throw new RuntimeException("Mesajınız şu anda gönderilemedi. Lütfen daha sonra tekrar deneyin.");
+                throw new DetectedException("Mesajınız şu anda gönderilemedi. Lütfen daha sonra tekrar deneyin.");
             }
         }
     }

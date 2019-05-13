@@ -114,267 +114,101 @@
 				</div>
 			</div>
 		</section>
-        <section class="pt-70 pt-lg-35 pb-120" id="prices">
-			<div class="text-center mb-lg-70 mb-40">
-				<h4 class="font__family-montserrat font__weight-light font__size-28 line__height-30 mb-10 brk-base-font-color">
-					Kampanyalı Paketlerimiz
-				</h4>
-				<h3 class="font__family-montserrat font__size-42 font__weight-bold line__height-46 mb-30">
-					Öne Çıkan Paketler
-				</h3>
-				<p class="brk-dark-font-color font__family-montserrat font__size-15 font__weight-normal line__height-24">
-					Sistemimize kayıt olmadan hızlı bir şekilde satın al butonuna tıklayarak istediğiniz paketi satın alabilirsiniz. Mailinize gelen takip numarası ile siparişinizin durumunu inceleyebilirsiniz.
-				</p>
-			</div>
-			<div class="container">
-				<div class="colored-slider swiper-container" data-brk-library="component__pricing_table,slider__swiper,component__button">
-					<div class="swiper-wrapper">
-						<div class="swiper-slide">
-							<div class="brk-pricing-colored">
-								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
-									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
-									<div class="brk-pricing-colored__content text-center">
-										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
-											İnstagram Takipçi
-										</div>
-										<div class="brk-pricing-colored__price">
-											<span class="font__family-montserrat font__weight-ultralight">
-												10 ₺
-											</span>
-											<div class="period font__family-open-sans font__weight-bold">
-												1000 Takipçi
-											</div>
-										</div>
-										<div class="brk-pricing-colored__description font__family-open-sans">
-											<ul>
-												<li>Şifre Gerekmiyor</li>
-												<li>Takip Etmek Gerekmiyor</li>
-												<li>Tamamı Aktif Kullanıcılar</li>
-												<li>Takipten Vazgeçebilir</li>
-												<li>En Hızlı Hizmet</li>
-											</ul>
-										</div>
-										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
-											<i class="fas fa-shopping-basket"></i> SATIN AL
-										</button>
-									</div>
-								</div>
-							</div>
+
+		<div class="default-slider slick-loading arrows-classic-dark fa-req" data-slick="{&quot;slidesToShow&quot;: 4, &quot;slidesToScroll&quot;: 1, &quot;arrows&quot;: true,
+		&quot;responsive&quot;: [
+		{&quot;breakpoint&quot;: 992, &quot;settings&quot;: {&quot;slidesToShow&quot;: 3}},
+		{&quot;breakpoint&quot;: 768, &quot;settings&quot;: {&quot;slidesToShow&quot;: 2}},
+		{&quot;breakpoint&quot;: 480, &quot;settings&quot;: {&quot;slidesToShow&quot;: 1}}
+		], &quot;autoplay&quot;: true, &quot;autoplaySpeed&quot;: 3000}" data-brk-library="slider__slick">
+
+			<div class="pl-15 pr-15" th:each="pkg : ${packages}">
+				<div class="brk-pricing-strict text-center" data-brk-library="component__pricing_table,component__button">
+					<div class="brk-pricing-strict__content">
+						<div class="brk-pricing-strict__title font__family-open-sans font__weight-bold">
+							<span class="before brk-bg-grad"></span>
+							<span th:text="${pkg.getName()}"></span>
 						</div>
-                        
-						<div class="swiper-slide">
-							<div class="brk-pricing-colored">
-								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
-									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
-									<div class="brk-pricing-colored__content text-center">
-										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
-											İnstagram Takipçi
-										</div>
-										<div class="brk-pricing-colored__price">
-											<span class="font__family-montserrat font__weight-ultralight">
-												10 ₺
-											</span>
-											<div class="period font__family-open-sans font__weight-bold">
-												1000 Takipçi
-											</div>
-										</div>
-										<div class="brk-pricing-colored__description font__family-open-sans">
-											<ul>
-												<li>Şifre Gerekmiyor</li>
-												<li>Takip Etmek Gerekmiyor</li>
-												<li>Tamamı Aktif Kullanıcılar</li>
-												<li>Takipten Vazgeçebilir</li>
-												<li>En Hızlı Hizmet</li>
-											</ul>
-										</div>
-										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
-											<i class="fas fa-shopping-basket"></i> SATIN AL
-										</button>
-									</div>
-								</div>
-							</div>
+						<div class="brk-pricing-strict__price font__family-montserrat">
+							<span class="st-sign">₺</span>
+							<span class="st-price font__weight-ultralight" th:text="${pkg.getPrice()}"></span>
 						</div>
-                        <div class="swiper-slide">
-							<div class="brk-pricing-colored">
-								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
-									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
-									<div class="brk-pricing-colored__content text-center">
-										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
-											İnstagram Takipçi
-										</div>
-										<div class="brk-pricing-colored__price">
-											<span class="font__family-montserrat font__weight-ultralight">
-												10 ₺
-											</span>
-											<div class="period font__family-open-sans font__weight-bold">
-												1000 Takipçi
-											</div>
-										</div>
-										<div class="brk-pricing-colored__description font__family-open-sans">
-											<ul>
-												<li>Şifre Gerekmiyor</li>
-												<li>Takip Etmek Gerekmiyor</li>
-												<li>Tamamı Aktif Kullanıcılar</li>
-												<li>Takipten Vazgeçebilir</li>
-												<li>En Hızlı Hizmet</li>
-											</ul>
-										</div>
-										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
-											<i class="fas fa-shopping-basket"></i> SATIN AL
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-                        <div class="swiper-slide">
-							<div class="brk-pricing-colored">
-								<div class="brk-pricing-colored__layer lazyload" data-bg="img/bg-patterns-12.png">
-									<div class="brk-pricing-colored__overlay brk-base-bg-gradient-50deg-a"></div>
-									<div class="brk-pricing-colored__content text-center">
-										<div class="brk-pricing-colored__title font__family-open-sans font__weight-bold">
-											İnstagram Takipçi
-										</div>
-										<div class="brk-pricing-colored__price">
-											<span class="font__family-montserrat font__weight-ultralight">
-												10 ₺
-											</span>
-											<div class="period font__family-open-sans font__weight-bold">
-												1000 Takipçi
-											</div>
-										</div>
-										<div class="brk-pricing-colored__description font__family-open-sans">
-											<ul>
-												<li>Şifre Gerekmiyor</li>
-												<li>Takip Etmek Gerekmiyor</li>
-												<li>Tamamı Aktif Kullanıcılar</li>
-												<li>Takipten Vazgeçebilir</li>
-												<li>En Hızlı Hizmet</li>
-											</ul>
-										</div>
-										<button class="brk-pricing-colored__btn btn font__family-open-sans font__weight-bold">
-											<i class="fas fa-shopping-basket"></i> SATIN AL
-										</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-base-arrow button-prev"><i class="fas fa-long-arrow-alt-left"></i></div>
-					<div class="swiper-base-arrow button-next"><i class="fas fa-long-arrow-alt-right"></i></div>
-				</div>
-			</div>
-            <div class="row">
-                <div class="col-12 col-lg-12">
-                    <h4 style="padding: 50px" class="title__divider title__divider--circle font__size-21 font__weight-bold font__family-montserrat line__height-24 text-center" data-brk-library="component__dividers">
-                                <span class="title__divider__wrapper">
-									<img th:src="@{/visitor/img/logo.png}">
-									<span class="line-left brk-base-bg-1"></span>
-									<span class="line-right brk-base-bg-1"></span>
-								</span>
-                              </h4>
-                    <p class="font__family-montserrat font__weight-light font__size-24 line__height-36 mb-30 text-center">
-						İstediğiniz miktarda sipariş vermek için panelimizi kullanabilir ve hızlı bir şekilde sipariş verebilirsiniz. Panelimizde İnstagram, Twitter, Youtube, Tiktok, Facebook gibi aklınıza gelebecek tüm sosyal medya siteleri için hizmetlerimiz bulunmaktadır. Hadi ne bekliyorsun ?
-					</p>
-                    <div class="text-center">
-						<a th:href="@{/login}" class="btn btn-inside-out btn-lg border-radius-30 btn-min-width-200 btn-shadow mt-25" data-brk-library="component__button">
-							<span class="before">PANELE GİT</span>
-							<span class="text"> SMM PANEL</span>
-							<span class="after">PANELE GİT</span>
+						<div class="brk-pricing-strict__description" th:utext="${pkg.getDescription()}"></div>
+						<a th:href="@{'/package/order/' + ${pkg.getId()}}" class="brk-pricing-strict__btn btn btn-md-2 btn-icon border-radius-25 font__family-open-sans font__weight-bold btn-inside-out">
+							<i class="fal fa-shopping-cart icon-inside" aria-hidden="true"></i>
+							<span class="before">Sipariş Ver</span>
+							<span class="text">Sipariş Ver</span>
+							<span class="after">Sipariş Ver</span>
 						</a>
 					</div>
-                </div>
-            </div>
-		</section>
+				</div>
+			</div>
+		</div>
+
 		<section class="custom-tabbed-contents-mt">
 			<div class="brk-tabs brk-tabs_tabbed-intro brk-tabs_tabbed-intro-shaped" data-index="1" data-brk-library="component__tabbed_contents">
 				<ul class="brk-tabs-nav">
-					<li class="brk-tab">
-						<i class="fab fa-instagram"></i>
-						<span>İnstagram</span>
-					</li>
-					<li class="brk-tab">
-						<i class="fab fa-facebook-f"></i>
-						<span>Facebook</span>
-					</li>
-					<li class="brk-tab">
-						<i class="fab fa-twitter"></i>
-						<span>Twitter</span>
-					</li>
-					<li class="brk-tab">
-						<i class="fab fa-youtube"></i>
-						<span>Youtube</span>
-					</li>
+					<li class="brk-tab"><i class="fab fa-instagram"></i><span>İnstagram</span></li>
+					<li class="brk-tab"><i class="fab fa-facebook-f"></i><span>Facebook</span></li>
+					<li class="brk-tab"><i class="fab fa-twitter"></i><span>Twitter</span></li>
+					<li class="brk-tab"><i class="fab fa-youtube"></i><span>Youtube</span></li>
 				</ul>
 				<div class="brk-tabs-content position-relative">
-					<div class="brk-abs-overlay">
-						<span class="brk-abs-overlay brk-base-bg-gradient-90deg"></span>
-					</div>
-                    <span class="brk-svg-pattern-container brk-svg-pattern-container-11-top brk-svg-pattern-container_top" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 265" enable-background="new 0 0 1920 265" space="preserve">
+					<div class="brk-abs-overlay"><span class="brk-abs-overlay brk-base-bg-gradient-90deg"></span></div>
+					<span class="brk-svg-pattern-container brk-svg-pattern-container-11-top brk-svg-pattern-container_top" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 265" enable-background="new 0 0 1920 265" space="preserve">
+						<g>
 							<g>
-								<g>
-									<path fill="#FFFFFF" d="M0,245.355c73.796,20.648,167.146,31.35,259-0.356c198.5-68.516,300.465-106.329,544-77
-        c229.662,27.66,585.606,115.249,756-12.999C1686.134,59.311,1776.214,8.995,1912.11,0H0V245.355z M1912.11,0h7.89v-0.479
-        C1917.351-0.336,1914.725-0.173,1912.11,0z" />
-								</g>
+								<path fill="#FFFFFF" d="M0,245.355c73.796,20.648,167.146,31.35,259-0.356c198.5-68.516,300.465-106.329,544-77
+								c229.662,27.66,585.606,115.249,756-12.999C1686.134,59.311,1776.214,8.995,1912.11,0H0V245.355z M1912.11,0h7.89v-0.479
+								C1917.351-0.336,1914.725-0.173,1912.11,0z" />
 							</g>
-						</svg> </span>
-                    <span class="brk-svg-pattern-container brk-svg-pattern-container-11-bottom brk-svg-pattern-container_bottom" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 80" enable-background="new 0 0 1920 80" space="preserve">
+						</g>
+					</svg> </span>
+					<span class="brk-svg-pattern-container brk-svg-pattern-container-11-bottom brk-svg-pattern-container_bottom" data-brk-library="component__svg_pattern"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 80" enable-background="new 0 0 1920 80" space="preserve">
+						<g>
 							<g>
-								<g>
-									<path fill="#FFFFFF" d="M1664,26C1193.465-60.58,959.422,159.636,497,45.999C198.597-27.33,60.458,1.476,0,31.136V80h1920V69.241
-        C1862.24,60.935,1780.166,47.375,1664,26z" />
-								</g>
+								<path fill="#FFFFFF" d="M1664,26C1193.465-60.58,959.422,159.636,497,45.999C198.597-27.33,60.458,1.476,0,31.136V80h1920V69.241
+								C1862.24,60.935,1780.166,47.375,1664,26z" />
 							</g>
-						</svg></span>
+						</g>
+					</svg></span>
 					<div class="brk-tab-item active">
 						<div class="container">
 							<div class="row">
 								<div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										İnstagram Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+									<h2 class="font__family-montserrat font__weight-semibold font__size-24 text-center brk-white-font-color mb-20 mt-10">İnstagram Takipçi Satın Al</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>İnstagram takipçi satın al</strong>ma işlemi yapmak sitemizde çok basit. Aşağıdaki instagram takipçi satın al butonuna tıklayarak hızlı bir şekilde insta takipçi alabilirsiniz. <strong>İnstagram takipçi kasma</strong> son zamanlarda oldukça popüler olmuştur. Bunun nedeni “fenomen” diye bir kavramın ortaya çıkmasıdır. <strong><i>İnstagram takipçi kasma hilesi</i></strong>, instagram takipçi hilesi bedava gibi insanları kandırarak fenomen olacağına inandırıp şifrelerini ele geçirmeyi amaçlamaktadırlar. Sosyal Trend olarak şifresiz instagram takipçisi gönderimi sağlıyoruz. Sizlerden şifrenizi kesinlikle istemiyoruz. Hadi ne duruyorsun. Hemen butona tıkla ve sende fenomen olmaya başla.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">İNSTAGRAM TAKİPÇİ SATIN AL</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">İNSTAGRAM TAKİPÇİ SATIN AL</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										İnstagram Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">İnstagram Takipçi Hilesi</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>İnstagram Takipçi Hilesi</strong> ile profillerinizi takip edenlerin sayısını arttırabilirsiniz ancak önemli bir detay var. Bunu yaparken sizlerden ınstagram şifrenizi isteyen yerlerden uzak durun. Bu tarz sistemler hesaplarınızı ele geçirmeyi amaçlamaktadır.<i> İnstagram Takipçi kasma</i> yöntemlerinin en iyisi <strong>instagram takipçi satın al</strong>ma yöntemidir. Sosyal trend olarak sizlere <strong>instagram takipçi</strong> hizmetini sizlerden şifrenizi istemeden yapıyoruz. Hemen paketlerimizi inceleyin ve size uygun paketi satın alarak fenomen olun. İnsta takipçi ’de çığır açan Sosyal Trend olarak sizlere her zaman en iyi hizmeti vermek için çalışıyoruz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">İNSTAGRAM TAKİPÇİ HİLESİ</span>
+											<span class="text"></span>PAKETLERİ İNCELE
+											<span class="after">İNSTAGRAM TAKİPÇİ HİLESİ</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										İnstagram Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">İnstagram Beğeni</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>İnstagram Beğeni</strong>, profilinizdeki fotoğraflarınızı hepsinin çok beğenilmesini herkes gibi sizde istersiniz. <i>İnstagram beğeni arttırma</i> işte tam olarak bunun için var. Diğer sitelerde <strong><i>instagram beğeni hilesi</i></strong> olarak gösterilen ve hesap şifrenizi ele geçirmeyi amaçlayan sistemlerdir. Ancak Sostal Trend sistemi bütçenize uygun <i>ınstagram beğeni</i> ve <strong>şifresiz instagram beğeni</strong> hizmetimiz ile sizlere kaliteli hizmeti sağlıyoruz. İnstagram beğeni şifresiz bir şekilde sitemizden satın alabilir ve profilinizi <i>instagram begeni</i> ile doldurabilirsiniz. Hemen aşağıdaki butondan instagram beğeni paketlerine gidebilir ve size uygun paketi hızlı bir şekilde alabilirsiniz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">İNSTAGRAM BEĞENİ SATIN AL</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">İNSTAGRAM BEĞENİ SATIN AL</span>
+										</a>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
@@ -382,149 +216,119 @@
 						<div class="container">
 							<div class="row">
 								<div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Facebook Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Facebook Beğeni Hilesi</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Facebook beğeni hilesi</strong>, Facebook nerdeyse ilk çıkan sosyal medya kanallarından bir tanesidir. Hala güncel olarak kullanılmaktadır ve geliştirilmektedir. Kullanıcılarda doğal olarak <strong>Facebook beğeni</strong> istemektedir. <strong><i>Facebook beğeni hilesi</i></strong> oldukça yaygındır ancak sayfanızı ya da profilinizi riske atabilirsiniz. Facebook begeni hilesi ile sistemler sizin şifrenizi ele geçirmek isterler. Hesabınız riske atmadan facebook begeni istiyorsanız Sosyal Trend sayesinde uygun fiyatlı ve şifrenizi vermeden <strong>facebook begeni</strong> ya da facebook sayfa begendirme alabilirsiniz. Hadi Facebook begeni ile sizde sayfalarınızı yukarılara taşıyın. Hemen alttaki butondan size uygu paketi seçin ve güvenli bir şekilde ödeme sağlayın.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">FACEBOOK BEĞENİ</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">FACEBOOK BEĞENİ</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Facebook Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Facebook Beğeni</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Facebook beğeni</strong>, hizmetimiz ile Facebook’da bulunan sayfalarınızı ya da profillerinize olan etkileşimi arttırabilirsiniz. <strong>Facebook begeni</strong> son zamanların oldukça ilgi gören hizmetlerinden birisidir. Bunun nedeni Facebook kitlesinin her geçen gün artmasıdır ve Facebook’un kendini geliştirmesidir. <i>Facebook Beğeni hilesi</i> ya da facebok sayfa beğeni hilesi ile uğraşmadan hesabınızın başkalarının eline geçmesi riskini almadan Facebook beğeni satın alabilirsiniz. Hemen aşağıdaki butona tıklayarak en uygun fiyatlı facebook beğeni satın alabilirsiniz. Facebook sayfa beğendirme ve Facebook beğeni paketleri en uygun fiyatlarla sadece Sosyal Trend’de.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">FACEBOOK BEĞENİ</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">FACEBOOK BEĞENİ</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Facebook Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-22 text-center brk-white-font-color mb-20 mt-10">Facebook Sayfa Beğendirme</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Facebook Sayfa Beğendirme</strong>, Facebook sayfaları Facebook’un açıldığından beri vazgeçilmezleri arasındadır. Sürekli paylaşım yaparak etkileşim almayı planlayan sayfalar düşük beğeni sayılarından şikayetçidir. Sizlerde Facebook’da bir sayfaya sahipseniz ve Facebook beğeni ya da <strong>Facebook sayfa beğendirme </strong>servisine ihtiyacınız var ise doğru yerdesiniz. <strong>Beğeni hilesi Facebook</strong>, İnstagram, Twitter ve diğer sosyal medya platformlarında doğru karşılanmamaktadır. Bizler Facebook beğeni hilesi yapmıyoruz. Sizlerin şifresini istemiyoruz. Kendinize uygun paketi seçip satın almanız halinde sadece sayfanızın URL’ini girerek istediğiniz beğeniyi hesabınıza gönderiyoruz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">FACEBOOK SAYFA BEĞENDİRME</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">FACEBOOK SAYFA BEĞENDİRME</span>
+										</a>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
-                    <div class="brk-tab-item">
+					<div class="brk-tab-item">
 						<div class="container">
 							<div class="row">
 								<div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Twitter Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Twitter Takipçi</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Twitter Takipçi </strong>, gündemi belirleyen hatta insanların düşüncelerini en rahat şekilde yayımlayabildiği Twitter’da takipçi sayısı oldukça önem kazanmaktadır. Takipçi sayısının fazla olması insanlara güven vermektedir. Sizlerde Twitter takipçi kasmak istiyorsanız kesinlikle <strong>twitter takipçi hilesi</strong> gibi araçlara bulaşmayın. Hesabınızı el geçirmeyi amaçlayan bu tarz sitelerden uzak durun. Twitter takipçi satın al hizmetimiz ile sizlerden hesap şifrenizi almadan sadece kullanıcı adınızı alarak istediğiniz miktarda takipçiyi sizlere gönderiyoruz. Twitter takipçi kazan ya da twitter takipçi hilesi gibi tuzaklara düşmeden Twitter takipçi almak için doğru adres Sosyal Trend. Hemen aşağıdaki butona tıklayarak paket fiyatlarına göz atabilirsiniz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">TWİTTER TAKİPÇİ</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">TWİTTER TAKİPÇİ</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Twitter Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Twitter Beğeni</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Twitter Beğeni</strong>, Twitter sistemine göre fazla beğeni alan postlar daha fazla etkileşim almakta ve tag ile paylaşımlarda daha fazla ön plana çıkmaktadır. Bizlerde sizi ön plana taşımak için Twitter beğeni satın al hizmetimizi aktif ettik. Twitter beğeni alarak profilinizdeki tüm gönderilere ya da sadece belli bir gönderinize beğeni gönderebilirsiniz. Sahte paneller gibi <strong>Twitter beğeni hilesi</strong> diyerek hesaplarınızın şifresini ele geçirmeye çalışmıyoruz. Gönderilerimizin tamamını twitter takipçi, twitter beğeni ne olursa olsun kesinlikle şifrenizi istemiyoruz. Yapmanız gereken tek şey bütçenize uygun paketi seçip beğeni göndermek istediğiniz gönderinizin URL’ini girmek. Bundan sonrasını bize bırakın.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">TWİTTER BEĞENİ</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">TWİTTER BEĞENİ</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Twitter Takipçi
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div><button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200"><span class="before">Read More</span> <span class="text">Read More</span> <span class="after">Read More</span></button></div>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Twitter Trend Topic</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Twitter Trend Topic Al</strong>, Twitter’a özgü olan bu trend topic sistemi genel olarak etiketlerin belli bir süre içerisinde paylaşım sayısını göz önüne alarak belirlemektedir. Twitter Trend Topic ile twitter’da hızlı bir şekilde ön plana çıkabilir ve birkaç saat trendlerde kalarak markanızın ya da isminizin herkes tarafından görülmesini sağlayabilirsiniz. Trend Topic tek başınıza yapabileceğiniz bir şey değildir. Düzenli ve eş zamanlı bir çalışma gerektirmektedir.  <strong>Twitter trend topic satın alarak</strong> kampanyalarınızı ya da yeni çıkan markanızı geniş kitlelere duyurabilirsiniz. Son zamanlarda yeni çıkan firmalar tarafından oldukça fazla kullanılmaktadır.Hemen aşağıdaki butondan Twitter trend topic fiyatlarına göz atabilirsiniz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">TWİTTER TREND TOPİC AL</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">TWİTTER TREND TOPİC AL</span>
+										</a>
+									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
-                    <div class="brk-tab-item">
+					<div class="brk-tab-item">
 						<div class="container">
 							<div class="row">
 								<div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Youtube Abone
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Youtube Abone Kasma</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Youtube abone kasma</strong>, Youtube herkesin bildiği gibi vazgeçilmez bir video izleme platformu. Bunun yanı sıra Youtube üzerinden para kazanmakta mümkündür. Ancak bazı şartlar var bunu yapabilmek için bunlardan ilk <strong>Youtube abone</strong> ikincisi ise Youtube izlenme sayısıdır. Youtube üzerinden para kazanmak için 1000 youtube abone kasmak gerekmektedir. Bunun için bizlerde <strong>Youtube abone satın al</strong> hizmetimizi başlatarak sizlere Youtube abone arttırma garantisi veriyoruz. İnternetteki youtube abone hilesi gibi tuzaklara kanmayın ve hesabınızı riske atmayın. Youtube abone kasma önemli ve titizlikle yapılması gereken bir iştir. Hemen aşağıdaki linkten paketlerimizi inceleyebilirsiniz ve size uygun youtube abone paketini satın alabilirsiniz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">YOUTUBE ABONE KASMA</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">YOUTUBE ABONE KASMA</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Youtube İzlenme
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-25 text-center brk-white-font-color mb-20 mt-10">Youtube İzlenme Arttırma</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Youtube izlenme arttırma</strong>, Youtube’de reklam gelirlerini açmak için belli bir izlenmenin üzerine çıkmak gerekmektedir. Bunun için sitemizden Youtube izlenme satın alarak bunu gerçekleştirebilirsiniz. <strong>Youtube izlenme hilesi </strong>gibi saçma yöntemlerle uğraşmak istemiyorsanız hemen aşağıdaki butona tıklayarak paketlerimize göz atabilirsiniz. Youtube izlenme botu videonuza gelen izlenmelerin doğal olup olmadığını kontrol etmektedir. Sosyal Trend olarak Youtube izlenme gönderimleri tamamen doğal olarak gönderilmektedir. Youtube izlenme satın al butonuna tıklayarak ihtiyacınız olan youtube izlenmesini satın alabilir ve Youtube üzerinden para kazanmaya başlayabilirsiniz. Hemen aşağıdaki butona tıkla ve sana uygun paketi satın al.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">YOUTUBE İZLENME SATIN AL</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">YOUTUBE İZLENME SATIN AL</span>
+										</a>
 									</div>
 								</div>
-                                <div class="col-xl-4 text-center">
-									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">
-										Youtube Beğeni
-									</h2>
-									<p class="font__size-16 line__height-26 text-center">
-										Viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in.
-									</p>
-                                    <div>
-										<button class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
-											<span class="before">Read More</span>
-											<span class="text">Read More</span>
-											<span class="after">Read More</span>
-										</button>
+								<div class="col-xl-4 text-center">
+									<h2 class="font__family-montserrat font__weight-semibold font__size-28 text-center brk-white-font-color mb-20 mt-10">Youtube Beğeni</h2>
+									<p class="font__size-16 line__height-26 text-center"><strong>Youtube beğeni</strong>, Youtube ’da videolara gönderilen beğeniler o videonun daha fazla öne çıkmasını sağlarken dislike butonu ise o videonun beğenilmediğini göstermektedir. Sizlerde videonuzu ön plana çıkarmak isterseniz Youtube beğeni satın alarak bunu sağlayabilirsiniz. Ayrıca başka videolara da beğeni ya da dislike gönderebilirsiniz. Youtube beğeni hilesi gibi sizlerin zamanlarını çalan asıl amacı hesaplarınızı ele geçirmek olan bu tarz sitelere itibar etmeyin. Biz Sosyal Trend olarak sizlerden hiçbir hizmetimizde hesap şifrenizi istemiyoruz. Beğeni, izlenme ya da abone hiç fark etmez  bize sadece gönderilen hesabı ya da URL’i vermeniz yeterli olacaktır. Hadi sende hemen Youtube begeni satın alarak öne çıkmaya başla. Aşağıdaki butondan Youtube begeni paketlerimizi görebilir ve bütçenize uygun paketi sipariş verebilirsiniz.</p>
+									<div>
+										<a href="/all-packages" class="btn btn-lg btn-block border-radius-30 font__family-open-sans font__weight-bold btn-inside-out btn-inside-out-invert btn-min-width-200">
+											<span class="before">YOUTUBE BEĞENİ</span>
+											<span class="text">PAKETLERİ İNCELE</span>
+											<span class="after">YOUTUBE BEĞENİ</span>
+										</a>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>

@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.Category;
 import com.thelastcodebenders.follower.model.SubCategory;
 import com.thelastcodebenders.follower.repository.CategoryRepository;
@@ -78,7 +79,7 @@ public class CategoryService {
             Category maincategory = categoryRepository.findById(mainId).get();
 
             if (isAlreadySubCategory(maincategory, subCategory.getName()))
-                throw new RuntimeException("Bu isimde bir alt kategori zaten bu ana kategori altında mevcut !");
+                throw new DetectedException("Bu isimde bir alt kategori zaten bu ana kategori altında mevcut !");
 
             subCategory.setCategory(maincategory);
             subCategory = subCategoryRepository.save(subCategory);
@@ -88,7 +89,7 @@ public class CategoryService {
             }else
                 return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Category Service Save Subcategory Error - " + e.getMessage());
             return false;
@@ -98,7 +99,7 @@ public class CategoryService {
     public boolean saveCategory(Category category){
         try {
             if (isAlreadyCategory(category.getName()))
-                throw new RuntimeException("Bu isimde bir kategori zaten mevcut !");
+                throw new DetectedException("Bu isimde bir kategori zaten mevcut !");
 
             category = categoryRepository.save(category);
             if (category==null){
@@ -107,7 +108,7 @@ public class CategoryService {
             }else
                 return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Category Service Save Category Error - " + e.getMessage());
             return false;
@@ -124,10 +125,10 @@ public class CategoryService {
                 return true;
             }else {
                 log.error("Category Service Subcategory Delete Error -> Bu kategori altında servisler mevcut !");
-                throw new RuntimeException("Bu kategori altında servisler mevcut, bu yüzden silemezsiniz !");
+                throw new DetectedException("Bu kategori altında servisler mevcut, bu yüzden silemezsiniz !");
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Category Service Subcategory Delete Error - " + e.getMessage());
             return false;
@@ -143,10 +144,10 @@ public class CategoryService {
                 return true;
             }else {
                 log.error("Category Service Category Delete Error -> Bu kategori altında alt kategori mevcut !");
-                throw new RuntimeException("Bu ana kategori altında alt kategoriler mevcut, bu yüzden silemezsiniz !");
+                throw new DetectedException("Bu ana kategori altında alt kategoriler mevcut, bu yüzden silemezsiniz !");
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("Category Service Category Delete Error - " + e.getMessage());
             return false;
@@ -161,10 +162,10 @@ public class CategoryService {
                 return opt.get();
             else {
                 log.error("Category Service Find Subcategory By Id Error");
-                throw new RuntimeException("Atamak istediğiniz kategori bulunamadı !");
+                throw new DetectedException("Atamak istediğiniz kategori bulunamadı !");
             }
         }catch (Exception e){
-            if ((e instanceof RuntimeException)){
+            if ((e instanceof DetectedException)){
                 throw e;
             }
             log.error("Category Service Find Subcategory By Id Error -> " + e.getMessage());
@@ -208,25 +209,25 @@ public class CategoryService {
             String[] parse = categoryUrlName.split("-");
             if (parse.length<2){
                 log.error("Package Service Visitor Package Error -> CategoryUrlName Parse < 2 !");
-                throw new RuntimeException("Kategori bulunamadı !");
+                throw new DetectedException("Kategori bulunamadı !");
             }else if(!parse[1].equals("paketleri")){
                 log.error("Package Service Visitor Package Error -> CategoryUrlName Parse[0] != paketleri !");
-                throw new RuntimeException("Kategori bulunamadı !");
+                throw new DetectedException("Kategori bulunamadı !");
             }else {
                 String categoryName = parse[0];
                 Category category = findCategoryByName(categoryName);
                 if (category == null){
                     log.error("Package Service Visitor Package Error -> Category Not Found !");
-                    throw new RuntimeException("Kategori bulunamadı !");
+                    throw new DetectedException("Kategori bulunamadı !");
                 }else {
                     return category;
                 }
             }
         }catch (Exception e){
-            if(e instanceof RuntimeException)
+            if(e instanceof DetectedException)
                 throw e;
             log.error("Package Service Visitor Package Error -> " + e.getMessage());
-            throw new RuntimeException("Kategori bulunamadı !");
+            throw new DetectedException("Kategori bulunamadı !");
         }
     }
 }

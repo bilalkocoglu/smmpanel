@@ -6,6 +6,7 @@ import com.thelastcodebenders.follower.dto.RegisterFormDTO;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.enums.SyncMailType;
 import com.thelastcodebenders.follower.enums.UserAction;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.Role;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.UserRepository;
@@ -172,12 +173,12 @@ public class UserService {
     public boolean saveUser(RegisterFormDTO registerForm){
         try {
             if (!registerFormValidation(registerForm)){
-                throw new RuntimeException("Tüm bilgileri doğru bir şekilde girmelisiniz !");
+                throw new DetectedException("Tüm bilgileri doğru bir şekilde girmelisiniz !");
             }
 
             List<User> users = userRepository.findByMail(registerForm.getMail());
             if (users.size()>0){
-                throw new RuntimeException("Kayıt için girdiğiniz mail adresi kullanımda !");
+                throw new DetectedException("Kayıt için girdiğiniz mail adresi kullanımda !");
             }
 
 
@@ -194,7 +195,7 @@ public class UserService {
 
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("User Service Save User Error -> " + e.getMessage());
             return false;
@@ -209,15 +210,20 @@ public class UserService {
         }
 
         if (!registerForm.isTermsUse()){
-            throw new RuntimeException("Kayıt olabilmek için kullanım koşullarını kabul etmelisiniz.");
+            throw new DetectedException("Kayıt olabilmek için kullanım koşullarını kabul etmelisiniz.");
         }
 
         if ( !registerForm.getPassword().equals(registerForm.getRepairPass()) ){
-            throw new RuntimeException("Şifreleriniz eşleşmiyor lütfen tekrar deneyin.");
+            throw new DetectedException("Şifreleriniz eşleşmiyor lütfen tekrar deneyin.");
         }
 
         if ( registerForm.getPassword().length()<PASSLENGTH){
-            throw new RuntimeException("Şifreniz 5 karakter veya daha fazla olmalıdır !");
+            throw new DetectedException("Şifreniz 5 karakter veya daha fazla olmalıdır !");
+        }
+
+        if (registerForm.getMail().length() > 80 || registerForm.getName().length() > 20 || registerForm.getPassword().length() > 30
+                || registerForm.getRepairPass().length()>30 || registerForm.getSurname().length() > 30){
+            throw new DetectedException("Çok uzun değer girdiniz !");
         }
 
         return true;
@@ -241,14 +247,14 @@ public class UserService {
 
             if (user.isState()){
                 log.error("Kullanıcı zaten aktif !");
-                throw new RuntimeException("Mail adresi zaten onaylanmış !");
+                throw new DetectedException("Mail adresi zaten onaylanmış !");
             }
 
             changeState(user.getId(), UserAction.ACTIVATE);
 
             return true;        //success
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("User Service Account Activate With Secret Error ! -> " + e.getMessage());
             return false;
@@ -257,15 +263,19 @@ public class UserService {
 
     public void accountActivateMailAgain(String email){
         if (isNullOrEmpty(email)){
-            throw new RuntimeException("Doğru bir mail adresi giriniz !");
+            throw new DetectedException("Doğru bir mail adresi giriniz !");
         }
+
+        if (email.length()> 80 )
+            throw new DetectedException("Böyle bir üyelik mevcut değil !");
+
 
         User user = findUserByMail(email);
 
         if (user == null){
-            throw new RuntimeException("Böyle bir üyelik mevcut değil !");
+            throw new DetectedException("Böyle bir üyelik mevcut değil !");
         }else if (user.isState()){
-            throw new RuntimeException("Hesap zaten aktif !");
+            throw new DetectedException("Hesap zaten aktif !");
         }
 
         accountActivationService.sendKeyAgain(user);
@@ -274,14 +284,22 @@ public class UserService {
 
     public boolean resetPassword(String email){
         try {
+            if (isNullOrEmpty(email)){
+                throw new DetectedException("Doğru bir mail adresi giriniz !");
+            }
+
+            if (email.length()>80){
+                throw new DetectedException("Böyle bir kullanıcı bulunamadı !");
+            }
+
             User user = findUserByMail(email);
 
             if (user == null)
-                throw new RuntimeException("Böyle bir kullanıcı bulunamadı !");
+                throw new DetectedException("Böyle bir kullanıcı bulunamadı !");
             if (user.getRole().getRole().equals("ADMIN"))
-                throw new RuntimeException("Böyle bir kullanıcı bulunamadı !");
+                throw new DetectedException("Böyle bir kullanıcı bulunamadı !");
             if (!user.isState())
-                throw new RuntimeException("Önce hesabınızı aktifleştirmelisiniz !");
+                throw new DetectedException("Önce hesabınızı aktifleştirmelisiniz !");
 
             String rndPass = accountActivationService.generateRandomPassword(PASSLENGTH);
             user.setPassword(bCryptPasswordEncoder.encode(rndPass));
@@ -292,13 +310,13 @@ public class UserService {
             if ( res )
                 return true;
             else
-                throw new RuntimeException("İşleminiz şu anda gerçekleştirilemedi. Lürfen daha sonra tekrar deneyin.");
+                throw new DetectedException("İşleminiz şu anda gerçekleştirilemedi. Lürfen daha sonra tekrar deneyin.");
 
         }catch (Exception e){
-            if ( e instanceof RuntimeException)
+            if ( e instanceof DetectedException)
                 throw e;
             log.error("User Service Reset Password Error -> " + e.getMessage());
-            throw new RuntimeException("İşleminiz şu anda gerçekleştirilemedi. Lürfen daha sonra tekrar deneyin.");
+            throw new DetectedException("İşleminiz şu anda gerçekleştirilemedi. Lürfen daha sonra tekrar deneyin.");
         }
     }
 
@@ -310,17 +328,17 @@ public class UserService {
 
 
             if (!bCryptPasswordEncoder.matches(changePasswordDTO.getCurrentPass(), user.getPassword())){
-                throw new RuntimeException("Eski şifrenizi hatalı girdiniz !");
+                throw new DetectedException("Eski şifrenizi hatalı girdiniz !");
             }
 
             user.setPassword(bCryptPasswordEncoder.encode(changePasswordDTO.getNewPass()));
             userRepository.save(user);
         }catch (Exception e){
-            if ( e instanceof RuntimeException)
+            if ( e instanceof DetectedException)
                 throw e;
             else {
                 log.error("User Service Reset Password Error -> " + e.getMessage());
-                throw new RuntimeException("İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+                throw new DetectedException("İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
             }
         }
     }
@@ -328,11 +346,13 @@ public class UserService {
     private void changePasswordDtoValidation(ChangePasswordDTO changePasswordDTO){
         if (isNullOrEmpty(changePasswordDTO.getCurrentPass()) || isNullOrEmpty(changePasswordDTO.getNewPass())
                 || isNullOrEmpty(changePasswordDTO.getNewPassAgain())){
-            throw new RuntimeException("Tüm alanları doldurmalısınız !");
+            throw new DetectedException("Tüm alanları doldurmalısınız !");
         }else if(!changePasswordDTO.getNewPass().equals(changePasswordDTO.getNewPassAgain())){
-            throw new RuntimeException("Şifreleriniz uyuşmuyor !");
+            throw new DetectedException("Şifreleriniz uyuşmuyor !");
         }else if(changePasswordDTO.getNewPass().length()<PASSLENGTH){
-            throw new RuntimeException("Yeni şifreniz 5 karakter veya daha uzun olmalıdır !");
+            throw new DetectedException("Yeni şifreniz 5 karakter veya daha uzun olmalıdır !");
+        }else if (changePasswordDTO.getNewPass().length()>30){
+            throw new DetectedException("Yeni şifreniz 30 karakterden daha kısa olmalıdır !");
         }
     }
 }

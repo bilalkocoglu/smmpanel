@@ -6,9 +6,11 @@ import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
+import com.thelastcodebenders.follower.dto.VisitorPageOrderDTO;
 import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.enums.ServiceState;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.Order;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.Service;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Sort;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
+import java.util.Optional;
 
 @org.springframework.stereotype.Service
 public class OrderService {
@@ -87,19 +90,24 @@ public class OrderService {
 
     public boolean createPackageOrder(NewOrderFormDTO newOrderFrom, long packageId) throws LoginException{
         try {
+            if (isNullOrEmpty(newOrderFrom.getUrl()))
+                throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+            else if(newOrderFrom.getUrl().length()>400)
+                throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+
             boolean isAlreadyUrl = isAlreadyUrl(newOrderFrom.getUrl());
 
             if (isAlreadyUrl){
                 log.error("Url üzerinde aktif sipariş mevcut !");
-                throw new RuntimeException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
+                throw new DetectedException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
             }
 
             Package pkg = packageService.findById(packageId);
 
             if (pkg == null){
-                throw new RuntimeException("Sipariş vermek istediğiniz paket bulunamadı !");
+                throw new DetectedException("Sipariş vermek istediğiniz paket bulunamadı !");
             }else if (!pkg.isState()){
-                throw new RuntimeException("Şu anda seçtiğiniz paket için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+                throw new DetectedException("Şu anda seçtiğiniz paket için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
             }
 
             User user = userService.getAuthUser();
@@ -107,20 +115,21 @@ public class OrderService {
             Order order = orderAssembler.convertFormDTOToPackageOrder(newOrderFrom, user, pkg);
 
             if (user.getBalance() < order.getCustomPrice()){
-                log.error("Order Service Create Order Error -> Insufficient Balance !");
-                throw new RuntimeException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
+                log.error("OrderService createPackageOrder Error -> Insufficient Balance !");
+                throw new DetectedException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
             }
 
             if( order.getApiPrice() > pkg.getService().getApi().getBalance() ){
-                log.error("Order Service Create Order Error -> API Insufficient Balance !");
-                throw new RuntimeException("İşleminiz gerçekleştirilemedi. " +
+                log.error("OrderService createPackageOrder Error -> API Insufficient Balance !");
+                throw new DetectedException("İşleminiz gerçekleştirilemedi. " +
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
             }
 
             String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
 
             if (apiOrderId == null){
-                throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+                log.error("OrderService createPackageOrder Error -> API Order Id Null !");
+                throw new DetectedException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
             }
 
             order.setApiOrderId(apiOrderId);
@@ -133,37 +142,41 @@ public class OrderService {
 
                 apiService.asyncApiUpdateBalance(order.getService().getApi());
             }else {
-                log.error("Order Service Create Package Order Error -> order not save");
+                log.error("OrderService createPackageOrder Order Error -> order not save");
             }
 
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
-            log.error("Order Service Create Package Order Error -> " + e.getMessage());
+            log.error("OrderService createPackageOrder Order Error -> " + e.getMessage());
             return false;
         }
     }
 
     public boolean createServiceOrder(NewOrderFormDTO newOrderForm, long serviceId) throws LoginException {
         try {
+            if (!newOrderFormValidate(newOrderForm)){
+                throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+            }
+
             boolean isAlreadyUrl = isAlreadyUrl(newOrderForm.getUrl());
 
             if (isAlreadyUrl){
                 log.error("Url üzerinde aktif bir sipariş mevcut.");
-                throw new RuntimeException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
+                throw new DetectedException("Sipariş vermek istediğiniz link için tamamlanmamış sipariş mevcut. Lütfen tamamlandıktan sonra bu işlemi tekrarlayınız.");
             }
 
             Service service = serviceService.findServiceById(serviceId);
 
             if (service == null){
-                throw new RuntimeException("Sipariş vermek istediğiniz servis bulunamadı !");
+                throw new DetectedException("Sipariş vermek istediğiniz servis bulunamadı !");
             }else if (service.getState() != ServiceState.ACTIVE){
-                throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+                throw new DetectedException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
             }else {
                 if (newOrderForm.getQuantity()>service.getCustomMaxPiece() ||
                         newOrderForm.getQuantity()<service.getCustomMinPiece()){
-                    throw new RuntimeException("Miktar ilgili servis için belirlenen aralığın dışında !");
+                    throw new DetectedException("Miktar ilgili servis için belirlenen aralığın dışında !");
                 }
             }
 
@@ -172,20 +185,20 @@ public class OrderService {
             Order order = orderAssembler.convertFormDtoToServiceOrder(newOrderForm, user, service);
 
             if (user.getBalance() < order.getCustomPrice()){
-                log.error("Order Service Create Order Error -> Insufficient Balance !");
-                throw new RuntimeException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
+                log.error("OrderService createServiceOrder Error -> Insufficient Balance !");
+                throw new DetectedException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
             }
 
             if( order.getApiPrice() > service.getApi().getBalance() ){
-                log.error("Order Service Create Order Error -> API Insufficient Balance !");
-                throw new RuntimeException("İşleminiz gerçekleştirilemedi. " +
+                log.error("OrderService createServiceOrder Error -> API Insufficient Balance !");
+                throw new DetectedException("İşleminiz gerçekleştirilemedi. " +
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
             }
 
             String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.SERVICE);
 
             if (apiOrderId == null || apiOrderId.equals("0")){
-                throw new RuntimeException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
+                throw new DetectedException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
             }
 
             order.setApiOrderId(apiOrderId);
@@ -198,17 +211,72 @@ public class OrderService {
 
                 apiService.asyncApiUpdateBalance(order.getService().getApi());
             }else {
-                log.error("Order Service Create Service Order Error -> order not save");
+                log.error("OrderService createServiceOrder Order Error -> order not save");
             }
 
             return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
-            log.error("Order Service Create Service Order Error -> " + e.getMessage());
+            log.error("OrderService createServiceOrder Order Error -> " + e.getMessage());
             return false;
         }
     }
+
+    private boolean newOrderFormValidate(NewOrderFormDTO newOrderFormDTO){
+        if (isNullOrEmpty(newOrderFormDTO.getUrl()) || newOrderFormDTO.getQuantity() <= 0){
+            throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+        }else if (newOrderFormDTO.getUrl().length()>400 || newOrderFormDTO.getQuantity()>50000){
+            throw new DetectedException("Tüm alanları doğru girmelisiniz !");
+        }
+        return true;
+    }
+
+    private static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
+
+
+
+    public long createVisitorPackageOrderReturnOrderId(Package pkg, String url){
+        try {
+            User user = userService.getAdmin();
+
+            Order order = orderAssembler.convertVisitorInfoToOrder(pkg, user, url);
+
+            if( order.getApiPrice() > pkg.getService().getApi().getBalance() ){
+                log.error("OrderService createVisitorPackageOrderReturnOrderId Error -> API Insufficient Balance !");
+                throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Para iadesi için sayfa altında yer alan iletişim bilgilerimizden bize ulaşabilirsiniz.");
+            }
+
+            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
+
+            if (apiOrderId == null){
+                log.error("OrderService createVisitorPackageOrderReturnOrderId Error -> Api Order Id Null !");
+                throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Para iadesi için sayfa altında yer alan iletişim bilgilerimizden bize ulaşabilirsiniz.");
+            }
+
+            order.setApiOrderId(apiOrderId);
+
+            order = orderRepository.save(order);
+
+            if (order != null){
+                apiService.asyncApiUpdateBalance(order.getService().getApi());
+            }else {
+                log.error("OrderService createVisitorPackageOrderReturnOrderId Order Error -> order not save");
+            }
+
+            return order.getId();
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                throw e;
+            log.error("OrderService createVisitorPackageOrderReturnOrderId Order Error -> " + e.getMessage());
+            return -1;
+        }
+    }
+
 
     public List<Order> getAllOrders(){
         return orderRepository.findAll();
@@ -228,6 +296,35 @@ public class OrderService {
     public List<Order> getOrdersByUser(User user){
         return orderRepository.findByUser(user, new Sort(Sort.Direction.DESC, "id"));
     }
+
+    public Order findById(long id){
+        Optional<Order> opt = orderRepository.findById(id);
+
+        if( !opt.isPresent()){
+            log.error("Order Service findbyId Error -> Not Found !");
+            return null;
+        }else
+            return opt.get();
+    }
+
+    public VisitorPageOrderDTO getVisitorOrderById(String orderIdStr){
+        try {
+            if (orderIdStr.length()>10)
+                throw new RuntimeException();
+
+            long orderId = Long.valueOf(orderIdStr);
+
+            Order order = findById(orderId);
+
+            if (order == null)
+                throw new RuntimeException();
+
+            return orderAssembler.convertOrderToVisitorPage(order);
+        }catch (Exception e){
+            throw new DetectedException("Böyle bir sipariş bulunamadı !");
+        }
+    }
+
 
     public int getAuthUserActiveOrderCount() throws LoginException {
         User user = userService.getAuthUser();

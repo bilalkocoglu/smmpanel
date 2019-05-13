@@ -14,5 +14,7 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
 
     List<Package> findByCategoryAndState(Category category, boolean state);
 
+    List<Package> findByState(boolean state);
+
     int countByCategoryAndState(Category category, boolean state);
 }

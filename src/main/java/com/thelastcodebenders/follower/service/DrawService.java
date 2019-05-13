@@ -4,6 +4,7 @@ import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.CountDownDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.repository.DrawCountRepository;
 import com.thelastcodebenders.follower.repository.DrawOrderRepository;
@@ -104,7 +105,7 @@ public class DrawService {
         DrawCount drawCount = findDrawCountByUser(user);
 
         if (drawCount.getCount() == 0){
-            throw new RuntimeException("Çekiliş hakkınız bulunmamaktadır. Çekilişlere katılmak için lütfen bakiye yükleyiniz !");
+            throw new DetectedException("Çekiliş hakkınız bulunmamaktadır. Çekilişlere katılmak için lütfen bakiye yükleyiniz !");
         }
 
         List<DrawVisit> drawVisits = drawVisitRepository.findByUser(user, new Sort(Sort.Direction.DESC, "date"));
@@ -139,9 +140,9 @@ public class DrawService {
             if (countDownDTO == null)
                 return true;
             else
-                throw new RuntimeException("Yeni bir çekilişe katılmak için biraz daha zamana ihtiyacınız var !");
+                throw new DetectedException("Yeni bir çekilişe katılmak için biraz daha zamana ihtiyacınız var !");
         }catch (Exception e){
-            if ( e instanceof RuntimeException)
+            if ( e instanceof DetectedException)
                 throw e;
             log.error("DrawService DrawActionPermission Error -> " + e.getMessage());
             return false;
@@ -165,24 +166,28 @@ public class DrawService {
 
     public DrawPrize newPrize(String url, long prizeId, long drawVisitId){
         try {
+            if (url == null || url.isEmpty() || url.length()>200){
+                throw new DetectedException("URL'i uygun formatta göndermelisiniz !");
+            }
+
             DrawVisit drawVisit = findDrawVisitById(drawVisitId);
 
             if (drawVisit == null){
-                throw new RuntimeException("Geçersiz Çekiliş !");
+                throw new DetectedException("Geçersiz Çekiliş !");
             }else if (drawVisit.getDrawOrder() != null){
-                throw new RuntimeException("Geçersiz Çekiliş !");
+                throw new DetectedException("Geçersiz Çekiliş !");
             }
 
             DrawPrize drawPrize = drawPrizeService.findById(prizeId);
 
             if (drawPrize == null){
-                throw new RuntimeException("Geçersiz Çekiliş !");
+                throw new DetectedException("Geçersiz Çekiliş !");
             }
 
             String apiOrderId = clientService.createDrawPrizeOrderReturnOrderId(drawPrize.getService(), url, String.valueOf(drawPrize.getQuantity()));
 
             if (apiOrderId == null || apiOrderId.equals("0")){
-                throw new RuntimeException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+                throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
             }
 
             DrawOrder drawOrder = DrawOrder.builder()
@@ -198,10 +203,10 @@ public class DrawService {
             drawVisitRepository.save(drawVisit);
             return drawPrize;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             else
-                throw new RuntimeException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+                throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
         }
     }
 

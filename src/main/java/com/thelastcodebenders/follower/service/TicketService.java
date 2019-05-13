@@ -6,6 +6,7 @@ import com.thelastcodebenders.follower.dto.CreateTicketFormDTO;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.enums.RoleType;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.Message;
 import com.thelastcodebenders.follower.model.Ticket;
 import com.thelastcodebenders.follower.model.User;
@@ -53,7 +54,7 @@ public class TicketService {
             int unreadcount = 0;
 
             for (Ticket ticket: activeTickets) {
-                if (ticket.isClosed() == false){
+                if (!ticket.isClosed()){
                     List<Message> messages = messageRepository.findByTicket(ticket);
                     if (!messages.isEmpty()){
                         Message message = messages.get(messages.size()-1);
@@ -69,7 +70,7 @@ public class TicketService {
             int unreadcount = 0;
 
             for (Ticket ticket: activeTickets) {
-                if (ticket.isClosed() == false){
+                if (!ticket.isClosed()){
                     List<Message> messages = messageRepository.findByTicket(ticket);
                     if (!messages.isEmpty()){
                         Message message = messages.get(messages.size()-1);
@@ -204,6 +205,10 @@ public class TicketService {
     }
 
     public boolean createTicket(CreateTicketFormDTO createTicketForm) throws LoginException {
+        if (!validateCreateTicketForm(createTicketForm)){
+            return false;
+        }
+
         User user = userService.getAuthUser();
 
         Ticket ticket = ticketAssembler.convertFormDtoToTicket(createTicketForm, user);
@@ -230,6 +235,15 @@ public class TicketService {
             mailService.asyncSendMail(AsyncMailType.CREATETICKET, user, admin,"");
         }
 
+        return true;
+    }
+
+    private boolean validateCreateTicketForm(CreateTicketFormDTO createTicketForm){
+        if (isNullOrEmpty(createTicketForm.getCustomSubject()) || isNullOrEmpty(createTicketForm.getMessage()) || isNullOrEmpty(createTicketForm.getSubject())){
+            throw new DetectedException("Tüm alanları eksiksiz girmelisiniz !");
+        }else if (createTicketForm.getSubject().length()>50 || createTicketForm.getCustomSubject().length()>100 || createTicketForm.getMessage().length()>200){
+            throw new DetectedException("Çok uzun değerler girdiniz !");
+        }
         return true;
     }
 
@@ -281,4 +295,11 @@ public class TicketService {
             return null;
         }
     }
+
+    private static boolean isNullOrEmpty(String str) {
+        if(str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
+
 }

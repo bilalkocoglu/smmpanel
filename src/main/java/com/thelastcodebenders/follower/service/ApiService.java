@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.client.ClientService;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.repository.APIRepository;
@@ -83,16 +84,16 @@ public class ApiService {
     public boolean save(API api){
         try {
             if (isAlreadyApi(api.getUrl()))
-                throw new RuntimeException("Eklemek istediğiniz Api ile aynı url e sahip başka bir Api mevcut !");
+                throw new DetectedException("Eklemek istediğiniz Api ile aynı url e sahip başka bir Api mevcut !");
 
             api.setState(true);
             double balance = clientService.getBalance(api);
             if (balance == -1){
-                throw new RuntimeException("Eklemek istediğiniz api kullanıma uygun değil !");
+                throw new DetectedException("Eklemek istediğiniz api kullanıma uygun değil !");
             }
             List<Service> services = clientService.getAllServices(api);
-            if (services == null && services.isEmpty()){
-                throw new RuntimeException("Eklemek istediğiniz api kullanıma uygun değil !");
+            if (services == null || services.isEmpty()){
+                throw new DetectedException("Eklemek istediğiniz api kullanıma uygun değil !");
             }
 
             for (Service service: services) {
@@ -107,7 +108,7 @@ public class ApiService {
             }else
                 return true;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             log.error("API Service Save Error -> " + e.getMessage());
             return false;
@@ -246,7 +247,7 @@ public class ApiService {
 
     public String allApiUpdateService(){
         try {
-            //log.info("All Service Update !!!");
+            log.info("All Service Update !!!");
             String message = "";
             List<Long> updatedServices = new ArrayList<Long>();
             List<Long> newServices = new ArrayList<Long>();
@@ -258,7 +259,7 @@ public class ApiService {
                 List<Service> apiServices = clientService.getAllServices(api);
 
                 if (apiServices == null){
-                    throw new RuntimeException("Api'den Servisler çekilemedi !");
+                    throw new DetectedException("Api'den Servisler çekilemedi !");
                 }
 
                 Stack<Service> stackApiServices = new Stack<>();
@@ -288,6 +289,13 @@ public class ApiService {
                         if (equivalentService.getApiMaxPiece() != apiService.getApiMaxPiece() ||
                                 equivalentService.getApiMinPiece() != apiService.getApiMinPiece() ||
                                 equivalentService.getApiPrice() != apiService.getApiPrice()){
+                            //eğer servis zaten pasif ise mailde mesaj gönderme
+                            boolean alreadyPassive = false;
+
+                            if (equivalentService.getState() == ServiceState.DELETED
+                                    || equivalentService.getState() == ServiceState.PASSIVE)
+                                alreadyPassive = true;
+
                             //değişiklik var
                             equivalentService.setApiMaxPiece(apiService.getApiMaxPiece());
                             equivalentService.setApiMinPiece(apiService.getApiMinPiece());
@@ -307,7 +315,8 @@ public class ApiService {
                             drawPrizeService.servicePassivateHandler(equivalentService);
 
                             log.info("Api Service Update Service Method -> " + equivalentService.getId() + "-Idli serviste apiden gelen değişiklikler mevcut. Servislerinizi ve paketlerinizi kontrol ediniz !");
-                            updatedServices.add(equivalentService.getId());
+                            if (!alreadyPassive)
+                                updatedServices.add(equivalentService.getId());
                             serviceRepository.save(equivalentService);
                         }else if (equivalentService.getState() == ServiceState.DELETED){
                             equivalentService.setState(ServiceState.PASSIVE);
@@ -342,7 +351,7 @@ public class ApiService {
                 }
                 if (updatedServices.size()>0){
                     for (long serviceId : updatedServices){
-                        message += serviceId + " ID'li servis güncellendi ve pasif duruma getirildi ! Servis ve paketlerinizi kontrol ediniz !<br>";
+                        message += serviceId + " ID'li servis güncellendi ve pasif duruma getirildi ! Servis ve paketlerinizi ve çekiliş hediyelerinizi kontrol ediniz !<br>";
                     }
                 }
                 if (deletedServices.size()>0){

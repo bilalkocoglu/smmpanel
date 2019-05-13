@@ -5,6 +5,7 @@ import com.thelastcodebenders.follower.assembler.DrawPrizeAssembler;
 import com.thelastcodebenders.follower.dto.DrawPrizeSpinnerItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.DrawVisit;
 import com.thelastcodebenders.follower.model.Service;
@@ -74,18 +75,18 @@ public class DrawPrizeService {
             drawPrize = drawPrizeRepository.save(drawPrize);
             return drawPrize;
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             else {
                 log.error("DrawPrizeService Save Error -> " + e.getMessage());
-                throw new RuntimeException("İşlem gerçekleştirilemedi !");
+                throw new DetectedException("İşlem gerçekleştirilemedi !");
             }
         }
     }
 
     private boolean drawPrizeValidation(DrawPrize drawPrize){
         if (isNullOrEmpty(drawPrize.getName()) || drawPrize.getQuantity()==0 || drawPrize.getService()==null){
-            throw new RuntimeException("Tüm alanları eksiksiz doldurmalısınız !");
+            throw new DetectedException("Tüm alanları eksiksiz doldurmalısınız !");
         }
         return true;
     }
@@ -103,12 +104,12 @@ public class DrawPrizeService {
 
             if (drawPrize == null){
                 log.error("DrawPrizeService Change State Error -> DrawPrize Not Found !");
-                throw new RuntimeException("Böyle bir ödül bulunamadı !");
+                throw new DetectedException("Böyle bir ödül bulunamadı !");
             }
 
             if (action == UserAction.ACTIVATE){
                 if (drawPrize.getService().getState() != ServiceState.ACTIVE)
-                    throw new RuntimeException("Ödülün bağlı olduğu servis pasif durumda !");
+                    throw new DetectedException("Ödülün bağlı olduğu servis pasif durumda !");
                 drawPrize.setState(true);
             }
             if (action == UserAction.PASSIVATE){
@@ -117,11 +118,11 @@ public class DrawPrizeService {
 
             drawPrizeRepository.save(drawPrize);
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 throw e;
             else {
                 log.error("DrawPrizeService Change State Error -> " + e.getMessage());
-                throw new RuntimeException("İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+                throw new DetectedException("İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
             }
         }
     }

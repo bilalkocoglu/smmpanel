@@ -6,7 +6,8 @@ import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
-import com.thelastcodebenders.follower.iyzipay.PaymentService;
+import com.thelastcodebenders.follower.exception.DetectedException;
+import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.service.*;
@@ -146,7 +147,7 @@ public class UserController {
                 return "redirect:/user/services";
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException){
+            if (e instanceof DetectedException){
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             }else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
@@ -169,7 +170,7 @@ public class UserController {
                 return "redirect:/user/services";
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException){
+            if (e instanceof DetectedException){
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             }else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi ! Lürfen daha sonra tekrar deneyiniz !");
@@ -217,11 +218,22 @@ public class UserController {
     @PostMapping("/payment-notifications")      //CREATE PAYMENT NOTIFICATION
     public String createPaymentNotification(@ModelAttribute PaymentNotificationFormDTO paymentNtfForm,
                                             RedirectAttributes redirectAttributes) throws LoginException {
-        boolean res = paymentNotificationService.createPaymentNotification(paymentNtfForm);
-        if (res)
-            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");
-        else
-            redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata ile karşılaşıldı. Lütfen daha sonra tekrar deneyin.");
+        try {
+            boolean res = paymentNotificationService.createPaymentNotification(paymentNtfForm);
+            if (res)
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("UserController createPaymentNotification error => " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+        }
+
         return "redirect:/user/payment-notifications";
     }
 
@@ -243,11 +255,21 @@ public class UserController {
     @PostMapping("/tickets")        //CREATE TİCKET
     public String createTicket(@ModelAttribute CreateTicketFormDTO createTicketFormDTO,
                                RedirectAttributes redirectAttributes) throws LoginException {
-        boolean res = ticketService.createTicket(createTicketFormDTO);
-        if (res)
-            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");
-        else
-            redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata ile karşılaşıldı. Lütfen daha sonra tekrar deneyin.");
+        try {
+            boolean res = ticketService.createTicket(createTicketFormDTO);
+            if (res)
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı bir şekilde gerçekleştirildi !");
+            else
+                redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata ile karşılaşıldı. Lütfen daha sonra tekrar deneyin.");
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("UserController createTicket Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata ile karşılaşıldı. Lütfen daha sonra tekrar deneyin.");
+            }
+        }
+
         return "redirect:/user/tickets";
     }
 
@@ -274,10 +296,26 @@ public class UserController {
     public String responseTicket(@PathVariable("ticketId") long ticketId,
                                  RedirectAttributes redirectAttributes,
                                  @ModelAttribute ChatMessageDTO chatMessage){
-        boolean res = ticketService.responseTicket(RoleType.USER, chatMessage.getMessage(), ticketId);
+        try {
+            if (chatMessage.getMessage() == null || chatMessage.getMessage().isEmpty()){
+                throw new DetectedException("Boş mesaj gönderemezsiniz !");
+            }else if(chatMessage.getMessage().length() > 100) {
+                throw new DetectedException("100 karakterden uzun mesaj gönderemezsiniz !");
+            }
 
-        if (!res)
-            redirectAttributes.addFlashAttribute("errormessage", "Mesaj gönderilemedi !");
+            boolean res = ticketService.responseTicket(RoleType.USER, chatMessage.getMessage(), ticketId);
+
+            if (!res)
+                redirectAttributes.addFlashAttribute("errormessage", "Mesaj gönderilemedi !");
+
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("UserContoller responseTicket error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "Mesaj gönderilemedi !");
+            }
+        }
 
         return "redirect:/user/tickets/detail/" + ticketId;
     }
@@ -300,23 +338,47 @@ public class UserController {
                                   @RequestParam("balance") String balance,
                                   HttpServletRequest httpServletRequest,
                                   RedirectAttributes redirectAttributes) throws LoginException {
-        User user = userService.getAuthUser();
+        try {
+            User user = userService.getAuthUser();
 
-        model.addAttribute("username", user.getName() + ' ' + user.getSurname());
-        model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
+            model.addAttribute("username", user.getName() + ' ' + user.getSurname());
+            model.addAttribute("userbalance", Double.parseDouble(String.format("%.2f", user.getBalance())));
 
-        CheckoutFormInitialize checkoutFormInitialize = paymentService.createPayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
-        System.out.println(checkoutFormInitialize.toString());
-        if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
-            log.error("Checkout Form Initialize Error -> " + checkoutFormInitialize.getErrorMessage());
-            redirectAttributes.addFlashAttribute("errormessage",
-                    "Şu anda ödeme alma işlemini başlatamadık. Lütfen tekrar deneyiniz veya diğer ödeme yöntemlerini kullanınız. Sorun ile ilgili destek talebi açarsanız arkadaşlarımız kısa süre içinde yardımcı olacaktır.");
-            return "redirect:/load-balance";
+            if (balance.length()>10){
+                log.error("Balance fazla uzun !");
+                throw new DetectedException("İşlem gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+
+            int balanceInt = Integer.valueOf(balance);
+
+            if (balanceInt<10){
+                log.error("Balance 10 TLden az !");
+                throw new DetectedException("Minimum 10 TL yükleme yapabilirsiniz !");
+            }
+
+            CheckoutFormInitialize checkoutFormInitialize = paymentService.createBalancePayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
+            System.out.println(checkoutFormInitialize.toString());
+            if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
+                log.error("Checkout Form Initialize Error -> " + checkoutFormInitialize.getErrorMessage());
+                redirectAttributes.addFlashAttribute("errormessage",
+                        "Şu anda ödeme alma işlemini başlatamadık. Lütfen tekrar deneyiniz veya diğer ödeme yöntemlerini kullanınız. Sorun ile ilgili destek talebi açarsanız arkadaşlarımız kısa süre içinde yardımcı olacaktır.");
+                return "redirect:/load-balance";
+            }
+
+            model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
+            return "user-load-balance-iyzico";
+
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+
+            return "redirect:/user/load-balance";
         }
 
-        model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
 
-        return "user-load-balance-iyzico";
     }
 
     @PostMapping("/iyzico/callback")
@@ -415,7 +477,7 @@ public class UserController {
                 return "redirect:/user/draw";
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Şu anda çekilişe katılamıyorsunuz. Lütfen daha sonra tekrar deneyin.");

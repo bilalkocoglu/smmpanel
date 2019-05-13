@@ -6,6 +6,7 @@ import com.thelastcodebenders.follower.dto.ServiceFormDTO;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.enums.UserAction;
+import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
@@ -127,7 +128,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
@@ -323,7 +324,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
@@ -346,7 +347,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
         }catch (Exception e){
-            if(e instanceof RuntimeException)
+            if(e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
@@ -363,7 +364,7 @@ public class AdminController {
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
-        }catch (RuntimeException e){
+        }catch (DetectedException e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }finally {
             return "redirect:/admin/categories";
@@ -378,7 +379,7 @@ public class AdminController {
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
-        }catch (RuntimeException e){
+        }catch (DetectedException e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }finally {
             return "redirect:/admin/categories";
@@ -407,7 +408,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
             return "redirect:/admin/apis";
-        }catch (RuntimeException e){
+        }catch (DetectedException e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }finally {
             return "redirect:/admin/apis";
@@ -516,7 +517,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage",e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
@@ -570,7 +571,7 @@ public class AdminController {
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else  {
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
@@ -685,7 +686,7 @@ public class AdminController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin !");
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else {
                 log.error("Admin Controller UpdateArticle Error -> " + e.getMessage());

@@ -138,6 +138,7 @@
                                         <td th:text="${pkg.getService().getSubCategory().getCategory().getName() + ' - ' + pkg.getService().getSubCategory().getName()}"></td>
                                         <td th:text="${pkg.getService().getId() + ' - ' + pkg.getService().getCustomName()}"></td>
                                         <td th:text="${pkg.getQuantity()}"></td>
+                                        <td th:text="${(pkg.getService().getApiPrice() / 1000) * pkg.getQuantity()}"></td>
                                         <td th:text="${pkg.getPrice()}"></td>
                                         <td>
                                             <span th:if="${pkg.isState() == true}" style="color: white; background-color: #0CC27E; padding: 3px 5px 3px 5px; border-radius: 3px;">

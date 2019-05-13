@@ -1,12 +1,14 @@
 package com.thelastcodebenders.follower.controller;
 
-import com.thelastcodebenders.follower.dto.PackageOrderPaymentFormDTO;
-import com.thelastcodebenders.follower.dto.RegisterFormDTO;
-import com.thelastcodebenders.follower.dto.UserPagePackageDTO;
-import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
-import com.thelastcodebenders.follower.iyzipay.PaymentService;
+import com.iyzipay.model.CheckoutForm;
+import com.iyzipay.model.CheckoutFormInitialize;
+import com.iyzipay.model.Status;
+import com.thelastcodebenders.follower.dto.*;
+import com.thelastcodebenders.follower.exception.DetectedException;
+import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
 import com.thelastcodebenders.follower.model.Category;
 import com.thelastcodebenders.follower.model.Package;
+import com.thelastcodebenders.follower.model.VisitorUser;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +29,28 @@ public class VisitorController {
     private VisitorMessageService visitorMessageService;
     private CategoryArticleService categoryArticleService;
     private PaymentService paymentService;
+    private VisitorUserService visitorUserService;
+    private OrderService orderService;
+    private MailService mailService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
                              CategoryService categoryService,
                              VisitorMessageService visitorMessageService,
                              CategoryArticleService categoryArticleService,
-                             PaymentService paymentService){
+                             PaymentService paymentService,
+                             VisitorUserService visitorUserService,
+                             OrderService orderService,
+                             MailService mailService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
         this.visitorMessageService = visitorMessageService;
         this.categoryArticleService = categoryArticleService;
         this.paymentService = paymentService;
+        this.visitorUserService = visitorUserService;
+        this.orderService = orderService;
+        this.mailService = mailService;
     }
 
     //Login
@@ -95,7 +106,7 @@ public class VisitorController {
             userService.accountActivateMailAgain(email);
             redirectAttributes.addFlashAttribute("successmessage", "Aktifleştirme linkiniz mail olarak gönderildi !");
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else {
                 log.error(e.getMessage());
@@ -128,7 +139,7 @@ public class VisitorController {
                 return "redirect:/registration";
             }
         }catch (Exception e){
-            if (e instanceof RuntimeException)
+            if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
@@ -147,7 +158,7 @@ public class VisitorController {
             } else
                 return "redirect:/";
         }catch (Exception e){
-            if (e instanceof RuntimeException){
+            if (e instanceof DetectedException){
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
                 return "redirect:/login";
             }else
@@ -159,6 +170,7 @@ public class VisitorController {
     //Index
     @GetMapping("/")
     public String home(Model model){
+        model.addAttribute("packages", packageService.activePackagesTop12());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
         return "visitor-index";
@@ -176,7 +188,7 @@ public class VisitorController {
 
 
     //Package
-    @GetMapping("/package/{categoryUrlName}")
+    @GetMapping("/package/{categoryUrlName}")       //Category packages page
     public String packagesByCategory(@PathVariable("categoryUrlName") String categoryUrlName,
                                      Model model,
                                      RedirectAttributes redirectAttributes){
@@ -201,16 +213,26 @@ public class VisitorController {
         return "visitor-packages";
     }
 
-    @GetMapping("/package/order/{packageId:.*}")
+    @GetMapping("/package/order/{packageId:.*}")        //Package Order Payment Page
     public String packageOrderPage(@PathVariable("packageId") long packageId,
                                    Model model,
                                    RedirectAttributes redirectAttributes){
-        UserPagePackageDTO pkg = packageService.createUserPageServiceFormat(packageId);
-        if ( pkg == null){
-            redirectAttributes.addFlashAttribute("errormessage", "Böyle bir paket bulunamadı !");
+        Package pkg = packageService.findById(packageId);
+        if (pkg == null || !pkg.isState()){
+            redirectAttributes.addFlashAttribute("errormessage", "Bu siparişi şu anda alamıyoruz lütfen daha sonra tekrar deneyin.");
             return "redirect:/all-packages";
         }
-        model.addAttribute("pkg", pkg);
+
+        double apiPrice = (pkg.getService().getApiPrice()/1000) * pkg.getQuantity();
+        //System.out.println(apiPrice);
+        //System.out.println(pkg.getService().getApi().getBalance());
+        if ( pkg.getService().getApi().getBalance() < apiPrice){
+            log.error("Api bakiyesi yetersiz !");
+            redirectAttributes.addFlashAttribute("errormessage", "İstediğiniz paket için geçici bir süre sipariş alamıyoruz. Lütfen daha sonra tekrar deneyin.");
+            return "redirect:/all-packages";
+        }
+
+        model.addAttribute("pkg", packageService.createUserPageServiceFormat(packageId));
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
         return "visitor-package-order";
@@ -219,14 +241,129 @@ public class VisitorController {
     @PostMapping("/package/order/{packageId:.*}/payment")
     public String packageOrderPaymentPage(RedirectAttributes redirectAttributes,
                                           @PathVariable("packageId") long packageId,
-                                          @ModelAttribute PackageOrderPaymentFormDTO packageOrderPaymentForm){
-        //validation
-        //create visit user
-        //create iyzipay payment page
-        //success ? new order , error
-        //new order canceled ? para iade
-        System.out.println(packageOrderPaymentForm.toString());
-        return "redirect:/package/order/" + packageId;
+                                          @ModelAttribute PackageOrderPaymentFormDTO packageOrderPaymentForm,
+                                          HttpServletRequest request,
+                                          Model model){
+        try {
+            //find package
+            Package pkg = packageService.findById(packageId);
+            if (pkg == null || !pkg.isState()){
+                redirectAttributes.addFlashAttribute("errormessage", "Bu siparişi şu anda alamıyoruz lütfen daha sonra tekrar deneyin.");
+                return "redirect:/all-packages";
+            }
+
+            //validation
+            //create visit user
+            VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);
+
+            //create iyzipay payment page
+            CheckoutFormInitialize checkoutFormInitialize = paymentService.createPackagePayment(visitorUser, pkg, request.getRemoteAddr());
+            System.out.println(checkoutFormInitialize.toString());
+
+            if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
+
+                log.error("Checkout Form Initialize Error -> " + checkoutFormInitialize.getErrorMessage());
+                redirectAttributes.addFlashAttribute("errormessage",
+                        "Şu anda ödeme alma işlemini başlatamadık. Lütfen tekrar deneyiniz veya diğer ödeme yöntemlerini kullanınız. Sorun ile ilgili destek talebi açarsanız arkadaşlarımız kısa süre içinde yardımcı olacaktır.");
+                return "redirect:/package/order/" + packageId;
+            }
+            visitorUserService.updateToken(visitorUser.getId(), checkoutFormInitialize.getToken());
+
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
+
+            return "visitor-package-payment";
+            //success ? new order , error
+            //new order canceled ? para iade
+        }catch (Exception e){
+            if (e instanceof DetectedException){
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            }else {
+                log.error("Visitor Controller packageorderpaymentpage Error -> "+e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage",
+                        "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+            return "redirect:/package/order/" + packageId;
+        }
+    }
+
+    @PostMapping("/package/order/iyzico/callback")
+    public String visitorIyzicoCallback(@RequestParam("token") String token,
+                                 RedirectAttributes redirectAttributes) {
+        try {
+            CheckoutForm checkoutForm = paymentService.infoPayment(token, "");
+            System.out.println(checkoutForm.toString());
+
+            if(checkoutForm.getStatus().equals(Status.SUCCESS.getValue())
+                    && checkoutForm.getPaymentStatus().equals("SUCCESS")){
+
+                //package ve url al
+                VisitorUser visitorUser = visitorUserService.findByToken(token);
+
+                if (visitorUser == null){
+                    throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
+                }
+
+                Package pkg = packageService.findById(visitorUser.getPackageId());
+
+                if (pkg == null || !pkg.isState()){
+                    throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
+                }
+
+                //order oluştur
+                long orderId = orderService.createVisitorPackageOrderReturnOrderId(pkg, visitorUser.getUrl());
+
+                if (orderId == -1){
+                    throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
+                }
+
+                visitorUserService.resetToken(visitorUser.getId());
+
+                //mail at
+                mailService.asyncSendVisitorOrderMail(visitorUser.getEmail(), String.valueOf(orderId), visitorUser.getName(), visitorUser.getSurname());
+
+                //takip sağla
+                redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı ! Sipariş takip numaranız : <strong>" + orderId + "</strong> Sipariş takip sayfasından siparişinizin durumunu takip edebilirsiniz.");
+            }else {
+                if(checkoutForm.getErrorMessage()!=null)
+                    redirectAttributes.addFlashAttribute("errormessage", checkoutForm.getErrorMessage());
+                else
+                    redirectAttributes.addFlashAttribute("errormessage", "İşlem başarısız !");
+            }
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("Visitor Controller visitorIyzicoCallback Error => " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz yapılamadı, ödemeniz alındı ise iade için sayfanın altında yer alan iletişim bilgilerimizden bize ulaşabilirsiniz.");
+            }
+        }finally {
+            return "redirect:/all-packages";
+        }
+    }
+
+    @GetMapping("/package/order/status")
+    public String orderStatusPage(Model model){
+        model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        return "visitor-order-status";
+    }
+
+    @PostMapping("/package/order/status")
+    public String orderStatus(RedirectAttributes redirectAttributes,
+                              @RequestParam("orderId") String orderId,
+                              Model model){
+        try {
+            VisitorPageOrderDTO visitorPageOrder = orderService.getVisitorOrderById(orderId);
+            model.addAttribute("order", visitorPageOrder);
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            return "visitor-order-status";
+        }catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            return "redirect:/package/order/status";
+        }
     }
 
 
@@ -241,7 +378,12 @@ public class VisitorController {
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Mesajınız şu anda gönderilemedi. Lütfen daha sonra tekrar deneyin.");
         }catch (Exception e){
-            redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("Visitor Message Controller Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "Mesajınız şu anda gönderilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
         }
         return "redirect:/";
     }

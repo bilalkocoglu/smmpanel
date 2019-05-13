@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns="http://www.w3.org/1999/xhtml">
+
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+	<style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+	<div class="main-page">
+		<div th:replace="visitor-template :: mobile-header"></div>
+
+		<header th:replace="visitor-template :: header"></header>
+		<h1 class="sr-only">SMM PANEL</h1>
+		<div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css"><span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+			<div class="breadcrumbs__wrapper">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-12 col-lg-6">
+							<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+								<h2 class="brk-white-font-color font__weight-semibold font__size-32 line__height-68 font__family-montserrat">
+									<span>Sosyal Trend</span>
+								</h2>
+							</div>
+						</div>
+						<div class="col-12 col-lg-6">
+							<div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+								<h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">
+									<span>Sosyal Trend</span>
+								</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="main-wrapper">
+			<main class="main-container mt-100 mt-md-50">
+				<div class="container">
+					<div th:replace="visitor-template :: messages"></div>
+
+					<div class="row">
+						<div class="col-2"></div>
+						<div class="col-8">
+							<div th:utext="${iyzicoscript}"></div>
+							<div id="iyzipay-checkout-form" class="responsive"></div>
+						</div>
+						<div class="col-2"></div>
+					</div>
+				</main>
+			</div>
+		</div>
+	<footer th:replace="visitor-template :: footer"></footer>
+	<a href="#top" id="toTop"></a>
+	<script th:src="@{/visitor/js/scripts.js}"></script>
+	<script th:src="@{/vendors/js/core/jquery-3.2.1.min.js}" type="text/javascript"></script>
+		</body>
+</html>

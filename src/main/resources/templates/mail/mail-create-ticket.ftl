@@ -376,7 +376,7 @@
 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:25px; padding-bottom:25px; padding-right: 0px; padding-left: 25px;">
 <!--<![endif]-->
 <div align="left" class="img-container left fixedwidth" style="padding-right: 0px;padding-left: 0px;">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="left"><![endif]--><img alt="Image" border="0" class="left fixedwidth" src="https://webgunlugum.com/wp-content/uploads/2019/04/Logo.png" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; clear: both; border: 0; height: auto; float: none; width: 100%; max-width: 195px; display: block;" title="Image" width="195"/>
+<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="left"><![endif]--><img alt="Image" border="0" class="left fixedwidth" src="https://webgunlugum.com/wp-content/uploads/2019/05/Logo.png" style="outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; clear: both; border: 0; height: auto; float: none; width: 100%; max-width: 75px; display: block;" title="Image" width="195"/>
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 <!--[if (!mso)&(!IE)]><!-->
@@ -392,7 +392,8 @@
 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:25px; padding-bottom:25px; padding-right: 25px; padding-left: 0px;">
 <!--<![endif]-->
 <div align="right" class="button-container" style="padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 10px" align="right"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:31.5pt; width:96pt; v-text-anchor:middle;" arcsize="34%" stroke="false" fillcolor="#e3edfe"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#052d3d; font-family:Tahoma, Verdana, sans-serif; font-size:14px"><![endif]--><a href="#" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #052d3d; background-color: #e3edfe; border-radius: 14px; -webkit-border-radius: 14px; -moz-border-radius: 14px; width: auto; width: auto; border-top: 1px solid #e3edfe; border-right: 1px solid #e3edfe; border-bottom: 1px solid #e3edfe; border-left: 1px solid #e3edfe; padding-top: 5px; padding-bottom: 5px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:14px;display:inline-block;">
+<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 0px; padding-bottom: 10px; padding-left: 10px" align="right"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:31.5pt; width:96pt; v-text-anchor:middle;" arcsize="34%" stroke="false" fillcolor="#e3edfe"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#052d3d; font-family:Tahoma, Verdana, sans-serif; font-size:14px"><![endif]-->
+	<a href="http://${create_order_link}" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #052d3d; background-color: #e3edfe; border-radius: 14px; -webkit-border-radius: 14px; -moz-border-radius: 14px; width: auto; width: auto; border-top: 1px solid #e3edfe; border-right: 1px solid #e3edfe; border-bottom: 1px solid #e3edfe; border-left: 1px solid #e3edfe; padding-top: 5px; padding-bottom: 5px; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:14px;display:inline-block;">
 <span style="font-size: 16px; line-height: 32px;"><span style="font-size: 14px; line-height: 28px;">Sipariş Ver</span></span>
 </span></a>
 <!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
@@ -488,7 +489,7 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:150%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-size: 12px; line-height: 18px; color: #555555; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif;">
-<p style="font-size: 14px; line-height: 21px; text-align: center; margin: 0;">XXX MEDYA - TÜRKİYE'NİN EN GELİŞMİŞ PANELİ</p>
+<p style="font-size: 14px; line-height: 21px; text-align: center; margin: 0;">SOSYAL TREND - TÜRKİYE'NİN EN GELİŞMİŞ PANELİ</p>
 <p style="font-size: 14px; line-height: 21px; text-align: center; margin: 0;">THE LAST CODE BANDERS</p>
 </div>
 </div>
@@ -511,7 +512,8 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#4F4F4F;font-family:'Lato', Tahoma, Verdana, Segoe, sans-serif;line-height:120%;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-size: 12px; line-height: 14px; color: #4F4F4F; font-family: 'Lato', Tahoma, Verdana, Segoe, sans-serif;">
-<p style="font-size: 12px; line-height: 16px; text-align: center; margin: 0;"><span style="font-size: 14px;"><a href="#" rel="noopener" style="text-decoration: none; color: #2190E3;" target="_blank"><strong>Satış Sözleşmesi</strong></a> |  <strong><a href="#" rel="noopener" style="text-decoration: none; color: #2190E3;" target="_blank">Sipariş Ver</a> </strong> |  <span style="background-color: transparent; line-height: 16px; font-size: 14px;">05xx xxx xx xx</span></span></p>
+<p style="font-size: 12px; line-height: 16px; text-align: center; margin: 0;"><span style="font-size: 14px;">
+		<a href="http://${terms_use_link}" rel="noopener" style="text-decoration: none; color: #2190E3;" target="_blank"><strong>Satış Sözleşmesi</strong></a> |  <strong><a href="http://${create_order_link}" rel="noopener" style="text-decoration: none; color: #2190E3;" target="_blank">Sipariş Ver</a> </strong> |  <span style="background-color: transparent; line-height: 16px; font-size: 14px;">0 534 899 87 05</span></span></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
