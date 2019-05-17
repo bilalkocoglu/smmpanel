@@ -21,7 +21,7 @@ import java.util.Map;
 public class MailService {
     private static final Logger log = LoggerFactory.getLogger(MailService.class);
 
-    private static final String HOST = "https://sosyaltrend.net";
+    private static final String HOST = "sosyaltrend.net";
 
     private JavaMailSender javaMailSender;
     private Configuration freeMarkerConfig;
