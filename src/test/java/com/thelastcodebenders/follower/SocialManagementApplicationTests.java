@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,9 @@ public class SocialManagementApplicationTests {
     @Autowired
     DrawService drawService;
 
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Test
     public void time() {
         LocalDateTime now = LocalDateTime.now();
@@ -35,6 +39,12 @@ public class SocialManagementApplicationTests {
         System.out.println(messageDate.compareTo(timeOutDate));
         System.out.println(messageDate.compareTo(messageDate));
         System.out.println(messageDate1.compareTo(timeOutDate));
+    }
+
+    @Test
+    public void pass() {
+        String pass = bCryptPasswordEncoder.encode("Bilal.1212");
+        System.out.println(pass);
     }
 }
 

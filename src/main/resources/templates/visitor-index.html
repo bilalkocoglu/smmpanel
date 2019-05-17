@@ -82,7 +82,7 @@
 										<i class="far fa-sign-in-alt"></i> KAYIT OL
 									</a>
 									<a class="brk-banner-timer__button brk-banner-timer__button_transparent"
-										href="/all-packages">
+										th:href="@{/all-packages}">
 										<i class="fas fa-bolt"></i> HIZLI SİPARİŞ
 									</a>
 								</div>
@@ -339,7 +339,7 @@
 		<footer th:replace="visitor-template :: footer"></footer>
 
 	</div><a href="#top" id="toTop"></a>
-	<script th:src="@{/visitor/js/scripts.js}"></script>
+	<script th:src="@{/visitor/js/scripts.js}" th:inline="javascript"></script>
 	<script type="text/javascript" th:src="@{/visitor/js/components/alerts.js}"></script>
 	<script th:src="@{/visitor/vendor/revslider/js/jquery.themepunch.tools.min.js}"></script>
 	<script th:src="@{/visitor/vendor/revslider/js/jquery.themepunch.revolution.min.js}"></script>
@@ -347,6 +347,9 @@
 	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.navigation.min.js}"></script>
 	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.parallax.min.js}"></script>
 	<script th:src="@{/visitor/vendor/revslider/js/extensions/revolution.extension.slideanims.min.js}"></script>
+	<script th:src="@{/visitor/js/assets/flexmenu.js}"></script>
+	<script th:src="@{/visitor/vendor/slickCarousel/js/slick.min.js}"></script>
+
 	<script>
 		var revapi19,
 			tpj;

@@ -64,8 +64,8 @@
             <div class="brk-header-mobile__open"><span></span></div>
             <div class="brk-header-mobile__logo">
                 <a th:href="@{/}">
-                    <img class="brk-header-mobile__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
-                    <img class="brk-header-mobile__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+                    <img class="brk-header-mobile__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" th:attr="data-src=@{/visitor/img/logo.png}" alt="alt">
+                    <img class="brk-header-mobile__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" th:attr="data-src=@{/visitor/img/logo.png}" alt="alt">
                 </a>
             </div>
         </div>
@@ -77,8 +77,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 align-center align-self-lg-center d-none d-lg-flex ml-10">
                         <a th:href="@{/}" class="brk-header__logo brk-header__item @@modifier">
-                            <img class="brk-header__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
-                            <img class="brk-header__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="height:70px; width: 70px;" data-src="/visitor/img/logo.png" alt="alt">
+                            <img class="brk-header__logo-1 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" th:attr="data-src=@{/visitor/img/logo.png}" alt="alt">
+                            <img class="brk-header__logo-2 lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" style="height:70px; width: 70px;" th:attr="data-src=@{/visitor/img/logo.png}" alt="alt">
                         </a>
                     </div>
                     <div class="col-lg align-self-lg-stretch text-lg-center">
@@ -135,7 +135,7 @@
                             <span class="after">GİRİŞ YAP</span>
                         </a>
 
-                        <a href="/package/order/status" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+                        <a th:href="@{/package/order/status}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
                             <span class="before">SİPARİŞ TAKİP</span>
                             <span class="text">SİPARİŞ TAKİP</span>
                             <span class="after">SİPARİŞ TAKİP</span>
@@ -355,9 +355,9 @@
                         <hr class="horiz-line mt-0 mb-20">
                         <div class="text-center mb-25 w-100">
                             <p class="brk-white-font-color font_family-open-sans font_size-14">
-                                <a href="/terms-use">Kullanım Koşulları</a> |
-                                <a href="/registration">Kayıt Ol</a> |
-                                <a href="/login">Giriş Yap</a>
+                                <a th:href="@{/terms-use}">Kullanım Koşulları</a> |
+                                <a th:href="@{/registration}">Kayıt Ol</a> |
+                                <a th:href="@{/login}">Giriş Yap</a>
                             </p>
                         </div>
                         <hr class="horiz-line mt-0 mb-20">
