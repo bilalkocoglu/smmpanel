@@ -122,7 +122,7 @@ public class DrawService {
 
             DrawVisit endVisit = drawVisits.get(0);
             Duration duration = Duration.between(endVisit.getDate(), LocalDateTime.now());
-            long durationSeconds = (24*60*60) - duration.toSeconds();
+            long durationSeconds = (24*60*60) - duration.toMinutes()*60;
             if ( durationSeconds < 0)
                 return null;
             else {
