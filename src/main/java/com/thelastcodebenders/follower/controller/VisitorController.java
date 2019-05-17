@@ -399,7 +399,7 @@ public class VisitorController {
     public String returnAndCancellation(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
-        return "visitor-terms-of-use";
+        return "visitor-return-and-cancelled";
     }
 
 }

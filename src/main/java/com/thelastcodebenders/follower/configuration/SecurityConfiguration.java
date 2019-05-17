@@ -62,7 +62,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/package/**",
                         "/message",
                         "/error",
-                        "/terms-use").permitAll()
+                        "/terms-use",
+                        "/kullanim-kosullari",
+                        "/iade-ve-iptal").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()
