@@ -388,8 +388,15 @@ public class VisitorController {
         return "redirect:/";
     }
 
-    @GetMapping("/terms-use")       //terms use page
+    @GetMapping("/kullanim-kosullari")       //terms use page
     public String termOfUse(Model model){
+        model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        return "visitor-terms-of-use";
+    }
+
+    @GetMapping("/iade-ve-iptal")       //terms use page
+    public String returnAndCancellation(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         return "visitor-terms-of-use";

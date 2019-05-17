@@ -1,5 +1,9 @@
 package com.thelastcodebenders.follower;
 
+import com.thelastcodebenders.follower.model.Role;
+import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.repository.RoleRepository;
+import com.thelastcodebenders.follower.repository.UserRepository;
 import com.thelastcodebenders.follower.service.DrawService;
 import com.thelastcodebenders.follower.service.UserService;
 import org.junit.Test;
@@ -25,6 +29,12 @@ public class SocialManagementApplicationTests {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     @Test
     public void time() {
         LocalDateTime now = LocalDateTime.now();
@@ -46,5 +56,31 @@ public class SocialManagementApplicationTests {
         String pass = bCryptPasswordEncoder.encode("Bilal.1212");
         System.out.println(pass);
     }
+/*
+    @Test
+    public void name() {
+        Role admin = Role.builder().role("ADMIN").build();
+        Role user = Role.builder().role("USER").build();
+
+        admin = roleRepository.save(admin);
+        user = roleRepository.save(user);
+
+        User user1 = User.builder()
+                .name("Bilal")
+                .balance(0)
+                .mail("sosyal1trend@gmail.com")
+                .number("5347756260")
+                .password(bCryptPasswordEncoder.encode("socialtrend.adminbilal"))
+                .role(admin)
+                .state(true)
+                .surname("Koçoğlu")
+                .build();
+
+        user1 = userRepository.save(user1);
+
+        System.out.println(user1);
+    }
+
+ */
 }
 

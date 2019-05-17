@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 public class PaymentService {
     private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
-    private static final String BALANCE_CALLBACK_URL = "http://localhost:8090/user/iyzico/callback";
-    private static final String PACKAGE_CALLBACK_URL = "http://localhost:8090/package/order/iyzico/callback";
+    private static final String BALANCE_CALLBACK_URL = "https://sosyaltrend.net/user/iyzico/callback";
+    private static final String PACKAGE_CALLBACK_URL = "https://sosyaltrend.net/package/order/iyzico/callback";
 
     Options options = new Options();
 

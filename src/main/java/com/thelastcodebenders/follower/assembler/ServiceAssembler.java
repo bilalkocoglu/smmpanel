@@ -25,6 +25,7 @@ public class ServiceAssembler {
                 .apiMinPiece(Integer.valueOf(serviceClientDTO.getMin()))
                 .apiMaxPiece(Integer.valueOf(serviceClientDTO.getMax()))
                 .apiDripfeed(serviceClientDTO.isDripfeed())
+                .apiCategory(serviceClientDTO.getCategory())
                 .build();
     }
 

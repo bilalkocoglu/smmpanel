@@ -41,11 +41,12 @@ public class Service {
     @Column(length = 3000)
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.ALL})
     @JoinColumn(name = "fk_api")
     private API api;
 
     @ManyToOne
     @JoinColumn(name = "fk_subcategory")
     private SubCategory subCategory;
+    private String apiCategory;
 }
