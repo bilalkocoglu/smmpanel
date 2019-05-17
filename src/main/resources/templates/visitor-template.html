@@ -1,5 +1,23 @@
 <!DOCTYPE html>
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
+
+    <div th:fragment="chat">
+        <!--Start of Tawk.to Script-->
+        <script type="text/javascript">
+            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+            (function(){
+                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+                s1.async=true;
+                s1.src='https://embed.tawk.to/5cdec9a42846b90c57af0b72/default';
+                s1.charset='UTF-8';
+                s1.setAttribute('crossorigin','*');
+                s0.parentNode.insertBefore(s1,s0);
+            })();
+        </script>
+        <!--End of Tawk.to Script-->
+    </div>
+
+
     <head th:fragment="head">
         <title> İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli - Yeni trendiniz.</title>
         <meta charset="utf-8">
@@ -244,7 +262,7 @@
                                                         Güvenli Ödeme Seçenekleri
                                                     </h4>
                                                     <p class="mt-30">
-                                                        xxx Ödeme seçeneklerinde kredi kartı, banka kartı ,EFT gibi bir çok seçenek bulunmaktadır. Hesabınıza Maximum 10 dk içinde paranız yatmaktadır. Online ve güvenli ödeme mevcuttur.
+                                                        PayTR ödeme seçeneği ile kredi kartı, banka kartı ,EFT gibi bir çok seçenek bulunmaktadır. Hesabınıza Maximum 10 dk içinde paranız yatmaktadır. Online ve güvenli ödeme mevcuttur.
                                                     </p>
                                                 </div>
                                             </div>
@@ -301,60 +319,10 @@
             <div class="position-relative z-index-3 w-100">
                 <div class="container">
                     <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class="text-center te d-flex flex-column mb-50">
-                                <div class="icon__cover" data-brk-library="component__services">
-                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
-                                        <i class="fa fa-phone" aria-hidden="true"></i>
-                                        <span class="before"></span>
-                                        <span class="after"></span>
-                                    </a>
-                                </div>
-                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
-                                    Telefon
-                                </p>
-                                <a href="#" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
-                                    0 534 899 87 05
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="text-center d-flex flex-column mb-50">
-                                <div class="icon__cover" data-brk-library="component__services">
-                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                        <span class="before"></span>
-                                        <span class="after"></span>
-                                    </a>
-                                </div>
-                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
-                                    Address
-                                </p>
-                                <p class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
-                                    İstanbul/ TÜRKİYE
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="text-center d-flex flex-column mb-50">
-                                <div class="icon__cover" data-brk-library="component__services">
-                                    <a href="#" class="icon__btn icon__btn-sm icon__btn-anim icon__btn_clear" data-brk-library="component__button">
-                                        <i class="fa fa-envelope" aria-hidden="true"></i>
-                                        <span class="before"></span>
-                                        <span class="after"></span>
-                                    </a>
-                                </div>
-                                <p class="brk-white-font-color font__family-montserrat font__size-24 line__height-24 mb-10 font__weight-semibold">
-                                    Email
-                                </p>
-                                <a href="mailto:info@domain.com" class="brk-white-font-color font__family-open-sans font__size-20 line__height-24">
-                                    info@domain.com
-                                </a>
-                            </div>
-                        </div>
                         <hr class="horiz-line mt-0 mb-20">
                         <div class="text-center mb-25 w-100">
                             <p class="brk-white-font-color font_family-open-sans font_size-14">
+                                <a th:href="@{/terms-use}">İptal ve İade</a> |
                                 <a th:href="@{/terms-use}">Kullanım Koşulları</a> |
                                 <a th:href="@{/registration}">Kayıt Ol</a> |
                                 <a th:href="@{/login}">Giriş Yap</a>
@@ -362,7 +330,7 @@
                         </div>
                         <hr class="horiz-line mt-0 mb-20">
                         <div class="text-center mb-25 w-100">
-                            <p class="brk-white-font-color font__family-open-sans font__size-14">&#xA9; 2019 <span class="font__weight-bold">The Lost Code Banders</span> All rights reserved</p>
+                            <p class="brk-white-font-color font__family-open-sans font__size-14">&#xA9; 2019 <span class="font__weight-bold">The Last Code Benders</span> All rights reserved</p>
                         </div>
                     </div>
                 </div>
