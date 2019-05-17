@@ -23,15 +23,10 @@ import java.util.concurrent.Executor;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
-public class SocialManagementApplication extends SpringBootServletInitializer {
+public class SocialManagementApplication {
 	private static final Logger log = LoggerFactory.getLogger(SocialManagementApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(SocialManagementApplication.class, args);
-	}
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(SocialManagementApplication.class);
 	}
 }
