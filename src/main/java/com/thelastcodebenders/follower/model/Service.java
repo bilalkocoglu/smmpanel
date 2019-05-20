@@ -36,12 +36,13 @@ public class Service {
     private boolean apiDripfeed;
 
     private double apiPrice;            //alis fiyati
+    private double apiUSDPrice;
     private double customPrice;     //satis fiyati
 
     @Column(length = 3000)
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "fk_api")
     private API api;
 

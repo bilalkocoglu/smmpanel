@@ -23,6 +23,6 @@ public class CategoryArticle {
     @JoinColumn(name = "fk_category")
     private Category category;
 
-    @Column(length = 20000)
+    @Column(length = 10000)
     private String article;
 }

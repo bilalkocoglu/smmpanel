@@ -56,9 +56,17 @@ public class DrawPrizeService {
 
         for (DrawPrize drawprize: drawPrizes) {
             drawprize.setState(false);
+            drawPrizeRepository.save(drawprize);
         }
+    }
 
-        drawPrizeRepository.saveAll(drawPrizes);
+    public void servicePriceUpdate(Service service){
+        List<DrawPrize> drawPrizes = drawPrizeRepository.findByService(service);
+
+        for (DrawPrize prize: drawPrizes) {
+            prize.setApiPrice((service.getApiPrice()/1000) * prize.getQuantity());
+            drawPrizeRepository.save(prize);
+        }
     }
 
 

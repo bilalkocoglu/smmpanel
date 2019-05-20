@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.assembler.ServiceAssembler;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageServiceDTO;
+import com.thelastcodebenders.follower.dto.VisitorServicesItem;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListItem;
 import com.thelastcodebenders.follower.dto.userservices.UserServicesListSubItem;
 import com.thelastcodebenders.follower.enums.ServiceState;
@@ -49,7 +50,7 @@ public class ServiceService {
 
     public List<String> serviceColumns(){
         return Stream.of(
-                "SystemId",
+                "ID",
                 "Name",
                 "Category",
                 "API",
@@ -85,7 +86,7 @@ public class ServiceService {
         }
     }
 
-    public List<Service> findActiveServiceByCategory(long subctgId){
+    public List<Service> findActiveServiceBySubCategoryId(long subctgId){
         try {
             SubCategory subCategory = categoryService.findSubCategoryById(subctgId);
             List<Service> services = serviceRepository.findBySubCategory(subCategory);
@@ -100,6 +101,10 @@ public class ServiceService {
             return null;
         }
 
+    }
+
+    public List<Service> findActiveServiceBySubCategory(SubCategory subCategory){
+        return serviceRepository.findBySubCategoryAndState(subCategory, ServiceState.ACTIVE);
     }
 
 
@@ -196,13 +201,13 @@ public class ServiceService {
 
                 List<UserServicesListSubItem> userServicesListSubItems = new ArrayList<>();
 
-                List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategory(category.getId());
+                List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategoryId(category.getId());
                 for (SubCategory subcategory: subCategories) {
                     //bütün alt kategoriler için birer servicesubitem oluşturulur ve içine servisler atılır
                     UserServicesListSubItem userServicesListSubItem = new UserServicesListSubItem();
                     userServicesListSubItem.setSubCategory(subcategory);
 
-                    List<Service> services = findActiveServiceByCategory(subcategory.getId());
+                    List<Service> services = findActiveServiceBySubCategoryId(subcategory.getId());
                     userServicesListSubItem.setServices(services);
                     if (userServicesListSubItem.getServices().size()>0)
                         userServicesListSubItems.add(userServicesListSubItem);
@@ -217,6 +222,29 @@ public class ServiceService {
             log.error("Service Service Create User Services Error -> " + e.getMessage());
             return null;
         }
+    }
+
+    public List<VisitorServicesItem> createVisitorServicesItems(){
+        List<VisitorServicesItem> visitorServicesItems = new ArrayList<>();
+        List<Category> categories = categoryService.allCategory();
+
+
+        categories.forEach(category -> {
+            List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategory(category);
+
+            List<Service> services = new ArrayList<>();
+
+            subCategories.forEach(subCategory -> {
+               List<Service> subCategoryServices = findActiveServiceBySubCategory(subCategory);
+               services.addAll(subCategoryServices);
+            });
+
+            if (services.size()>0){
+                visitorServicesItems.add(VisitorServicesItem.builder().category(category).services(services).build());
+            }
+        });
+
+        return visitorServicesItems;
     }
 
     public UserPageServiceDTO createUserpageServiceAjaxFormat(long serviceId){

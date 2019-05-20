@@ -1,7 +1,7 @@
-package com.thelastcodebenders.follower.client;
+package com.thelastcodebenders.follower.client.panel;
 
 import com.thelastcodebenders.follower.assembler.ServiceAssembler;
-import com.thelastcodebenders.follower.client.dto.*;
+import com.thelastcodebenders.follower.client.panel.dto.*;
 import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.model.API;
 import com.thelastcodebenders.follower.model.Order;
@@ -17,14 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 
 @org.springframework.stereotype.Service
-public class ClientService {
-    private static final Logger log = LoggerFactory.getLogger(ClientService.class);
+public class PanelService {
+    private static final Logger log = LoggerFactory.getLogger(PanelService.class);
 
     private RestTemplate restTemplate;
     private ServiceAssembler serviceAssembler;
 
-    public ClientService(RestTemplate restTemplate,
-                         ServiceAssembler serviceAssembler){
+    public PanelService(RestTemplate restTemplate,
+                        ServiceAssembler serviceAssembler){
         this.restTemplate = restTemplate;
         this.serviceAssembler = serviceAssembler;
     }

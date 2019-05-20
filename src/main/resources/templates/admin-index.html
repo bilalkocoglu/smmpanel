@@ -124,11 +124,12 @@
 				   class="btn gradient-harmonic-energy">
 					Bakiyeleri Güncelle
 				</a>
-				<a th:href="@{/admin/apis/update-services}"
+				<a th:href="@{/admin/apis/update-usd-rate}"
 				   style="float: left; margin-left: 3px; color: white; border: none;"
 				   class="btn gradient-flickr">
-					Servisleri Güncelle
+					Dolar Kuru Güncelle
 				</a>
+
 			</div>
 			<div class="card-body" style="overflow-y: auto; overflow-x: hidden; max-height:300px; height: auto!important;">
 				<table class="table table-responsive-sm text-center">
@@ -144,6 +145,9 @@
 							<td>
 								<a th:if="${api.isState() == true}" class="btn white btn-round gradient-green-tea">Active</a>
 								<a th:if="${api.isState() == false}" class="btn white btn-round gradient-blueberry">Paused</a>
+							</td>
+							<td>
+								<span th:if="${api.isUseUSD()}" th:text="${api.getRateUSD()}"></span>
 							</td>
 							<td th:text="${api.getBalance()}"></td>
 						</tr>

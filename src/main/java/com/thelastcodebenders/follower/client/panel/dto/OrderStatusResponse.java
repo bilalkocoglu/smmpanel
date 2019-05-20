@@ -1,4 +1,4 @@
-package com.thelastcodebenders.follower.client.dto;
+package com.thelastcodebenders.follower.client.panel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.thelastcodebenders.follower.assembler;
 
-import com.thelastcodebenders.follower.client.dto.ServiceClientDTO;
+import com.thelastcodebenders.follower.client.panel.dto.ServiceClientDTO;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageServiceDTO;
 import com.thelastcodebenders.follower.enums.ServiceState;
@@ -11,22 +11,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
+
 @Component
 public class ServiceAssembler {
     private static final Logger log = LoggerFactory.getLogger(ServiceAssembler.class);
 
     public Service convertClientDtoToService(ServiceClientDTO serviceClientDTO, API api){
-        return Service.builder()
-                .state(ServiceState.PASSIVE)
-                .api(api)
-                .apiServiceId(serviceClientDTO.getService())
-                .apiName(serviceClientDTO.getName())
-                .apiPrice(Double.valueOf(serviceClientDTO.getRate()))
-                .apiMinPiece(Integer.valueOf(serviceClientDTO.getMin()))
-                .apiMaxPiece(Integer.valueOf(serviceClientDTO.getMax()))
-                .apiDripfeed(serviceClientDTO.isDripfeed())
-                .apiCategory(serviceClientDTO.getCategory())
-                .build();
+        Service service = new Service();
+        service.setState(ServiceState.PASSIVE);
+        service.setApi(api);
+        service.setApiServiceId(serviceClientDTO.getService());
+        service.setApiName(serviceClientDTO.getName());
+
+        if (api.isUseUSD()){
+            service.setApiUSDPrice(Double.valueOf(serviceClientDTO.getRate()));
+
+            double apiPriceTL = service.getApiUSDPrice() * api.getRateUSD();
+            service.setApiPrice(Double.valueOf(new DecimalFormat("##.##").format(apiPriceTL)));
+        }else {
+            service.setApiPrice(Double.valueOf(serviceClientDTO.getRate()));
+        }
+        service.setApiMinPiece(Integer.valueOf(serviceClientDTO.getMin()));
+        service.setApiMaxPiece(Integer.valueOf(serviceClientDTO.getMax()));
+        service.setApiDripfeed(serviceClientDTO.isDripfeed());
+        service.setApiCategory(serviceClientDTO.getCategory());
+
+        return service;
     }
 
     public ServiceFormDTO convertServiceToFormDto(Service service){

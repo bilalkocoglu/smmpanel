@@ -32,6 +32,7 @@ public class VisitorController {
     private VisitorUserService visitorUserService;
     private OrderService orderService;
     private MailService mailService;
+    private ServiceService serviceService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
@@ -41,7 +42,8 @@ public class VisitorController {
                              PaymentService paymentService,
                              VisitorUserService visitorUserService,
                              OrderService orderService,
-                             MailService mailService){
+                             MailService mailService,
+                             ServiceService serviceService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
@@ -51,6 +53,7 @@ public class VisitorController {
         this.visitorUserService = visitorUserService;
         this.orderService = orderService;
         this.mailService = mailService;
+        this.serviceService = serviceService;
     }
 
     //Login
@@ -175,7 +178,6 @@ public class VisitorController {
         model.addAttribute("message", new VisitorMessageDTO());
         return "visitor-index";
     }
-
 
     //All Packages
     @GetMapping("/all-packages")
@@ -400,6 +402,14 @@ public class VisitorController {
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         return "visitor-return-and-cancelled";
+    }
+
+    @GetMapping("/fiyat-listesi")
+    public String servicePriceList(Model model){
+        model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        model.addAttribute("listItems", serviceService.createVisitorServicesItems());
+        return "visitor-service-list";
     }
 
 }

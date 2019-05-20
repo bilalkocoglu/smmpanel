@@ -2,8 +2,8 @@ package com.thelastcodebenders.follower.service;
 
 
 import com.thelastcodebenders.follower.assembler.OrderAssembler;
-import com.thelastcodebenders.follower.client.ClientService;
-import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
+import com.thelastcodebenders.follower.client.panel.PanelService;
+import com.thelastcodebenders.follower.client.panel.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.dto.VisitorPageOrderDTO;
@@ -32,7 +32,7 @@ public class OrderService {
     private UserService userService;
     private OrderRepository orderRepository;
     private OrderAssembler orderAssembler;
-    private ClientService clientService;
+    private PanelService panelService;
     private ApiService apiService;
     private PackageService packageService;
 
@@ -40,14 +40,14 @@ public class OrderService {
                         UserService userService,
                         OrderRepository orderRepository,
                         OrderAssembler orderAssembler,
-                        ClientService clientService,
+                        PanelService panelService,
                         ApiService apiService,
                         PackageService packageService){
         this.serviceService = serviceService;
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.orderAssembler = orderAssembler;
-        this.clientService = clientService;
+        this.panelService = panelService;
         this.apiService = apiService;
         this.packageService = packageService;
     }
@@ -125,7 +125,7 @@ public class OrderService {
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
             }
 
-            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
+            String apiOrderId = panelService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
 
             if (apiOrderId == null){
                 log.error("OrderService createPackageOrder Error -> API Order Id Null !");
@@ -195,7 +195,7 @@ public class OrderService {
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
             }
 
-            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.SERVICE);
+            String apiOrderId = panelService.createOrderReturnOrderId(order, CreateAPIOrderType.SERVICE);
 
             if (apiOrderId == null || apiOrderId.equals("0")){
                 throw new DetectedException("Şu anda seçtiğiniz servis için sipariş alamıyoruz. Daha sonra tekrar deneyin.");
@@ -251,7 +251,7 @@ public class OrderService {
                 throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Para iadesi için sayfa altında yer alan iletişim bilgilerimizden bize ulaşabilirsiniz.");
             }
 
-            String apiOrderId = clientService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
+            String apiOrderId = panelService.createOrderReturnOrderId(order, CreateAPIOrderType.PACKAGE);
 
             if (apiOrderId == null){
                 log.error("OrderService createVisitorPackageOrderReturnOrderId Error -> Api Order Id Null !");
@@ -339,7 +339,7 @@ public class OrderService {
 
 
             for (Order order: activeOrders) {
-                OrderStatusResponse orderStatusResponse = clientService.orderStatus(order.getApiOrderId(), order.getService().getApi());
+                OrderStatusResponse orderStatusResponse = panelService.orderStatus(order.getApiOrderId(), order.getService().getApi());
 
                 if (orderStatusResponse.getStatus().equals("Pending")){
                     //sipariş alındı

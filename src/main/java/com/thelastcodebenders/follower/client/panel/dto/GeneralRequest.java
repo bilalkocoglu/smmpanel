@@ -1,4 +1,4 @@
-package com.thelastcodebenders.follower.client.dto;
+package com.thelastcodebenders.follower.client.panel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateOrderResponse {
-    private long order;
+public class GeneralRequest {
+    private String key;
+    private String action;
 }

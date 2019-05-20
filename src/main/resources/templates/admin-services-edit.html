@@ -132,8 +132,16 @@
                                                     <td style="font-size: small;font-weight: bold;">API Name</td>
                                                     <td th:text="${service.getApiName()}"></td>
                                                 </tr>
+                                                <tr th:if="${service.getApi().isUseUSD()}">
+                                                    <td style="font-size: small;font-weight: bold;">API USD Rate(last update)</td>
+                                                    <td th:text="${service.getApi().getRateUSD()}"></td>
+                                                </tr>
+                                                <tr th:if="${service.getApi().isUseUSD()}">
+                                                    <td style="font-size: small;font-weight: bold;">API USD Price</td>
+                                                    <td th:text="${service.getApiUSDPrice()}"></td>
+                                                </tr>
                                                 <tr>
-                                                    <td style="font-size: small;font-weight: bold;">API Price</td>
+                                                    <td style="font-size: small;font-weight: bold;">API Price (TL)</td>
                                                     <td th:text="${service.getApiPrice()}"></td>
                                                 </tr>
                                                 <tr>

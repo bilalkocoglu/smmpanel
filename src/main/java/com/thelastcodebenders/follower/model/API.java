@@ -27,4 +27,8 @@ public class API {
     private boolean state;
 
     private double balance;
+
+    private boolean useUSD;
+
+    private double rateUSD;
 }

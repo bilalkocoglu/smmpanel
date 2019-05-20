@@ -28,28 +28,33 @@ public class ScheduleTaskService {
         this.drawService = drawService;
     }
 
-    @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)     //45 minutes
+    @Scheduled(fixedDelay = 40 * 60 * 1000, initialDelay = 50 * 1000)     //45 minutes
     public void servicesUpdate() {
-        //long startTime = System.nanoTime();
-        String message = apiService.allApiUpdateService();
+        User admin = userService.getAdmin();
 
-        if (!message.equals("")){
-            User admin = userService.getAdmin();
-
-            mailService.sendUpdateServiceStateMail(admin.getMail(), message);
-        }else {
-            //log.info("Servisler başarılı şekilde güncellendi ! Değişiklik görülmedi !");
-        }
-
-        //long endTime = System.nanoTime();
-        //long totalTime = endTime - startTime;
-        //System.out.println("Total Time => " + totalTime);
+        String otherUpdateMessage = apiService.allApiUpdateOtherService();
+        if (!otherUpdateMessage.equals(""))
+            mailService.sendUpdateServiceStateMail(admin.getMail(), otherUpdateMessage);
     }
 
-    @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 10 * 1000)
+    @Scheduled(fixedDelay = 10 * 60 * 1000, initialDelay = 10 * 1000)
     public void updateActiveOrderStatus(){
-        //log.info("All Order Update !");
+        //All Orders Update !
         orderService.updateActiveOrderStatus();
+
+        //All Draw Orders Update !
         drawService.updateActiveOrderStatus();
+
+        User admin = userService.getAdmin();
+
+        //All Active Service Update !
+        String activeUpdateMessage = apiService.allApiUpdateActiveService();
+
+        if (activeUpdateMessage.equals("")){
+            log.info("Tüm aktif servisler başarılı şekilde güncellendi ! Bir değişiklik görülmedi.");
+        }else {
+            log.info("Değişiklik tespit edilen servislerle ilgili admine mail gönderildi.");
+            mailService.sendUpdateServiceStateMail(admin.getMail(), activeUpdateMessage);
+        }
     }
 }

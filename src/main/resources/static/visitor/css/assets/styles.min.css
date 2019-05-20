@@ -12,3 +12,11 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
 .brk-pricing-horizontal :hover{color:#fff;}
 .brk-pricing-strict__description ul{line-height: 48px; font-size: .875rem;font-family: 'Open Sans',sans-serif;}
 .brk-pricing-strict__description li{padding: 0 15px;}
+#price-list .card-block tr td{
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+#price-list table th{
+    padding-bottom: 15px;
+    padding-top: 15px;
+}

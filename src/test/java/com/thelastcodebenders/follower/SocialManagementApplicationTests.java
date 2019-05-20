@@ -1,9 +1,13 @@
 package com.thelastcodebenders.follower;
 
+import com.thelastcodebenders.follower.client.rate.CurrencyRateService;
 import com.thelastcodebenders.follower.model.Role;
 import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.repository.APIRepository;
 import com.thelastcodebenders.follower.repository.RoleRepository;
+import com.thelastcodebenders.follower.repository.ServiceRepository;
 import com.thelastcodebenders.follower.repository.UserRepository;
+import com.thelastcodebenders.follower.service.ApiService;
 import com.thelastcodebenders.follower.service.DrawService;
 import com.thelastcodebenders.follower.service.UserService;
 import org.junit.Test;
@@ -35,6 +39,18 @@ public class SocialManagementApplicationTests {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    CurrencyRateService currencyRateService;
+
+    @Autowired
+    ApiService apiService;
+
+    @Autowired
+    APIRepository apiRepository;
+
+    @Autowired
+    ServiceRepository serviceRepository;
+
     @Test
     public void time() {
         LocalDateTime now = LocalDateTime.now();
@@ -56,7 +72,13 @@ public class SocialManagementApplicationTests {
         String pass = bCryptPasswordEncoder.encode("Bilal.1212");
         System.out.println(pass);
     }
-/*
+
+    @Test
+    public void usd() {
+        System.out.println(currencyRateService.getUSD());
+    }
+
+
     @Test
     public void name() {
         Role admin = Role.builder().role("ADMIN").build();
@@ -80,7 +102,23 @@ public class SocialManagementApplicationTests {
 
         System.out.println(user1);
     }
+/*
+    @Test
+    public void apiUpdateServices() {
+        apiService.allApiUpdateOtherService();
+    }
 
- */
+    @Test
+    public void deleteServicesById(){
+        API api = apiRepository.findById((long)6773).get();
+
+        List<Service> services = serviceRepository.findByApi(api);
+
+        System.out.println(services.size());
+
+        serviceRepository.deleteAll(services);
+    }
+
+     */
 }
 

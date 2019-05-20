@@ -1,7 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
-import com.thelastcodebenders.follower.client.ClientService;
-import com.thelastcodebenders.follower.client.dto.OrderStatusResponse;
+import com.thelastcodebenders.follower.client.panel.PanelService;
+import com.thelastcodebenders.follower.client.panel.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.dto.CountDownDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.exception.DetectedException;
@@ -9,7 +9,6 @@ import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.repository.DrawCountRepository;
 import com.thelastcodebenders.follower.repository.DrawOrderRepository;
 import com.thelastcodebenders.follower.repository.DrawVisitRepository;
-import org.apache.catalina.Lifecycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -31,18 +30,18 @@ public class DrawService {
     private DrawOrderRepository drawOrderRepository;
     private DrawVisitRepository drawVisitRepository;
     private DrawPrizeService drawPrizeService;
-    private ClientService clientService;
+    private PanelService panelService;
 
     public DrawService(DrawCountRepository drawCountRepository,
                        DrawOrderRepository drawOrderRepository,
                        DrawVisitRepository drawVisitRepository,
                        DrawPrizeService drawPrizeService,
-                       ClientService clientService){
+                       PanelService panelService){
         this.drawCountRepository = drawCountRepository;
         this.drawOrderRepository = drawOrderRepository;
         this.drawVisitRepository = drawVisitRepository;
         this.drawPrizeService = drawPrizeService;
-        this.clientService = clientService;
+        this.panelService = panelService;
     }
 
     public DrawCount findDrawCountByUser(User user){
@@ -184,7 +183,7 @@ public class DrawService {
                 throw new DetectedException("Geçersiz Çekiliş !");
             }
 
-            String apiOrderId = clientService.createDrawPrizeOrderReturnOrderId(drawPrize.getService(), url, String.valueOf(drawPrize.getQuantity()));
+            String apiOrderId = panelService.createDrawPrizeOrderReturnOrderId(drawPrize.getService(), url, String.valueOf(drawPrize.getQuantity()));
 
             if (apiOrderId == null || apiOrderId.equals("0")){
                 throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
@@ -217,7 +216,7 @@ public class DrawService {
 
 
             for (DrawOrder order: activeOrders) {
-                OrderStatusResponse orderStatusResponse = clientService.orderStatus(order.getApiOrderId(), order.getDrawPrize().getService().getApi());
+                OrderStatusResponse orderStatusResponse = panelService.orderStatus(order.getApiOrderId(), order.getDrawPrize().getService().getApi());
 
                 if (orderStatusResponse.getStatus().equals("Pending")){
                     //sipariş alındı

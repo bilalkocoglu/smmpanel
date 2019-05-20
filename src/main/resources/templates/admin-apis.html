@@ -41,10 +41,23 @@
 								    <label for="userinput2">APİ URL</label>
 									<input required th:field="*{url}" autocomplete="off" type="text" id="userinput2" class="form-control"  name="company">
 								</div>
-                                <div class="form-group">
-									<label for="userinput2">APİ KEY</label>
-									<input required th:field="*{secretKey}" autocomplete="off" type="text" id="userinput2" class="form-control"  name="company">
-								</div>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <label for="userinput2">APİ KEY</label>
+                                            <input required th:field="*{secretKey}" autocomplete="off" type="text" id="userinput2" class="form-control"  name="company">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group ">
+                                            <label for="userinput2">Para Birimi (default : TL)</label>
+                                            <div class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                                                <input checked="" th:field="*{useUSD}" class="custom-control-input" id="customcheckbox1" type="checkbox">
+                                                <label style="font-size: unset" class="custom-control-label" for="customcheckbox1">USD $</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 							</div>
 							<div class="form-actions right">
 								<button type="submit" class="btn btn-raised btn-block white gradient-plum">

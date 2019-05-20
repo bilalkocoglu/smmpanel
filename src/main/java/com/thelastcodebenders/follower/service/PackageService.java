@@ -14,6 +14,7 @@ import com.thelastcodebenders.follower.repository.PackageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,10 +52,6 @@ public class PackageService {
             log.error("Package Service Save Error -> " + e.getMessage());
             return false;
         }
-    }
-
-    public void saveAll(List<Package> packages){
-        packageRepository.saveAll(packages);
     }
 
 
@@ -134,6 +131,29 @@ public class PackageService {
             throw new DetectedException("Geçersiz Kategori !");
     }
 
+    public void servicePassivateHandler(Service service){
+        List<Package> packages = packageRepository.findByService(service);
+
+        for (Package pkg: packages) {
+            pkg.setState(false);
+            packageRepository.save(pkg);
+        }
+    }
+
+    public void updatePackagePriceByService(Service service, double oldCustomPrice, double newCustomPrice) {
+        List<Package> packages = findPackageByService(service);
+
+        for (Package pkg: packages) {
+            double oldApiPrice = (oldCustomPrice/1000)*pkg.getQuantity();
+            double newApiPrice = (newCustomPrice/1000)*pkg.getQuantity();
+
+            double newPrice = (pkg.getPrice()*newApiPrice)/oldApiPrice;
+
+            pkg.setPrice(Double.valueOf(new DecimalFormat("####").format(newPrice)));
+            packageRepository.save(pkg);
+        }
+    }
+
 
 
     public List<Category> visitorAllPackageCategories(){
@@ -154,7 +174,7 @@ public class PackageService {
         List<Category> popularCategories = new ArrayList<>();
 
         for (Category ctg: categories) {
-            if (popularCategories.size()<4){
+            if (popularCategories.size()<3){
                 popularCategories.add(ctg);
             }else {
                 break;
@@ -178,7 +198,7 @@ public class PackageService {
         List<VisitorPackagesItem> visitorPackagesItems = new ArrayList<>();
         List<Package> packages = packageRepository.findByCategoryAndState(category, true);
 
-        List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategory(category.getId());
+        List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategoryId(category.getId());
 
         if (!subCategories.isEmpty()){
             for (SubCategory subctg: subCategories) {
@@ -212,4 +232,6 @@ public class PackageService {
         }
         return findedPackages;
     }
+
+
 }

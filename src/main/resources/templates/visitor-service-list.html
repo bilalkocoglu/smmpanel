@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="brk-preloader" lang="en" data-brk-skin="brk-blue.css"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="visitor-template :: head"></head>
+
+<body class="brk-bordered-theme" data-border="30">
+        <style>.brk-button-shadow{-webkit-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;-moz-box-shadow:0 5px 16px rgba(39,117,255,.5) !important;box-shadow:0 5px 16px rgba(39,117,255,.5) !important;  margin:20px !important}@media (min-width: 992px) {.custom-tabbed-contents-mt {margin-top: -140px;}}</style>
+        <div class="main-page">
+            <div th:replace="visitor-template :: mobile-header"></div>
+
+            <header th:replace="visitor-template :: header"></header>
+            <h1 class="sr-only">SMM PANEL</h1>
+            <div class="breadcrumbs__section breadcrumbs__section-thin brk-bg-center-cover lazyload" data-bg="img/1920x258_1.jpg" data-brk-library="component__breadcrumbs_css"><span class="brk-abs-bg-overlay brk-bg-grad opacity-80"></span>
+                <div class="breadcrumbs__wrapper">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-lg-6">
+                                <div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
+                                    <h2 class="brk-white-font-color font__weight-semibold font__size-48 line__height-68 font__family-montserrat">FİYAT LİSTESİ</h2>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="pt-25 pb-35 position-static position-lg-relative breadcrumbs__subtitle">
+                                    <h3 class="brk-white-font-color font__family-montserrat font__weight-medium font__size-18 line__height-21 text-uppercase mb-15">UYGUN FİYAT - KALİTELİ HİZMET</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="main-wrapper">
+                <main class="main-container mb-70 mt-md-50">
+                    <section id="price-list">
+                        <div class="container">
+                            <div class="brk-tabs brk-tabs-bottom-top" data-hash="true" data-brk-library="component__tabs">
+                                <div class="accordion accordion-rounded accordion-image" role="tablist" aria-multiselectable="true" data-brk-library="component__accordions">
+                                    <div th:each="item : ${listItems}" class="card">
+                                        <a class="font__weight-medium card-title clicks"
+                                           data-toggle="collapse"
+                                           data-parent=".accordion-image"
+                                           th:href="${'#collapseOne' + item.getCategory().getId()}"
+                                           aria-expanded="true" th:attr="aria-controls='heading' + ${item.getCategory().getId()}">
+                                            <div class="card-header text-left"
+                                                 role="tab"
+                                                 th:id="${'heading' + item.getCategory().getId()}">
+                                                <h5 class="mb-0 font__family-montserrat font__weight-semibold letter-spacing-20 font__size-16 line__height-16 brk-base-font-color text-uppercase" data-brk-library="component__title">
+                                                    <i class="far fa-gem"></i> <span th:text="${item.getCategory().getName()}"></span> SERVİSLERİ
+                                                </h5>
+                                                <a class="card-toggle-icon"
+                                                   data-toggle="collapse"
+                                                   data-parent=".accordion-image"
+                                                   th:href="${'#collapseOne' + item.getCategory().getId()}"
+                                                   aria-expanded="true" th:attr="aria-controls='heading' + ${item.getCategory().getId()}">
+                                                    <span class="arrow"></span>
+                                                </a>
+                                            </div>
+                                        </a>
+                                        <div th:id="${'collapseOne' + item.getCategory().getId()}" class="collapse show" role="tabpanel" th:attr="aria-labelledby='heading' + ${item.getCategory().getId()}" >
+                                            <div class="card-block text-left all-light font__family-open-sans bg-cover default-bg-1"><span class="full__size-absolute brk-bg-grad opacity-90"></span>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                            <div class="brk-tables brk-tables-trend font__family-montserrat brk-base-6">
+                                                                <h4 class="font__family-montserrat font__weight-semibold highlight-underline font__size-28 line__height-32 mt-0"><span class="before wow fadeInUp brk-base-bg-8" style="visibility: visible; animation-name: fadeInUp;"></span>İNSTAGRAM TAKİPÇİ SİERVİSLERİ</h4>
+                                                                <table style="background-color: #fff; color: #000;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="active" scope="col">SERVİS ADI</th>
+                                                                            <th scope="col">MİNİMUM MİKTAR</th>
+                                                                            <th scope="col">MAKSİMUM MİKTAR</th>
+                                                                            <th scope="col">1K FİYATI</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr th:each="service : ${item.getServices()}">
+                                                                            <td th:text="${service.getCustomName()}"></td>
+                                                                            <td th:text="${service.getCustomMinPiece()}"></td>
+                                                                            <td th:text="${service.getCustomMaxPiece()}"></td>
+                                                                            <td class="font__size-18 font__weight-semibold">
+                                                                                <span th:text="${service.getCustomPrice()}"></span> TL</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+        <footer th:replace="visitor-template :: footer"></footer>
+        <a href="#top" id="toTop"></a>
+        <script th:src="@{/visitor/js/scripts.js}"></script>
+        <script>
+            window.onload = function () {
+                var questions = document.getElementsByClassName('clicks');
+                for (var i = 0; i<questions.length ; i++){
+                    questions[i].click();
+                }
+            };
+        </script>
+    </body>
+
+</html>

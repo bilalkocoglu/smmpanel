@@ -6,6 +6,7 @@ import com.thelastcodebenders.follower.model.SubCategory;
 import com.thelastcodebenders.follower.repository.CategoryRepository;
 import com.thelastcodebenders.follower.repository.ServiceRepository;
 import com.thelastcodebenders.follower.repository.SubCategoryRepository;
+import org.hibernate.mapping.Subclass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -173,7 +174,7 @@ public class CategoryService {
         }
     }
 
-    public List<SubCategory> findSubCategoryByMainCategory(long mainctgId){
+    public List<SubCategory> findSubCategoryByMainCategoryId(long mainctgId){
         Optional<Category> opt = categoryRepository.findById(mainctgId);
         if (!opt.isPresent()){
             log.error("Category Service Find Subcategory By Main Category Error -> Not Found");
@@ -181,6 +182,10 @@ public class CategoryService {
         }else {
             return subCategoryRepository.findByCategory(opt.get());
         }
+    }
+
+    public List<SubCategory> findSubCategoryByMainCategory(Category category){
+        return subCategoryRepository.findByCategory(category);
     }
 
     public Category findCategoryByName(String name) {

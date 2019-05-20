@@ -335,7 +335,7 @@ public class AdminController {
 
     @GetMapping("/categories/subcategory")      //AJAX SUBCATEGORİES
     public @ResponseBody List<SubCategory> subCategoriesByMainCategory(@RequestParam("maincategoryId") long id){
-        return categoryService.findSubCategoryByMainCategory(id);
+        return categoryService.findSubCategoryByMainCategoryId(id);
     }
 
     @PostMapping("/categories/maincategory")    //CREATE CATEGORY
@@ -401,18 +401,19 @@ public class AdminController {
 
     @PostMapping("/apis")       //CREATE API
     public String createApi(@ModelAttribute API api, RedirectAttributes redirectAttributes){
+
         try {
             boolean res = apiService.save(api);
             if (res)
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
             else
                 redirectAttributes.addFlashAttribute("errormessage", "Beklenmeyen bir hata oluştu. Daha sonra tekrar deneyin !");
-            return "redirect:/admin/apis";
         }catch (DetectedException e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }finally {
             return "redirect:/admin/apis";
         }
+
     }
 
     @GetMapping("/apis/passivate/{apiId:.*}")       //PASSIVATE API
@@ -446,6 +447,25 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 
+    @GetMapping("/apis/update-usd-rate")
+    public String updateUsdRate(RedirectAttributes redirectAttributes){
+        try {
+            boolean res = apiService.usdRateUpdate();
+
+            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleşti !");
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("Update USD Rate Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem başarısız oldu. Lütfen daha sonra deneyin.");
+            }
+        }
+
+        return "redirect:/admin/dashboard";
+    }
+
+    /*
     @GetMapping("/apis/update-services")    //ALL API UPDATE SERVİCE
     public String updateServiceApi(RedirectAttributes redirectAttributes){
         try {
@@ -463,7 +483,7 @@ public class AdminController {
             return "redirect:/admin/dashboard";
         }
     }
-
+*/
 
 
 
@@ -498,7 +518,7 @@ public class AdminController {
 
     @GetMapping("/services/service-category")        //AJAX SERVİCE BY CATEGORY
     public @ResponseBody List<Service> findServiceByCategory(@RequestParam("subcategoryId") long id){
-        return serviceService.findActiveServiceByCategory(id);
+        return serviceService.findActiveServiceBySubCategoryId(id);
     }
 
     @GetMapping("/services/service-id")             //AJAX SERVİCE BY ID
