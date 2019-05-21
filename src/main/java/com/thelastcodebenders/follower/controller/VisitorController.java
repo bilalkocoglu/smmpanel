@@ -59,6 +59,9 @@ public class VisitorController {
     //Login
     @GetMapping("/login")
     public String loginPage(Model model){
+        model.addAttribute("title", "Giriş Yap - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
+        model.addAttribute("description", "SMM panel ile sosyal medyadaki tüm hesaplarınıza uygun fiyatlı ve kaliteli servislerimiz ile beğeni, takipçi vb. aklınıza gelebilecek herşeyi gönderebilirsiniz. Hemen SMM panelimize giriş yaparak Sosyal Medya Panelinde yeni trend ile tanışın. Hızlı ve garantili servisin tadını çıkarın");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-login";
     }
 
@@ -77,6 +80,10 @@ public class VisitorController {
     //Forgot Password Page
     @GetMapping("/forgot-password")
     public String forgotPasswordPage(Model model){
+        model.addAttribute("title", "Şifremi Unuttum - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
+        model.addAttribute("description", "SMM panel ile sosyal medyadaki tüm hesaplarınıza uygun fiyatlı ve kaliteli servislerimiz ile beğeni, takipçi vb. aklınıza gelebilecek herşeyi gönderebilirsiniz. Hemen SMM panelimize giriş yaparak Sosyal Medya Panelinde yeni trend ile tanışın. Hızlı ve garantili servisin tadını çıkarın");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+
         return "visitor-forgot-password";
     }
 
@@ -99,6 +106,10 @@ public class VisitorController {
 
     @GetMapping("/account-activate/again")
     public String accountActivateAgainPage(Model model){
+        model.addAttribute("title", "Hesap Aktivasyon - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
+        model.addAttribute("description", "SMM panel ile sosyal medyadaki tüm hesaplarınıza uygun fiyatlı ve kaliteli servislerimiz ile beğeni, takipçi vb. aklınıza gelebilecek herşeyi gönderebilirsiniz. Hemen SMM panelimize giriş yaparak Sosyal Medya Panelinde yeni trend ile tanışın. Hızlı ve garantili servisin tadını çıkarın");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+
         return "visitor-activate-again";
     }
 
@@ -124,6 +135,10 @@ public class VisitorController {
     @GetMapping("/registration")
     public String registrationPage(Model model){
         model.addAttribute("userform", new RegisterFormDTO());
+        model.addAttribute("title", "Kayıt Ol - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+        model.addAttribute("description", "SMM panelimizin tüm özelliklerinden yararlanmak ve uygun fiyatlı servislerden faydalanmak için hemen kaydolun. Sosyal Trend olarak sizlere hızlı ve kaliteli hizmeti sunuyoruz. Kayıt olmadan da sipariş verebileceğiniz sistemimizde kayıt olarak fiyat avantajından yararlanabilirsiniz.");
+
         return "visitor-register";
     }
 
@@ -152,7 +167,8 @@ public class VisitorController {
 
     //Account Activate
     @GetMapping("/account-activate/{code}")
-    public String accountActivateWithMail(@PathVariable("code") String secretKey, RedirectAttributes redirectAttributes){
+    public String accountActivateWithMail(@PathVariable("code") String secretKey,
+                                          RedirectAttributes redirectAttributes){
         try {
             boolean res = userService.accountActivateWithMail(secretKey);
             if (res){
@@ -176,6 +192,9 @@ public class VisitorController {
         model.addAttribute("packages", packageService.activePackagesTop12());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("title", "Sosyal Medya Paneli - SMM Panel - Sosyal Trend - Yeni Trendiniz.");
+        model.addAttribute("description", "SMM Panel'de yeni trend. Sosyal medya panelimiz ile instagram, twitter, facebook gibi sosyal medyalardan uygun fiyatlı takipçi, beğeni gibi hizmet satınalabilirsiniz. Hızlı ve kaliteli hizmet ile şifresiz gönderim imkanı sağlıyoruz.");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-index";
     }
 
@@ -185,6 +204,9 @@ public class VisitorController {
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("categories", packageService.visitorAllPackageCategories());
+        model.addAttribute("title", "Tüm Paketler - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+        model.addAttribute("description", "İnstagram takipçi, twitter takipçi gibi bir çok hizmeti sitemizden şifresiz bir şekilde satınalabilirsiniz. Sosyal medya panelinde yeni trend. SMM Panel denince akla gelen ilk adres olan Sosyal Trend'e hemen sizde kaydolun ve fırsatları kaçırmayın.");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-allpackages";
     }
 
@@ -206,12 +228,17 @@ public class VisitorController {
             }
 
             model.addAttribute("category", category);
+            model.addAttribute("title",  category.getName() + " Takipçi Satın al - " + category.getName() + " Beğeni| Sosyal Trend");
+            model.addAttribute("description", category.getName() + " takipçi satın al, " + category.getName() + " beğeni hilesi ve " + category.getName() + " takipçi hilesi gibi sitelerde vakit kaybetmeden uygun fiyatlı bir şekilde " + category.getName() + " begeni, " + category.getName()+ " takipci satın alarak " + category.getName() + " profilinizi güçlendirebilirsiniz. Hemen sende sitemizi ziyaret et ve şifreni vermeden takipçi almanın keyfini çıkar.");
+            model.addAttribute("keywords", category.getName() + " takipçi hilesi, " + category.getName()+" takipçi, "+category.getName()+" beğeni hilesi, "+ category.getName() +" beğeni, takipçi hilesi, " +category.getName()+ " takipçi satın al, "+category.getName()+" beğeni satın al, smm panel");
+
         }catch (Exception e){
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             return "redirect:/all-packages";
         }
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+
         return "visitor-packages";
     }
 
@@ -237,6 +264,10 @@ public class VisitorController {
         model.addAttribute("pkg", packageService.createUserPageServiceFormat(packageId));
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
+        model.addAttribute("title",  pkg.getCategory().getName() + " Takipçi Satın al - " + pkg.getCategory().getName() + " Beğeni| Sosyal Trend");
+        model.addAttribute("description", pkg.getCategory().getName() + " takipçi satın al, " + pkg.getCategory().getName() + " beğeni hilesi ve " + pkg.getCategory().getName() + " takipçi hilesi gibi sitelerde vakit kaybetmeden uygun fiyatlı bir şekilde " + pkg.getCategory().getName() + " begeni, " + pkg.getCategory().getName()+ " takipci satın alarak " + pkg.getCategory().getName() + " profilinizi güçlendirebilirsiniz. Hemen sende sitemizi ziyaret et ve şifreni vermeden takipçi almanın keyfini çıkar.");
+        model.addAttribute("keywords", pkg.getCategory().getName() + " takipçi hilesi, " + pkg.getCategory().getName()+" takipçi, "+pkg.getCategory().getName()+" beğeni hilesi, "+ pkg.getCategory().getName() +" beğeni, takipçi hilesi, " +pkg.getCategory().getName()+ " takipçi satın al, "+pkg.getCategory().getName()+" beğeni satın al, smm panel");
+
         return "visitor-package-order";
     }
 
@@ -274,6 +305,9 @@ public class VisitorController {
             model.addAttribute("popularCategories", packageService.visitorPopularCategories());
             model.addAttribute("message", new VisitorMessageDTO());
             model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
+            model.addAttribute("title", "Sosyal Medya Paneli - SMM Panel - Sosyal Trend - Yeni Trendiniz.");
+            model.addAttribute("description", "SMM Panel'de yeni trend. Sosyal medya panelimiz ile instagram, twitter, facebook gibi sosyal medyalardan uygun fiyatlı takipçi, beğeni gibi hizmet satınalabilirsiniz. Hızlı ve kaliteli hizmet ile şifresiz gönderim imkanı sağlıyoruz.");
+            model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
 
             return "visitor-package-payment";
             //success ? new order , error
@@ -345,10 +379,15 @@ public class VisitorController {
         }
     }
 
+    //Order Status Page
     @GetMapping("/package/order/status")
     public String orderStatusPage(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        model.addAttribute("title", "Sipariş Takip - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+        model.addAttribute("description", "Sipariş takip sistemimiz ile kayıt olmadan yapılan işlemlerinizi mailinize gelen takip numarası ile kolay bir şekilde takip edebilirsiniz. Kayıt olmadan ve şifre vermeden SMM panelimizden sipariş vermeye başlayabilirsiniz. Sosyal Medya Panelinde yeni Trend.");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+
         return "visitor-order-status";
     }
 
@@ -361,6 +400,10 @@ public class VisitorController {
             model.addAttribute("order", visitorPageOrder);
             model.addAttribute("message", new VisitorMessageDTO());
             model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("title", "Sipariş Takip - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+            model.addAttribute("description", "Kullanım koşulları sizin ve bizim güvenliğini sağlamak amacı ile hazırlanmıştır. Sosyal medya panelimizden yapılan tüm işlemlerde kullanım koşullarını kabul etmiş sayılırsınız. Koşullara uymayan tüm siparişler ve işlemler itiraz kabul edilmeksizin iptal edilmektedir.");
+            model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+
             return "visitor-order-status";
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
@@ -394,6 +437,9 @@ public class VisitorController {
     public String termOfUse(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        model.addAttribute("title", "Kullanım Koşulları - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+        model.addAttribute("description", "Kullanım koşulları sizin ve bizim güvenliğini sağlamak amacı ile hazırlanmıştır. Sosyal medya panelimizden yapılan tüm işlemlerde kullanım koşullarını kabul etmiş sayılırsınız. Koşullara uymayan tüm siparişler ve işlemler itiraz kabul edilmeksizin iptal edilmektedir.");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-terms-of-use";
     }
 
@@ -401,6 +447,9 @@ public class VisitorController {
     public String returnAndCancellation(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+        model.addAttribute("title", "İptal ve İade - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+        model.addAttribute("description", "İptal ve iade koşullarımız ile sizleri garanti altına alıyoruz. SMM panelimizden satın aldığınız tüm hizmetlede bu koşulları kabul etmiş sayılırsınız. Sosyal medya panelinden yaptığınız tüm işlemler kullanım koşullarını kabul ettiğinizi gösterir. Hemen sitemizi ziyaret ederek sosyal medya paketlerimize göz atabilirsiniz");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-return-and-cancelled";
     }
 
@@ -409,6 +458,9 @@ public class VisitorController {
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("listItems", serviceService.createVisitorServicesItems());
+        model.addAttribute("title", "Fiyat Listesi - İnstagram | Facebook | Twitter | Sosyal Medya Satış Paneli");
+        model.addAttribute("description", "İnstagram takipçi, twitter takipçi gibi bir çok hizmeti sitemizden şifresiz bir şekilde satınalabilirsiniz. Sosyal medya panelinde yeni trend. SMM Panel denince akla gelen ilk adres olan Sosyal Trend'e hemen sizde kaydolun ve fırsatları kaçırmayın.");
+        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-service-list";
     }
 

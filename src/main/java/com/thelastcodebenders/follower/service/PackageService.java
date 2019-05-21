@@ -174,7 +174,7 @@ public class PackageService {
         List<Category> popularCategories = new ArrayList<>();
 
         for (Category ctg: categories) {
-            if (popularCategories.size()<3){
+            if (popularCategories.size()<2){
                 popularCategories.add(ctg);
             }else {
                 break;
