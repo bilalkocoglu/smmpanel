@@ -4,6 +4,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.assembler.OrderAssembler;
 import com.thelastcodebenders.follower.client.panel.PanelService;
 import com.thelastcodebenders.follower.client.panel.dto.OrderStatusResponse;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.dto.VisitorPageOrderDTO;
@@ -35,6 +36,7 @@ public class OrderService {
     private PanelService panelService;
     private ApiService apiService;
     private PackageService packageService;
+    private TelegramService telegramService;
 
     public OrderService(ServiceService serviceService,
                         UserService userService,
@@ -42,7 +44,8 @@ public class OrderService {
                         OrderAssembler orderAssembler,
                         PanelService panelService,
                         ApiService apiService,
-                        PackageService packageService){
+                        PackageService packageService,
+                        TelegramService telegramService){
         this.serviceService = serviceService;
         this.userService = userService;
         this.orderRepository = orderRepository;
@@ -50,6 +53,7 @@ public class OrderService {
         this.panelService = panelService;
         this.apiService = apiService;
         this.packageService = packageService;
+        this.telegramService = telegramService;
     }
 
     //net kazanç
@@ -144,7 +148,7 @@ public class OrderService {
             }else {
                 log.error("OrderService createPackageOrder Order Error -> order not save");
             }
-
+            telegramService.asyncSendAdminMessage(user.getId() + "-" + user.getName() + " " + user.getSurname() + " kullanıcısı tarafından yeni sipariş alındı.");
             return true;
         }catch (Exception e){
             if (e instanceof DetectedException)
@@ -213,7 +217,7 @@ public class OrderService {
             }else {
                 log.error("OrderService createServiceOrder Order Error -> order not save");
             }
-
+            telegramService.asyncSendAdminMessage(user.getId() + "-" + user.getName() + " " + user.getSurname() + " kullanıcısı tarafından yeni sipariş alındı.");
             return true;
         }catch (Exception e){
             if (e instanceof DetectedException)

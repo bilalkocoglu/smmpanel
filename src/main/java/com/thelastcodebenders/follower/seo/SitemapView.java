@@ -1,4 +1,4 @@
-package com.thelastcodebenders.follower.ceo;
+package com.thelastcodebenders.follower.seo;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

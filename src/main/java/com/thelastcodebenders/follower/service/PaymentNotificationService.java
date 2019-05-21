@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.assembler.PaymenNotificationAssembler;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.PaymentNotificationFormDTO;
 import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.exception.DetectedException;
@@ -28,19 +29,22 @@ public class PaymentNotificationService {
     private BankAccountService bankAccountService;
     private MailService mailService;
     private DrawService drawService;
+    private TelegramService telegramService;
 
     public PaymentNotificationService(PaymentNotificationRepository paymentNotificationRepository,
                                       UserService userService,
                                       PaymenNotificationAssembler paymenNotificationAssembler,
                                       BankAccountService bankAccountService,
                                       MailService mailService,
-                                      DrawService drawService){
+                                      DrawService drawService,
+                                      TelegramService telegramService){
         this.paymentNotificationRepository = paymentNotificationRepository;
         this.userService = userService;
         this.paymenNotificationAssembler = paymenNotificationAssembler;
         this.bankAccountService = bankAccountService;
         this.mailService = mailService;
         this.drawService = drawService;
+        this.telegramService = telegramService;
     }
 
     public List<String> tableColumns(){
@@ -131,7 +135,8 @@ public class PaymentNotificationService {
 
         paymentNotification = paymentNotificationRepository.save(paymentNotification);
         if (paymentNotification != null){
-            mailService.asyncSendMail(AsyncMailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
+            //mailService.asyncSendMail(AsyncMailType.PAYMENTNTFREQ, paymentNotification.getUser(), userService.getAdmin(), "");
+            telegramService.asyncSendAdminMessage(paymentNotification.getUser().getId() + "-" + paymentNotification.getUser().getName() + " " + paymentNotification.getUser().getSurname() + " kullanıcısı tarafından yeni bir ödeme bildirimi oluşturuldu.");
             return true;
         }
         else{

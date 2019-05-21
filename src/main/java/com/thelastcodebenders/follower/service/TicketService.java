@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.assembler.MessageAssembler;
 import com.thelastcodebenders.follower.assembler.TicketAssembler;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.CreateTicketFormDTO;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.AsyncMailType;
@@ -32,19 +33,22 @@ public class TicketService {
     private MessageAssembler messageAssembler;
     private MessageRepository messageRepository;
     private MailService mailService;
+    private TelegramService telegramService;
 
     public TicketService(TicketRepository ticketRepository,
                          UserService userService,
                          TicketAssembler ticketAssembler,
                          MessageRepository messageRepository,
                          MessageAssembler messageAssembler,
-                         MailService mailService){
+                         MailService mailService,
+                         TelegramService telegramService){
         this.ticketRepository = ticketRepository;
         this.userService = userService;
         this.ticketAssembler = ticketAssembler;
         this.messageAssembler = messageAssembler;
         this.messageRepository = messageRepository;
         this.mailService = mailService;
+        this.telegramService = telegramService;
     }
 
     public int unreadTickets(RoleType roleType) throws LoginException {
@@ -192,7 +196,8 @@ public class TicketService {
             Message message = messageAssembler.convertStringToMessage(messageBody, true, ticket);
             try {
                 message = messageRepository.save(message);
-                mailService.asyncSendMail(AsyncMailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
+                //mailService.asyncSendMail(AsyncMailType.RESPONSETICKET, ticket.getFromUser(), userService.getAdmin(),"");
+                telegramService.asyncSendAdminMessage(ticket.getFromUser().getId() + "-" +ticket.getFromUser().getName() + " " + ticket.getFromUser().getSurname() + " kullanıcısı tarafından bir gönderilen bir destek talebi mevcut.");
                 return true;
             }catch (Exception e){
                 log.error("Ticket Service Response Ticket Error -> " + e.getMessage());
@@ -232,7 +237,8 @@ public class TicketService {
         if (admin == null){
             log.error("Cant Send Mail Because Admin Not Found !");
         }else {
-            mailService.asyncSendMail(AsyncMailType.CREATETICKET, user, admin,"");
+            //mailService.asyncSendMail(AsyncMailType.CREATETICKET, user, admin,"");
+            telegramService.asyncSendAdminMessage(user.getId() + "-" + user.getName() + " " + user.getSurname() + " kullanıcısı tarafından bir destek talebi oluşturuldu.");
         }
 
         return true;

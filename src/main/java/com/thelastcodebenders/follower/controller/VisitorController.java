@@ -3,7 +3,8 @@ package com.thelastcodebenders.follower.controller;
 import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
 import com.iyzipay.model.Status;
-import com.thelastcodebenders.follower.ceo.SitemapView;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.seo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
@@ -13,7 +14,6 @@ import com.thelastcodebenders.follower.model.VisitorUser;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +38,8 @@ public class VisitorController {
     private OrderService orderService;
     private MailService mailService;
     private ServiceService serviceService;
-
     private final SitemapView sitemapView;
+    private TelegramService telegramService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
@@ -51,7 +51,8 @@ public class VisitorController {
                              OrderService orderService,
                              MailService mailService,
                              ServiceService serviceService,
-                             SitemapView sitemapView){
+                             SitemapView sitemapView,
+                             TelegramService telegramService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
@@ -63,6 +64,7 @@ public class VisitorController {
         this.mailService = mailService;
         this.serviceService = serviceService;
         this.sitemapView = sitemapView;
+        this.telegramService = telegramService;
     }
 
     //Login
@@ -175,7 +177,7 @@ public class VisitorController {
     }
 
     //Account Activate
-    @GetMapping("/account-activate/{code}")
+    @GetMapping("/account-activate/{code}")     //SEND TELEGRAM MESSAGE
     public String accountActivateWithMail(@PathVariable("code") String secretKey,
                                           RedirectAttributes redirectAttributes){
         try {
@@ -347,12 +349,14 @@ public class VisitorController {
                 VisitorUser visitorUser = visitorUserService.findByToken(token);
 
                 if (visitorUser == null){
+                    telegramService.asyncSendAdminMessage("Ziyaretçi bir kullanıcıdan ödeme alındı fakat token eşleşmemesi sebebiyle sipariş verilemedi.");
                     throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
                 }
 
                 Package pkg = packageService.findById(visitorUser.getPackageId());
 
                 if (pkg == null || !pkg.isState()){
+                    telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden ödeme alındı fakat paket durumundaki değişimden dolayı sipariş verilemedi.");
                     throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
                 }
 
@@ -360,6 +364,7 @@ public class VisitorController {
                 long orderId = orderService.createVisitorPackageOrderReturnOrderId(pkg, visitorUser.getUrl());
 
                 if (orderId == -1){
+                    telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden bir kullanıcıdan ödeme alındı fakat " + pkg.getService().getApi().getName() + " API'den " + pkg.getService().getId() + " idli servis ile ilgili cevap gelmediği için sipariş verilemedi.");
                     throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
                 }
 
@@ -369,6 +374,7 @@ public class VisitorController {
                 mailService.asyncSendVisitorOrderMail(visitorUser.getEmail(), String.valueOf(orderId), visitorUser.getName(), visitorUser.getSurname());
 
                 //takip sağla
+                telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden " + pkg.getPrice() + " tutarında ödeme alındı ve " + pkg.getId() + "paketinden sipariş verildi.");
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı ! Sipariş takip numaranız : <strong>" + orderId + "</strong> Sipariş takip sayfasından siparişinizin durumunu takip edebilirsiniz.");
             }else {
                 if(checkoutForm.getErrorMessage()!=null)

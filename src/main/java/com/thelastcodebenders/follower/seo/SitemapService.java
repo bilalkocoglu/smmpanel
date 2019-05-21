@@ -1,4 +1,4 @@
-package com.thelastcodebenders.follower.ceo;
+package com.thelastcodebenders.follower.seo;
 
 import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;

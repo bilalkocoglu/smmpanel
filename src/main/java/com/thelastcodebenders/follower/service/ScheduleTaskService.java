@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.service;
 
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,28 +18,33 @@ public class ScheduleTaskService {
     private OrderService orderService;
     private DrawService drawService;
     private CacheManager cacheManager;
+    private TelegramService telegramService;
 
     public ScheduleTaskService(ApiService apiService,
                                MailService mailService,
                                UserService userService,
                                OrderService orderService,
                                DrawService drawService,
-                               CacheManager cacheManager){
+                               CacheManager cacheManager,
+                               TelegramService telegramService){
         this.apiService = apiService;
         this.mailService = mailService;
         this.userService = userService;
         this.orderService = orderService;
         this.drawService = drawService;
         this.cacheManager = cacheManager;
+        this.telegramService = telegramService;
     }
 
     @Scheduled(fixedDelay = 40 * 60 * 1000, initialDelay = 50 * 1000)     //45 minutes
     public void servicesUpdate() {
-        User admin = userService.getAdmin();
+        //User admin = userService.getAdmin();
 
         String otherUpdateMessage = apiService.allApiUpdateOtherService();
-        if (!otherUpdateMessage.equals(""))
-            mailService.sendUpdateServiceStateMail(admin.getMail(), otherUpdateMessage);
+        if (!otherUpdateMessage.equals("")){
+            //mailService.sendUpdateServiceStateMail(admin.getMail(), otherUpdateMessage);
+            telegramService.sendAdminMessage(otherUpdateMessage);
+        }
     }
 
     @Scheduled(fixedDelay = 10 * 60 * 1000, initialDelay = 10 * 1000)
@@ -49,7 +55,7 @@ public class ScheduleTaskService {
         //All Draw Orders Update !
         drawService.updateActiveOrderStatus();
 
-        User admin = userService.getAdmin();
+        //User admin = userService.getAdmin();
 
         //All Active Service Update !
         String activeUpdateMessage = apiService.allApiUpdateActiveService();
@@ -58,7 +64,8 @@ public class ScheduleTaskService {
             log.info("Tüm aktif servisler başarılı şekilde güncellendi ! Bir değişiklik görülmedi.");
         }else {
             log.info("Değişiklik tespit edilen servislerle ilgili admine mail gönderildi.");
-            mailService.sendUpdateServiceStateMail(admin.getMail(), activeUpdateMessage);
+            //mailService.sendUpdateServiceStateMail(admin.getMail(), activeUpdateMessage);
+            telegramService.sendAdminMessage(activeUpdateMessage);
         }
     }
 

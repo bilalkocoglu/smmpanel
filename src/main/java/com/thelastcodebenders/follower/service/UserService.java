@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.assembler.UserAssembler;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.ChangePasswordDTO;
 import com.thelastcodebenders.follower.dto.RegisterFormDTO;
 import com.thelastcodebenders.follower.enums.RoleType;
@@ -36,6 +37,7 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private MailService mailService;
     private DrawService drawService;
+    private TelegramService telegramService;
 
     public UserService(UserRepository userRepository,
                        UserAssembler userAssembler,
@@ -43,7 +45,8 @@ public class UserService {
                        AccountActivationService accountActivationService,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        MailService mailService,
-                       DrawService drawService){
+                       DrawService drawService,
+                       TelegramService telegramService){
         this.userRepository = userRepository;
         this.userAssembler = userAssembler;
         this.roleService = roleService;
@@ -51,6 +54,7 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.mailService = mailService;
         this.drawService = drawService;
+        this.telegramService = telegramService;
     }
 
     public int userCount(){
@@ -252,7 +256,7 @@ public class UserService {
             }
 
             changeState(user.getId(), UserAction.ACTIVATE);
-
+            telegramService.asyncSendAdminMessage("Yeni bir üye sisteme eklendi !");
             return true;        //success
         }catch (Exception e){
             if (e instanceof DetectedException)

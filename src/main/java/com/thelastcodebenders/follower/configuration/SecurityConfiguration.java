@@ -68,8 +68,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/fiyat-listesi",
                         "/sitemap.xml",
                         "/order/**",
-                        "/robots.txt",
-                        "/deneme").permitAll()
+                        //"/deneme",
+                        "/robots.txt").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()

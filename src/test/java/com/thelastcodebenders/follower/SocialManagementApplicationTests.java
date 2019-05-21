@@ -1,20 +1,8 @@
 package com.thelastcodebenders.follower;
 
-import com.thelastcodebenders.follower.client.rate.CurrencyRateService;
-import com.thelastcodebenders.follower.model.Role;
-import com.thelastcodebenders.follower.model.User;
-import com.thelastcodebenders.follower.repository.APIRepository;
-import com.thelastcodebenders.follower.repository.RoleRepository;
-import com.thelastcodebenders.follower.repository.ServiceRepository;
-import com.thelastcodebenders.follower.repository.UserRepository;
-import com.thelastcodebenders.follower.service.ApiService;
-import com.thelastcodebenders.follower.service.DrawService;
-import com.thelastcodebenders.follower.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
@@ -24,32 +12,7 @@ import java.time.temporal.ChronoUnit;
 @SpringBootTest
 public class SocialManagementApplicationTests {
 
-    @Autowired
-    UserService userService;
 
-    @Autowired
-    DrawService drawService;
-
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    CurrencyRateService currencyRateService;
-
-    @Autowired
-    ApiService apiService;
-
-    @Autowired
-    APIRepository apiRepository;
-
-    @Autowired
-    ServiceRepository serviceRepository;
 
     @Test
     public void time() {
@@ -67,18 +30,7 @@ public class SocialManagementApplicationTests {
         System.out.println(messageDate1.compareTo(timeOutDate));
     }
 
-    @Test
-    public void pass() {
-        String pass = bCryptPasswordEncoder.encode("Bilal.1212");
-        System.out.println(pass);
-    }
-
-    @Test
-    public void usd() {
-        System.out.println(currencyRateService.getUSD());
-    }
-
-
+    /*
     @Test
     public void name() {
         Role admin = Role.builder().role("ADMIN").build();

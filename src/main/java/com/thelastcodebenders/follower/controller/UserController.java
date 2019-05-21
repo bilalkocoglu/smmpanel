@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.controller;
 import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
 import com.iyzipay.model.Status;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
@@ -40,6 +41,7 @@ public class UserController {
     private ApiService apiService;
     private PaymentService paymentService;
     private CardPaymentService cardPaymentService;
+    private TelegramService telegramService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -54,7 +56,8 @@ public class UserController {
                           DrawPrizeService drawPrizeService,
                           ApiService apiService,
                           PaymentService paymentService,
-                          CardPaymentService cardPaymentService){
+                          CardPaymentService cardPaymentService,
+                          TelegramService telegramService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -69,6 +72,7 @@ public class UserController {
         this.apiService = apiService;
         this.paymentService = paymentService;
         this.cardPaymentService = cardPaymentService;
+        this.telegramService = telegramService;
     }
 
     //USER INDEX
@@ -132,7 +136,7 @@ public class UserController {
         return "user-orders";
     }
 
-    @PostMapping("/order/{serviceId:.*}")       //CREATE ORDER
+    @PostMapping("/order/{serviceId:.*}")       //CREATE ORDER-SEND TELEGRAM MESSAGE
     public String createNewOrder(@ModelAttribute NewOrderFormDTO orderForm,
                                  @PathVariable("serviceId") long serviceId,
                                  RedirectAttributes redirectAttributes){
@@ -155,7 +159,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/order/package/{packageId:.*}")        //CREATE ORDER PACKAGE
+    @PostMapping("/order/package/{packageId:.*}")        //CREATE ORDER PACKAGE-SEND TELEGRAM MESSAGE
     public String createNewPackageOrder(@ModelAttribute NewOrderFormDTO orderForm,
                                         @PathVariable("packageId") long packageId,
                                         RedirectAttributes redirectAttributes){
@@ -215,7 +219,7 @@ public class UserController {
         return "user-payment-notifications";
     }
 
-    @PostMapping("/payment-notifications")      //CREATE PAYMENT NOTIFICATION
+    @PostMapping("/payment-notifications")      //CREATE PAYMENT NOTIFICATION - SEND TELEGRAM MESSAGE
     public String createPaymentNotification(@ModelAttribute PaymentNotificationFormDTO paymentNtfForm,
                                             RedirectAttributes redirectAttributes) throws LoginException {
         try {
@@ -252,7 +256,7 @@ public class UserController {
         return "user-tickets";
     }
 
-    @PostMapping("/tickets")        //CREATE TİCKET
+    @PostMapping("/tickets")        //CREATE TİCKET - SEND TELEGRAM MESSAGE
     public String createTicket(@ModelAttribute CreateTicketFormDTO createTicketFormDTO,
                                RedirectAttributes redirectAttributes) throws LoginException {
         try {
@@ -292,7 +296,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/tickets/response/{ticketId:.*}")         //RESPONSE TİCKET
+    @PostMapping("/tickets/response/{ticketId:.*}")         //RESPONSE TİCKET-SEND TELEGRAM MESSAGE
     public String responseTicket(@PathVariable("ticketId") long ticketId,
                                  RedirectAttributes redirectAttributes,
                                  @ModelAttribute ChatMessageDTO chatMessage){
@@ -381,7 +385,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/iyzico/callback")
+    @PostMapping("/iyzico/callback")    //SEND TELEGRAM MESSAGE
     public String iyzicoCallback(@RequestParam("token") String token,
                                  RedirectAttributes redirectAttributes) throws LoginException {
         User user = userService.getAuthUser();
@@ -396,7 +400,7 @@ public class UserController {
             cardPaymentService.newSuccessCardPayment(user, checkoutForm.getPaidPrice().doubleValue(), token);
             userService.updateUserBalance(user, checkoutForm.getPaidPrice().doubleValue());
             drawService.addDrawCount(user);
-
+            telegramService.asyncSendAdminMessage(user.getId()+ "-" +user.getName() + " " + user.getSurname() + " kullanıcısı tarafından "+checkoutForm.getPaidPrice().doubleValue() + " TL bakiye eklendi.");
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı !");
         }else {
             if(checkoutForm.getErrorMessage()!=null)

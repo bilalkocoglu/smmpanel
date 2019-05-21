@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.client.panel.PanelService;
 import com.thelastcodebenders.follower.client.rate.CurrencyRateService;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.OtherServiceUpdateDTO;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
@@ -32,6 +33,7 @@ public class ApiService {
     private UserService userService;
     private DrawPrizeService drawPrizeService;
     private CurrencyRateService currencyRateService;
+    private TelegramService telegramService;
 
     public ApiService(APIRepository apiRepository,
                       PanelService panelService,
@@ -40,7 +42,8 @@ public class ApiService {
                       MailService mailService,
                       UserService userService,
                       DrawPrizeService drawPrizeService,
-                      CurrencyRateService currencyRateService){
+                      CurrencyRateService currencyRateService,
+                      TelegramService telegramService){
         this.apiRepository = apiRepository;
         this.panelService = panelService;
         this.serviceRepository = serviceRepository;
@@ -49,6 +52,7 @@ public class ApiService {
         this.userService = userService;
         this.drawPrizeService = drawPrizeService;
         this.currencyRateService = currencyRateService;
+        this.telegramService = telegramService;
     }
 
     public List<String> adminTableColumns(){
@@ -150,8 +154,10 @@ public class ApiService {
             if (api == null){
                 log.error("API Service Save Error");
                 return false;
-            }else
+            }else{
+                telegramService.asyncSendAdminMessage(api.getName() + " API başarıyla sisteme eklendi.");
                 return true;
+            }
         }catch (Exception e){
             if (e instanceof DetectedException)
                 throw e;
