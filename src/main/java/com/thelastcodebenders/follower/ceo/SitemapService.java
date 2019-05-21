@@ -34,13 +34,25 @@ public final class SitemapService {
                 .changeFreq(ChangeFreq.DAILY).build();
         sitemap.addUrl(url);
 
-        url = new WebSitemapUrl.Options(BASE_URL + "/package/instagram-paketleri")
+        url = new WebSitemapUrl.Options(BASE_URL + "/package/Instagram-paketleri")
                 .lastMod(new Date())
                 .priority(1.0)
                 .changeFreq(ChangeFreq.DAILY).build();
         sitemap.addUrl(url);
 
-        url = new WebSitemapUrl.Options(BASE_URL + "/package/facebook-paketleri")
+        url = new WebSitemapUrl.Options(BASE_URL + "/package/Facebook-paketleri")
+                .lastMod(new Date())
+                .priority(1.0)
+                .changeFreq(ChangeFreq.DAILY).build();
+        sitemap.addUrl(url);
+
+        url = new WebSitemapUrl.Options(BASE_URL + "/package/YouTube-paketleri")
+                .lastMod(new Date())
+                .priority(1.0)
+                .changeFreq(ChangeFreq.DAILY).build();
+        sitemap.addUrl(url);
+
+        url = new WebSitemapUrl.Options(BASE_URL + "/package/Twitter-paketleri")
                 .lastMod(new Date())
                 .priority(1.0)
                 .changeFreq(ChangeFreq.DAILY).build();
@@ -77,18 +89,6 @@ public final class SitemapService {
         sitemap.addUrl(url);
 
         url = new WebSitemapUrl.Options(BASE_URL + "/kullanim-kosullari")
-                .lastMod(new Date())
-                .priority(1.0)
-                .changeFreq(ChangeFreq.DAILY).build();
-        sitemap.addUrl(url);
-
-        url = new WebSitemapUrl.Options(BASE_URL + "/package/youtube-paketleri")
-                .lastMod(new Date())
-                .priority(1.0)
-                .changeFreq(ChangeFreq.DAILY).build();
-        sitemap.addUrl(url);
-
-        url = new WebSitemapUrl.Options(BASE_URL + "/package/twitter-paketleri")
                 .lastMod(new Date())
                 .priority(1.0)
                 .changeFreq(ChangeFreq.DAILY).build();
