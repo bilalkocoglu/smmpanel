@@ -69,7 +69,7 @@ public class ScheduleTaskService {
         }
     }
 
-    @Scheduled(fixedDelay = 20 * 60 * 1000, initialDelay = 3 * 60 * 1000)
+    @Scheduled(fixedDelay = 30 * 60 * 1000, initialDelay = 3 * 60 * 1000)
     public void clearCache(){
         log.info("Cache Clear !");
         cacheManager.getCacheNames().stream()

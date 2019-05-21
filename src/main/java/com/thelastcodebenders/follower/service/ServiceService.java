@@ -14,6 +14,7 @@ import com.thelastcodebenders.follower.repository.PackageRepository;
 import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +177,7 @@ public class ServiceService {
     }
 
 
-
+    @Cacheable("userservicespage")
     public List<UserServicesListItem> createUserServicesItems(){
         try {
             List<UserServicesListItem> userServicesListItems = new ArrayList<>();
