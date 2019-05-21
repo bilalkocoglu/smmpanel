@@ -194,15 +194,8 @@ function isSafari() {
   $(function () {
 
     var fonts = {
-      '.font__family-oxygen': 'Oxygen:300,400,700',
-      '.font__family-montserrat': 'Montserrat:100,200,300,400,500,600,700',
-      '.font__family-open-sans': 'Open+Sans:200,300,400,600,700',
-      '.font__family-playfair': 'Playfair+Display:400,400i,700',
-      '.font__family-roboto': 'Roboto:100,300,400,700',
-      '.font__family-roboto-slab': 'Roboto+Slab:100,300,400,700',
-      '.font__family-poppins': 'Poppins:100,200,300,400,600,700',
-      '.font__family-pacifico': 'Pacifico:300,400,700',
-      '.font__family-montserrat-alt': 'Montserrat+Alternates:400,700'
+        '.font__family-montserrat': 'Montserrat:100,200,300,400,500,600,700',
+        '.font__family-open-sans': 'Open+Sans:200,300,400,600,700'
     };
 
     var fontValue = [],

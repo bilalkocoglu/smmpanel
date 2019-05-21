@@ -19,6 +19,25 @@
 
 
     <head th:fragment="head">
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140626849-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-140626849-1');
+        </script>
+
+        <meta property="og:title" content="Sosyal Trend - SMM Panel - Sosyal Medya Paneli">
+
+        <meta property="og:description" content="Sosyal Trend ile SMM Panel'de yeni trendi keşfedeceksiniz. Hemen sitemizi ziyaret edin ve kaliteyi uygun fiyata sahip olun">
+
+        <meta property="og:image" content="https://sosyaltrend.net/visitor/img/hizmetarka.jpg">
+
+        <meta property="og:site_name" content="Sosyal Trend - SMM Panel - Sosyal Medya Paneli">
+
         <title th:text="${title}"></title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1">
@@ -26,7 +45,11 @@
         <link rel="shortcut icon" th:href="@{/visitor/img/favicon.ico}">
         <link rel="apple-touch-icon-precomposed" th:href="@{/visitor/img/favicon.ico}">
         <meta name="theme-color" content="#2775FF">
+        <meta name="google-site-verification" content="l_YwG01YV-W_KZ7vrDI3Z2RVtMv0rm-jFgf0t7Nca0o" />
         <meta name="keywords" th:content="${keywords}">
+        <meta name="author" content="LAST CODE BENDERS">
+        <meta name="robots" content="index">
+        <meta name="publisher" content="JAVA8" />
         <meta name="description" th:content="${description}">
         <link rel="stylesheet" id="brk-direction-bootstrap" th:href="@{/visitor/css/assets/bootstrap.css}">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
@@ -158,7 +181,7 @@
                             <span class="after">GİRİŞ YAP</span>
                         </a>
 
-                        <a th:href="@{/package/order/status}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
+                        <a th:href="@{/order/status}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
                             <span class="before">SİPARİŞ TAKİP</span>
                             <span class="text">SİPARİŞ TAKİP</span>
                             <span class="after">SİPARİŞ TAKİP</span>
@@ -337,9 +360,12 @@
                         <div class="text-center mb-25 w-100">
                             <p class="brk-white-font-color font__family-open-sans font__size-14">&#xA9; 2019 <span class="font__weight-bold">The Last Code Benders</span> All rights reserved</p>
                         </div>
+                        <hr class="horiz-line mt-0 mb-20">
+                        <a href="//www.dmca.com/Protection/Status.aspx?ID=9d367ccf-bbce-4931-bd64-e75d10e79931" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca-badge-w150-5x1-04.png?ID=9d367ccf-bbce-4931-bd64-e75d10e79931"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
                     </div>
                 </div>
             </div>
         </div>
+
     </footer>
 </html>

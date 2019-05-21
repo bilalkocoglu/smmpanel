@@ -65,7 +65,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/terms-use",
                         "/kullanim-kosullari",
                         "/iade-ve-iptal",
-                        "/fiyat-listesi").permitAll()
+                        "/fiyat-listesi",
+                        "/sitemap.xml",
+                        "/order/**",
+                        "/robots.txt").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()

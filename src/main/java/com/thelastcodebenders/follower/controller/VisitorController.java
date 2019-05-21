@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.controller;
 import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
 import com.iyzipay.model.Status;
+import com.thelastcodebenders.follower.ceo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
@@ -12,12 +13,15 @@ import com.thelastcodebenders.follower.model.VisitorUser;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 public class VisitorController {
@@ -34,6 +38,8 @@ public class VisitorController {
     private MailService mailService;
     private ServiceService serviceService;
 
+    private final SitemapView sitemapView;
+
     public VisitorController(UserService userService,
                              PackageService packageService,
                              CategoryService categoryService,
@@ -43,7 +49,8 @@ public class VisitorController {
                              VisitorUserService visitorUserService,
                              OrderService orderService,
                              MailService mailService,
-                             ServiceService serviceService){
+                             ServiceService serviceService,
+                             SitemapView sitemapView){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
@@ -54,6 +61,7 @@ public class VisitorController {
         this.orderService = orderService;
         this.mailService = mailService;
         this.serviceService = serviceService;
+        this.sitemapView = sitemapView;
     }
 
     //Login
@@ -380,7 +388,7 @@ public class VisitorController {
     }
 
     //Order Status Page
-    @GetMapping("/package/order/status")
+    @GetMapping("/order/status")
     public String orderStatusPage(Model model){
         model.addAttribute("message", new VisitorMessageDTO());
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
@@ -391,7 +399,7 @@ public class VisitorController {
         return "visitor-order-status";
     }
 
-    @PostMapping("/package/order/status")
+    @PostMapping("/order/status")
     public String orderStatus(RedirectAttributes redirectAttributes,
                               @RequestParam("orderId") String orderId,
                               Model model){
@@ -462,6 +470,28 @@ public class VisitorController {
         model.addAttribute("description", "İnstagram takipçi, twitter takipçi gibi bir çok hizmeti sitemizden şifresiz bir şekilde satınalabilirsiniz. Sosyal medya panelinde yeni trend. SMM Panel denince akla gelen ilk adres olan Sosyal Trend'e hemen sizde kaydolun ve fırsatları kaçırmayın.");
         model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
         return "visitor-service-list";
+    }
+
+    @RequestMapping(path = "/sitemap.xml", produces = MediaType.APPLICATION_XML_VALUE)
+    public SitemapView create(){
+        return sitemapView;
+    }
+
+    @RequestMapping(value = "/robots.txt")
+    public void robots(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            response.getWriter().write("User-agent: *\n" +
+                    "Allow:\n"+
+                    "Allow:/\n"+
+                    "Disallow: /cgi-bin/\n"+
+                    "Disallow: /login-failure\n"+
+                    "Disallow: /forgot-password\n"+
+                    "Disallow: /account-activate\n"+
+                    "Disallow: /package/order\n"+
+                    "Sitemap: https://sosyaltrend.net/sitemap.xml");
+        } catch (IOException e) {
+            log.info("robots(): "+e.getMessage());
+        }
     }
 
 }
