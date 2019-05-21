@@ -12,6 +12,7 @@ import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -355,4 +356,18 @@ public class UserService {
             throw new DetectedException("Yeni şifreniz 30 karakterden daha kısa olmalıdır !");
         }
     }
+
+/*
+    @Cacheable("deneme")
+    public String ddeneme(){
+        try {
+            Thread.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "deneme";
+    }
+
+ */
+
 }

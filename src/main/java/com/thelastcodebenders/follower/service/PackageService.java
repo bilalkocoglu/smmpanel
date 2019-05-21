@@ -13,6 +13,7 @@ import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.repository.PackageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -75,6 +76,7 @@ public class PackageService {
         return packageRepository.findAll();
     }
 
+    @Cacheable("activePackages")
     public List<Package> activePackagesTop12(){
         List<Package> packages = packageRepository.findByState(true);
 
@@ -155,7 +157,7 @@ public class PackageService {
     }
 
 
-
+    @Cacheable("allcategories")
     public List<Category> visitorAllPackageCategories(){
         List<Category> categories = categoryService.allCategory();
         List<Category> notEmptyCategories = new ArrayList<>();
@@ -169,6 +171,8 @@ public class PackageService {
         return notEmptyCategories;
     }
 
+
+    @Cacheable("popularCategories")
     public List<Category> visitorPopularCategories(){
         List<Category> categories = visitorAllPackageCategories();
         List<Category> popularCategories = new ArrayList<>();

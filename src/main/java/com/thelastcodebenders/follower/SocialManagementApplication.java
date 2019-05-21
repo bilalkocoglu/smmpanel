@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -23,6 +24,7 @@ import java.util.concurrent.Executor;
 @SpringBootApplication
 @EnableAsync
 @EnableScheduling
+@EnableCaching
 public class SocialManagementApplication {
 	private static final Logger log = LoggerFactory.getLogger(SocialManagementApplication.class);
 

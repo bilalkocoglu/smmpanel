@@ -13,6 +13,7 @@ import com.thelastcodebenders.follower.model.VisitorUser;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -494,4 +495,11 @@ public class VisitorController {
         }
     }
 
+    /*
+    @GetMapping(path = "/deneme", produces = MediaType.APPLICATION_XML_VALUE)
+    public void deneme(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.getWriter().write(userService.ddeneme());
+    }
+
+     */
 }

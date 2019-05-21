@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +16,20 @@ public class ScheduleTaskService {
     private UserService userService;
     private OrderService orderService;
     private DrawService drawService;
+    private CacheManager cacheManager;
 
     public ScheduleTaskService(ApiService apiService,
                                MailService mailService,
                                UserService userService,
                                OrderService orderService,
-                               DrawService drawService){
+                               DrawService drawService,
+                               CacheManager cacheManager){
         this.apiService = apiService;
         this.mailService = mailService;
         this.userService = userService;
         this.orderService = orderService;
         this.drawService = drawService;
+        this.cacheManager = cacheManager;
     }
 
     @Scheduled(fixedDelay = 40 * 60 * 1000, initialDelay = 50 * 1000)     //45 minutes
@@ -56,5 +60,12 @@ public class ScheduleTaskService {
             log.info("Değişiklik tespit edilen servislerle ilgili admine mail gönderildi.");
             mailService.sendUpdateServiceStateMail(admin.getMail(), activeUpdateMessage);
         }
+    }
+
+    @Scheduled(fixedDelay = 20 * 60 * 1000, initialDelay = 3 * 60 * 1000)
+    public void clearCache(){
+        log.info("Cache Clear !");
+        cacheManager.getCacheNames().stream()
+                .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
     }
 }
