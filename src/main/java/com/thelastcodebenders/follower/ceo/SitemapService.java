@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Service
 public final class SitemapService {
-    private static final String BASE_URL = "https://selfprestige.net";
+    private static final String BASE_URL = "https://sosyaltrend.net";
 
     public String createSitemap() throws MalformedURLException {
         WebSitemapGenerator sitemap = new WebSitemapGenerator(BASE_URL);
