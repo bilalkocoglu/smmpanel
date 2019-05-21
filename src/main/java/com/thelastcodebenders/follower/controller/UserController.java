@@ -397,10 +397,10 @@ public class UserController {
         if(checkoutForm.getStatus().equals(Status.SUCCESS.getValue())
                 && checkoutForm.getPaymentStatus().equals("SUCCESS")){
 
-            cardPaymentService.newSuccessCardPayment(user, checkoutForm.getPaidPrice().doubleValue(), token);
-            userService.updateUserBalance(user, checkoutForm.getPaidPrice().doubleValue());
+            cardPaymentService.newSuccessCardPayment(user, checkoutForm.getPrice().doubleValue(), token);
+            userService.updateUserBalance(user, checkoutForm.getPrice().doubleValue());
             drawService.addDrawCount(user);
-            telegramService.asyncSendAdminMessage(user.getId()+ "-" +user.getName() + " " + user.getSurname() + " kullanıcısı tarafından "+checkoutForm.getPaidPrice().doubleValue() + " TL bakiye eklendi.");
+            telegramService.asyncSendAdminMessage(user.getId()+ "-" +user.getName() + " " + user.getSurname() + " kullanıcısı tarafından "+checkoutForm.getPrice().doubleValue() + " TL bakiye eklendi.");
             redirectAttributes.addFlashAttribute("successmessage", "İşlem başarılı !");
         }else {
             if(checkoutForm.getErrorMessage()!=null)
