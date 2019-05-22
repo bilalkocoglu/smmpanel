@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/sitemap.xml",
                         "/order/**",
                         //"/deneme",
+                        "/paytr/callback",
                         "/robots.txt").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")

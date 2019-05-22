@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class TokenRequest {
-    private String merchant_id;        //mağaza no
+    private int merchant_id;        //mağaza no
     private String merchant_key;
     private String merchant_salt;
 

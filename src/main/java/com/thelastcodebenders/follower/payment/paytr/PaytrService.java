@@ -22,12 +22,12 @@ public class PaytrService {
     private static final Logger log = LoggerFactory.getLogger(PaytrService.class);
 
     private static final String TOKEN_URL = "https://www.paytr.com/odeme/api/get-token";
-    private static final String MERCHANT_ID = "135435";
+    private static final int MERCHANT_ID = 135435;
     private static final String MERCHANT_KEY = "hZGwHWfRgzyN6YM4";
     private static final String MERCHANT_SALT = "A5MuRFAut6Q4u479";
 
-    private static final String USER_CALLBACK = "deneme";
-    private static final String USER_FAIL_CALLBACK = "deneme fail";
+    private static final String USER_CALLBACK = "https://sosyaltrend.net/user/load-balance";
+    private static final String USER_FAIL_CALLBACK = "https://sosyaltrend.net/user/load-balance";
     private static final String VISITOR_CALLBACK = "visitor deneme";
     private static final String VISITOR_FAIL_CALLBACK = "visitor fail deneme";
 
@@ -74,7 +74,7 @@ public class PaytrService {
             request.setCurrency("TL");
             request.setLang("tr");
 
-            String[] infs = new String[]{request.getMerchant_id(), request.getUser_ip(), request.getMerchant_oid(),
+            String[] infs = new String[]{String.valueOf(request.getMerchant_id()), request.getUser_ip(), request.getMerchant_oid(),
                     request.getEmail(), String.valueOf(request.getPayment_amount()), request.getUser_basket().toString(),
                     String.valueOf(request.getNo_installment()), String.valueOf(request.getMax_installment()),
                     request.getCurrency(), String.valueOf(request.getTest_mode()), request.getMerchant_salt()};

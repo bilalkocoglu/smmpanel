@@ -4,6 +4,7 @@ import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
 import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
 import com.thelastcodebenders.follower.seo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.exception.DetectedException;
@@ -393,6 +394,14 @@ public class VisitorController {
             return "redirect:/all-packages";
         }
     }
+
+    @PostMapping("/paytr/callback")
+    public void visitorPaytrCallback(@ModelAttribute CallbackRequest callbackRequest,
+                                       HttpServletResponse httpServletResponse) throws IOException{
+        System.out.println(callbackRequest.toString());
+        httpServletResponse.getWriter().write("OK");
+    }
+
 
     //Order Status Page
     @GetMapping("/order/status")
