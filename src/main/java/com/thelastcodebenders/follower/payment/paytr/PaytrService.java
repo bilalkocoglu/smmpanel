@@ -106,7 +106,7 @@ public class PaytrService {
             }
 
             System.out.println(Base64.encodeBase64String(bytes));
-            request.setPaytr_token("3BH3EmdQ+lGZ8DVugdEZ3EjYVpaURZarTjMams42BcQ=");
+            request.setPaytr_token("CcGActTv/z0p2aGTChfEKi56P/ytJ8qfLO4aDUFm+zY=");
 
             System.out.println("send Req");
             ResponseEntity<TokenResponse> res = restTemplate.postForEntity(TOKEN_URL, request, TokenResponse.class);
