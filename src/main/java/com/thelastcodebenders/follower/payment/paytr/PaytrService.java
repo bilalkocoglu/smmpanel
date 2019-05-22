@@ -26,7 +26,7 @@ public class PaytrService {
     private static final Logger log = LoggerFactory.getLogger(PaytrService.class);
 
     private static final String TOKEN_URL = "https://www.paytr.com/odeme/api/get-token";
-    private static final int MERCHANT_ID = 135435;
+    private static final String MERCHANT_ID = "135435";
     private static final String MERCHANT_KEY = "hZGwHWfRgzyN6YM4";
     private static final String MERCHANT_SALT = "A5MuRFAut6Q4u479";
 
@@ -58,7 +58,8 @@ public class PaytrService {
 
             request.setPayment_amount(balance*100);
             String oid = accountActivationService.generateRandomPassword(40);
-            request.setMerchant_oid(oid);
+            //System.out.println(oid);
+            request.setMerchant_oid("jjot0g1p56og59te36zpl87jpcsijb4a90zzj213");
 
             request.setUser_ip(ip);
 
@@ -80,31 +81,32 @@ public class PaytrService {
 
 
             String basketJson = new Gson().toJson(request.getUser_basket());
+            String basket = Base64.encodeBase64String(basketJson.getBytes(StandardCharsets.UTF_8));
 
-            String[] infs = new String[]{String.valueOf(request.getMerchant_id()), request.getUser_ip(), request.getMerchant_oid(),
-                    request.getEmail(), String.valueOf(request.getPayment_amount()), basketJson,
+            String[] infs = new String[]{request.getMerchant_id(), request.getUser_ip(), request.getMerchant_oid(),
+                    request.getEmail(), String.valueOf(request.getPayment_amount()), basket,
                     String.valueOf(request.getNo_installment()), String.valueOf(request.getMax_installment()),
                     request.getCurrency(), String.valueOf(request.getTest_mode()), request.getMerchant_salt()};
-            String concat = "";
+            StringBuilder concat = new StringBuilder();
 
             for (String info : infs ) {
-                concat += info;
+                concat.append(info);
             }
+            System.out.println(concat);
+
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            //sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-
-            SecretKeySpec secret_key = new SecretKeySpec(request.getMerchant_key().getBytes(), "HmacSHA256");
-            sha256_HMAC.init(secret_key);
-
-            //byte[] bytes = sha256_HMAC.doFinal(concat.getBytes(StandardCharsets.UTF_8));
+            sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
 
 
-            System.out.println(Base64.encodeBase64String(sha256_HMAC.doFinal(concat.getBytes())));
+            byte[] bytes = sha256_HMAC.doFinal(concat.toString().getBytes(StandardCharsets.UTF_8));
 
-            request.setPaytr_token(Base64.encodeBase64String(sha256_HMAC.doFinal(concat.getBytes())));
-            System.out.println(concat);
-            System.out.println(request.getMerchant_key());
+            for (byte b: bytes) {
+                System.out.println(b);
+            }
+
+            System.out.println(Base64.encodeBase64String(bytes));
+            request.setPaytr_token("3BH3EmdQ+lGZ8DVugdEZ3EjYVpaURZarTjMams42BcQ=");
 
             System.out.println("send Req");
             ResponseEntity<TokenResponse> res = restTemplate.postForEntity(TOKEN_URL, request, TokenResponse.class);

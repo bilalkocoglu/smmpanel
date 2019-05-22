@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TokenRequest {
-    private int merchant_id;        //mağaza no
+    private String merchant_id;        //mağaza no
     private String merchant_key;
     private String merchant_salt;
 
