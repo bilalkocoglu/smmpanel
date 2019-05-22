@@ -14,8 +14,11 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Formatter;
 
 @Service
 public class PaytrService {
@@ -52,7 +55,7 @@ public class PaytrService {
             request.setUser_address("Istanbul");
             request.setUser_phone("05347756260");
 
-            request.setPayment_amount(balance);
+            request.setPayment_amount(balance*100);
             String oid = accountActivationService.generateRandomPassword(40);
             request.setMerchant_oid(oid);
 
@@ -81,14 +84,17 @@ public class PaytrService {
             String concat = "";
 
             for (String info : infs ) {
-                concat = concat.concat(info);
+                concat += info;
             }
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            sha256_HMAC.init(new SecretKeySpec(StandardCharsets.UTF_8.encode(request.getMerchant_key()).toString().getBytes(), "HmacSHA256"));
-            byte[] bytes = sha256_HMAC.doFinal(StandardCharsets.UTF_8.encode(concat).toString().getBytes());
+            sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
 
-            request.setPaytr_token(Base64.getEncoder().encodeToString(bytes));
+            byte[] bytes = sha256_HMAC.doFinal(concat.getBytes(StandardCharsets.UTF_8));
+
+
+
+            request.setPaytr_token(new String(bytes));
 
             System.out.println("send Req");
             ResponseEntity<TokenResponse> res = restTemplate.postForEntity(TOKEN_URL, request, TokenResponse.class);
@@ -99,9 +105,8 @@ public class PaytrService {
             return res.getBody();
         }catch (Exception e){
             log.error("PayTR Service CreateUserToken Error => " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
-
     }
-
 }
