@@ -12,6 +12,7 @@ import com.thelastcodebenders.follower.payment.iyzipay.IyzicoService;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.payment.paytr.PaytrService;
+import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -364,8 +365,15 @@ public class UserController {
                 throw new DetectedException("Minimum 10 TL yükleme yapabilirsiniz !");
             }
 
-            paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
+            TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
 
+            if (tokenResponse.getStatus().equals("success")){
+                System.out.println("token = " + tokenResponse.getToken());
+                model.addAttribute("paytrtoken", tokenResponse.getToken());
+                return "user-load-balance-iyzico";
+            }else {
+                throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
+            }
             /*
             CheckoutFormInitialize checkoutFormInitialize = iyzicoService.createBalancePayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
             System.out.println(checkoutFormInitialize.toString());
@@ -380,7 +388,7 @@ public class UserController {
             return "user-load-balance-iyzico";
              */
 
-            return "redirect:/user/load-balance";
+            //return "redirect:/user/load-balance";
         }catch (Exception e){
             if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());

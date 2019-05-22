@@ -8,8 +8,13 @@ import com.thelastcodebenders.follower.service.AccountActivationService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
@@ -48,41 +53,40 @@ public class PaytrService {
         try {
             TokenRequest request = new TokenRequest();
             request.setMerchant_id(MERCHANT_ID);
-            request.setMerchant_key(MERCHANT_KEY);
             request.setMerchant_salt(MERCHANT_SALT);
 
             request.setEmail(user.getMail());
             request.setUser_name(user.getName() + " " + user.getSurname());
-            request.setUser_address("Istanbul");
+            request.setUser_address("İstanbul");
             request.setUser_phone("05347756260");
 
             request.setPayment_amount(balance*100);
             String oid = accountActivationService.generateRandomPassword(40);
-            //System.out.println(oid);
-            request.setMerchant_oid("jjot0g1p56og59te36zpl87jpcsijb4a90zzj213");
+            request.setMerchant_oid(oid);
 
-            //request.setUser_ip(ip);
-            request.setUser_ip("141.101.104.31");
+            request.setUser_ip(ip);
 
             Object[][] objects = {
                     new Object[]{"Bakiye", String.valueOf(balance), 1}
             };
-            request.setUser_basket(objects);
+
+            String basketJson = new Gson().toJson(objects);
+            String basket = Base64.encodeBase64String(basketJson.getBytes(StandardCharsets.UTF_8));
+            request.setUser_basket(basket);
 
             request.setMerchant_ok_url(USER_CALLBACK);
             request.setMerchant_fail_url(USER_FAIL_CALLBACK);
 
-            request.setTimeout_limit(30);
-            request.setDebug_on(1);
-            request.setTest_mode(1);
-            request.setNo_installment(0);
-            request.setMax_installment(0);
+            request.setTimeout_limit("30");
+            request.setDebug_on("1");
+            request.setTest_mode("1");
+            request.setNo_installment("0");
+            request.setMax_installment("0");
             request.setCurrency("TL");
             request.setLang("tr");
 
 
-            String basketJson = new Gson().toJson(request.getUser_basket());
-            String basket = Base64.encodeBase64String(basketJson.getBytes(StandardCharsets.UTF_8));
+
 
             String[] infs = new String[]{request.getMerchant_id(), request.getUser_ip(), request.getMerchant_oid(),
                     request.getEmail(), String.valueOf(request.getPayment_amount()), basket,
@@ -93,29 +97,47 @@ public class PaytrService {
             for (String info : infs ) {
                 concat.append(info);
             }
-            System.out.println(concat);
-
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            SecretKeySpec secret_key = new SecretKeySpec(MERCHANT_KEY.getBytes(), "HmacSHA256");
+            sha256_HMAC.init(secret_key);
+
+            String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(concat.toString().getBytes()));
+            request.setPaytr_token(hash);
 
 
-            byte[] bytes = sha256_HMAC.doFinal(concat.toString().getBytes(StandardCharsets.UTF_8));
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-            for (byte b: bytes) {
-                System.out.println(b);
-            }
+            // if you need to pass form parameters in request with headers.
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("merchant_id", request.getMerchant_id());
+            map.add("user_ip", request.getUser_ip());
+            map.add("merchant_oid", request.getMerchant_oid());
+            map.add("email",request.getEmail());
+            map.add("payment_amount", String.valueOf(request.getPayment_amount()));
+            map.add("user_basket", basket);
+            map.add("paytr_token", request.getPaytr_token());
+            map.add("debug_on",request.getDebug_on());
+            map.add("test_mode", request.getTest_mode());
+            map.add("no_installment", request.getNo_installment());
+            map.add("max_installment", request.getMax_installment());
+            map.add("user_name",request.getUser_name());
+            map.add("user_address", request.getUser_address());
+            map.add("user_phone", request.getUser_phone());
+            map.add("merchant_ok_url",request.getMerchant_ok_url());
+            map.add("merchant_fail_url",request.getMerchant_fail_url());
+            map.add("timeout_limit",request.getTimeout_limit());
+            map.add("currency",request.getCurrency());
+            map.add("lang", request.getLang());
 
-            System.out.println(Base64.encodeBase64String(bytes));
-            request.setPaytr_token("CcGActTv/z0p2aGTChfEKi56P/ytJ8qfLO4aDUFm+zY=");
+            HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(map, headers);
+            ResponseEntity<String> res = restTemplate.postForEntity(TOKEN_URL, req, String.class);
 
-            System.out.println("send Req");
-            ResponseEntity<TokenResponse> res = restTemplate.postForEntity(TOKEN_URL, request, TokenResponse.class);
+            TokenResponse tokenResponse = new Gson().fromJson(res.getBody(), TokenResponse.class);
 
-            System.out.println(res);
-            System.out.println(res.getBody());
 
-            return res.getBody();
+            return tokenResponse;
         }catch (Exception e){
             log.error("PayTR Service CreateUserToken Error => " + e.getMessage());
             e.printStackTrace();
