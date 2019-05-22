@@ -7,7 +7,7 @@ import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.seo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.exception.DetectedException;
-import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
+import com.thelastcodebenders.follower.payment.iyzipay.IyzicoService;
 import com.thelastcodebenders.follower.model.Category;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.VisitorUser;
@@ -33,7 +33,7 @@ public class VisitorController {
     private CategoryService categoryService;
     private VisitorMessageService visitorMessageService;
     private CategoryArticleService categoryArticleService;
-    private PaymentService paymentService;
+    private IyzicoService iyzicoService;
     private VisitorUserService visitorUserService;
     private OrderService orderService;
     private MailService mailService;
@@ -46,7 +46,7 @@ public class VisitorController {
                              CategoryService categoryService,
                              VisitorMessageService visitorMessageService,
                              CategoryArticleService categoryArticleService,
-                             PaymentService paymentService,
+                             IyzicoService iyzicoService,
                              VisitorUserService visitorUserService,
                              OrderService orderService,
                              MailService mailService,
@@ -58,7 +58,7 @@ public class VisitorController {
         this.categoryService = categoryService;
         this.visitorMessageService = visitorMessageService;
         this.categoryArticleService = categoryArticleService;
-        this.paymentService = paymentService;
+        this.iyzicoService = iyzicoService;
         this.visitorUserService = visitorUserService;
         this.orderService = orderService;
         this.mailService = mailService;
@@ -301,7 +301,7 @@ public class VisitorController {
             VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);
 
             //create iyzipay payment page
-            CheckoutFormInitialize checkoutFormInitialize = paymentService.createPackagePayment(visitorUser, pkg, request.getRemoteAddr());
+            CheckoutFormInitialize checkoutFormInitialize = iyzicoService.createPackagePayment(visitorUser, pkg, request.getRemoteAddr());
             System.out.println(checkoutFormInitialize.toString());
 
             if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
@@ -339,7 +339,7 @@ public class VisitorController {
     public String visitorIyzicoCallback(@RequestParam("token") String token,
                                  RedirectAttributes redirectAttributes) {
         try {
-            CheckoutForm checkoutForm = paymentService.infoPayment(token, "");
+            CheckoutForm checkoutForm = iyzicoService.infoPayment(token, "");
             System.out.println(checkoutForm.toString());
 
             if(checkoutForm.getStatus().equals(Status.SUCCESS.getValue())

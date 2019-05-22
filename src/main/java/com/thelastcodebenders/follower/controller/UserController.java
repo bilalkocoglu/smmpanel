@@ -8,9 +8,10 @@ import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.exception.DetectedException;
-import com.thelastcodebenders.follower.payment.iyzipay.PaymentService;
+import com.thelastcodebenders.follower.payment.iyzipay.IyzicoService;
 import com.thelastcodebenders.follower.model.DrawPrize;
 import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,10 @@ public class UserController {
     private DrawService drawService;
     private DrawPrizeService drawPrizeService;
     private ApiService apiService;
-    private PaymentService paymentService;
+    private IyzicoService iyzicoService;
     private CardPaymentService cardPaymentService;
     private TelegramService telegramService;
+    private PaytrService paytrService;
 
     public UserController(ServiceService serviceService,
                           AskedQuestionService askedQuestionService,
@@ -55,9 +57,10 @@ public class UserController {
                           DrawService drawService,
                           DrawPrizeService drawPrizeService,
                           ApiService apiService,
-                          PaymentService paymentService,
+                          IyzicoService iyzicoService,
                           CardPaymentService cardPaymentService,
-                          TelegramService telegramService){
+                          TelegramService telegramService,
+                          PaytrService paytrService){
         this.serviceService = serviceService;
         this.askedQuestionService = askedQuestionService;
         this.userService = userService;
@@ -70,9 +73,10 @@ public class UserController {
         this.drawService = drawService;
         this.drawPrizeService = drawPrizeService;
         this.apiService = apiService;
-        this.paymentService = paymentService;
+        this.iyzicoService = iyzicoService;
         this.cardPaymentService = cardPaymentService;
         this.telegramService = telegramService;
+        this.paytrService = paytrService;
     }
 
     //USER INDEX
@@ -360,7 +364,10 @@ public class UserController {
                 throw new DetectedException("Minimum 10 TL yükleme yapabilirsiniz !");
             }
 
-            CheckoutFormInitialize checkoutFormInitialize = paymentService.createBalancePayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
+            paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
+
+            /*
+            CheckoutFormInitialize checkoutFormInitialize = iyzicoService.createBalancePayment(user, Integer.valueOf(balance), httpServletRequest.getRemoteAddr());
             System.out.println(checkoutFormInitialize.toString());
             if (!checkoutFormInitialize.getStatus().equals(Status.SUCCESS.getValue())){
                 log.error("Checkout Form Initialize Error -> " + checkoutFormInitialize.getErrorMessage());
@@ -371,11 +378,14 @@ public class UserController {
 
             model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
             return "user-load-balance-iyzico";
+             */
 
+            return "redirect:/user/load-balance";
         }catch (Exception e){
             if (e instanceof DetectedException)
                 redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
             else {
+                log.error(e.getMessage());
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
             }
 
@@ -390,7 +400,7 @@ public class UserController {
                                  RedirectAttributes redirectAttributes) throws LoginException {
         User user = userService.getAuthUser();
 
-        CheckoutForm checkoutForm = paymentService.infoPayment(token, "");
+        CheckoutForm checkoutForm = iyzicoService.infoPayment(token, "");
         System.out.println(checkoutForm.toString());
 
 

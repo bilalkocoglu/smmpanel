@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PaymentService {
-    private static final Logger log = LoggerFactory.getLogger(PaymentService.class);
+public class IyzicoService {
+    private static final Logger log = LoggerFactory.getLogger(IyzicoService.class);
     private static final String BALANCE_CALLBACK_URL = "https://sosyaltrend.net/user/iyzico/callback";
     private static final String PACKAGE_CALLBACK_URL = "https://sosyaltrend.net/package/order/iyzico/callback";
 
@@ -27,7 +27,7 @@ public class PaymentService {
 
     Options options = new Options();
 
-    public PaymentService(){
+    public IyzicoService(){
         options.setApiKey("sandbox-VAErQ0WL9YQw1iZoIcosEd83huLyHsSx");
         options.setSecretKey("sandbox-tHYHe4jbjH4pWrJ1wVleaF8dqv07a5wk");
         options.setBaseUrl("https://sandbox-api.iyzipay.com");
