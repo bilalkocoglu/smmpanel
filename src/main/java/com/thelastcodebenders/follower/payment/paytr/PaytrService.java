@@ -61,7 +61,8 @@ public class PaytrService {
             //System.out.println(oid);
             request.setMerchant_oid("jjot0g1p56og59te36zpl87jpcsijb4a90zzj213");
 
-            request.setUser_ip(ip);
+            //request.setUser_ip(ip);
+            request.setUser_ip("141.101.104.31");
 
             Object[][] objects = {
                     new Object[]{"Bakiye", String.valueOf(balance), 1}
