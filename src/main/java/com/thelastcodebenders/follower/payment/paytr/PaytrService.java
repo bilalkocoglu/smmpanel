@@ -1,9 +1,11 @@
 package com.thelastcodebenders.follower.payment.paytr;
 
+import com.google.gson.Gson;
 import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenRequest;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
 import com.thelastcodebenders.follower.service.AccountActivationService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,6 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Formatter;
 
 @Service
@@ -77,8 +78,11 @@ public class PaytrService {
             request.setCurrency("TL");
             request.setLang("tr");
 
+
+            String basketJson = new Gson().toJson(request.getUser_basket());
+
             String[] infs = new String[]{String.valueOf(request.getMerchant_id()), request.getUser_ip(), request.getMerchant_oid(),
-                    request.getEmail(), String.valueOf(request.getPayment_amount()), request.getUser_basket().toString(),
+                    request.getEmail(), String.valueOf(request.getPayment_amount()), basketJson,
                     String.valueOf(request.getNo_installment()), String.valueOf(request.getMax_installment()),
                     request.getCurrency(), String.valueOf(request.getTest_mode()), request.getMerchant_salt()};
             String concat = "";
@@ -88,13 +92,19 @@ public class PaytrService {
             }
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
-            sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            //sha256_HMAC.init(new SecretKeySpec(request.getMerchant_key().getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
 
-            byte[] bytes = sha256_HMAC.doFinal(concat.getBytes(StandardCharsets.UTF_8));
+            SecretKeySpec secret_key = new SecretKeySpec(request.getMerchant_key().getBytes(), "HmacSHA256");
+            sha256_HMAC.init(secret_key);
+
+            //byte[] bytes = sha256_HMAC.doFinal(concat.getBytes(StandardCharsets.UTF_8));
 
 
+            System.out.println(Base64.encodeBase64String(sha256_HMAC.doFinal(concat.getBytes())));
 
-            request.setPaytr_token(new String(bytes));
+            request.setPaytr_token(Base64.encodeBase64String(sha256_HMAC.doFinal(concat.getBytes())));
+            System.out.println(concat);
+            System.out.println(request.getMerchant_key());
 
             System.out.println("send Req");
             ResponseEntity<TokenResponse> res = restTemplate.postForEntity(TOKEN_URL, request, TokenResponse.class);
