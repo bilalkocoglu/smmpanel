@@ -102,7 +102,11 @@ public class PaymentNotificationService {
                     return false;
                 }
                 paymentNotification.setConfirmation(true);
-                boolean res = userService.updateUserBalance(paymentNotification.getUser(), paymentNotification.getAmount());
+
+                //kampanya
+                double plusAmount = paymentNotification.getAmount() * 0.02;
+
+                boolean res = userService.updateUserBalance(paymentNotification.getUser(), plusAmount);
                 if (!res)
                     return false;
                 drawService.addDrawCount(paymentNotification.getUser());
