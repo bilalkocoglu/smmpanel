@@ -17,8 +17,9 @@ import java.time.LocalDateTime;
 @Table(name = "card_payment")
 public class CardPayment {
     @Id
-    @Column(name = "card_payment_id", length = 41)
-    private String id;  //-token
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "card_payment_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "fk_cardpayment_user")
@@ -28,7 +29,7 @@ public class CardPayment {
 
     private String date;
 
-    //private String token;
+    private String token;
 
     private boolean finished;
 }

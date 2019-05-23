@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CardPaymentRepository extends JpaRepository<CardPayment, String> {
+public interface CardPaymentRepository extends JpaRepository<CardPayment, Long> {
     List<CardPayment> findByFinished(boolean finished);
 
-    List<CardPayment> findByIdAndFinished(String id, boolean finished);
+    List<CardPayment> findByTokenAndFinished(String token, boolean finished);
 }

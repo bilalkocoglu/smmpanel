@@ -6,7 +6,6 @@ import com.thelastcodebenders.follower.model.User;
 import com.thelastcodebenders.follower.repository.CardPaymentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -37,7 +36,7 @@ public class CardPaymentService {
     public boolean createCardPayment(User user, String token, int balance){
         try {
             CardPayment cardPayment = new CardPayment();
-            cardPayment.setId(token);
+            cardPayment.setToken(token);
             cardPayment.setUser(user);
             cardPayment.setAmount(balance);
             cardPayment.setFinished(false);
@@ -53,7 +52,7 @@ public class CardPaymentService {
     }
 
     public CardPayment findActiveByToken(String merchant_oid){
-        List<CardPayment> cardPayments = cardPaymentRepository.findByIdAndFinished(merchant_oid, false);
+        List<CardPayment> cardPayments = cardPaymentRepository.findByTokenAndFinished(merchant_oid, false);
 
         if (cardPayments.isEmpty()){
             throw new DetectedException("Böyle bir CardPayment Bulunamadı !");
