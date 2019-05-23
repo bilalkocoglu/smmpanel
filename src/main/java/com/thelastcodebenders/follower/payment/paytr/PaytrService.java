@@ -180,7 +180,7 @@ public class PaytrService {
                 int amount = Integer.parseInt(callbackRequest.getPayment_amount()) / 100;
                 userService.updateUserBalance(cardPayment.getUser(), (double) amount);
                 drawService.addDrawCount(cardPayment.getUser());
-                telegramService.asyncSendAdminMessage(cardPayment.getUser().getId()+ "-" +cardPayment.getUser().getName() + " " + cardPayment.getUser().getSurname() + " kullanıcısı tarafından "+ callbackRequest.getPayment_amount() + " TL bakiye eklendi.");
+                telegramService.asyncSendAdminMessage(cardPayment.getUser().getId()+ "-" +cardPayment.getUser().getName() + " " + cardPayment.getUser().getSurname() + " kullanıcısı tarafından "+ amount + " TL bakiye eklendi.");
             }
             if (visitorUser != null){
 
