@@ -40,8 +40,8 @@ public class PaytrService {
 
     private static final String USER_CALLBACK = "https://sosyaltrend.net/user/load-balance";
     private static final String USER_FAIL_CALLBACK = "https://sosyaltrend.net/user/load-balance";
-    private static final String VISITOR_CALLBACK = "visitor deneme";
-    private static final String VISITOR_FAIL_CALLBACK = "visitor fail deneme";
+    private static final String VISITOR_CALLBACK = "https://sosyaltrend.net/all-packages";
+    private static final String VISITOR_FAIL_CALLBACK = "https://sosyaltrend.net/all-packages";
 
     private RestTemplate restTemplate;
     private AccountActivationService accountActivationService;
