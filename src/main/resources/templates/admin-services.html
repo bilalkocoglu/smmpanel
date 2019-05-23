@@ -44,11 +44,7 @@
                                             <tr th:each="service : ${services}">
                                                 <td th:text="${service.getId()}"></td>
                                                 <td>
-                                                    <p th:if="${service.getCustomName() == null}"
-                                                          style="color:white; padding: 3px; border-radius: 2px; margin: 0px;"
-                                                          class="gradient-green-tea">
-                                                        Undefined
-                                                    </p>
+                                                    <p th:if="${service.getCustomName() == null}" th:text="${service.getApiName()}" style="margin: 0px;"></p>
                                                     <p th:if="${service.getCustomName() != null}" th:text="${service.getCustomName()}" style="margin: 0px;"></p>
                                                 </td>
                                                 <td>
