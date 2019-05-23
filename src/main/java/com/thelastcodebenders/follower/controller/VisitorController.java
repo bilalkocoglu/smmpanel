@@ -451,7 +451,7 @@ public class VisitorController {
             return "visitor-order-status";
         }catch (Exception e) {
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
-            return "redirect:/package/order/status";
+            return "redirect:/order/status";
         }
     }
 
