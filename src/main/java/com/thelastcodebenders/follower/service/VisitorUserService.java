@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import ch.qos.logback.core.encoder.EchoEncoder;
 import com.thelastcodebenders.follower.dto.PackageOrderPaymentFormDTO;
 import com.thelastcodebenders.follower.exception.DetectedException;
+import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.VisitorUser;
 import com.thelastcodebenders.follower.repository.VisitorUserRepository;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class VisitorUserService {
         this.orderService = orderService;
     }
 
-    public VisitorUser save(PackageOrderPaymentFormDTO packageOrderPaymentForm, long packageId){
+    public VisitorUser save(PackageOrderPaymentFormDTO packageOrderPaymentForm, Package pkg){
         try {
             packageOrderFormValidate(packageOrderPaymentForm);
 
@@ -36,7 +37,7 @@ public class VisitorUserService {
                     .number(packageOrderPaymentForm.getNumber())
                     .surname(packageOrderPaymentForm.getSurname())
                     .url(packageOrderPaymentForm.getUrl())
-                    .packageId(packageId)
+                    .pkg(pkg)
                     .finished(false)
                     .build();
 

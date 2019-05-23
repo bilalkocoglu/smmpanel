@@ -294,7 +294,7 @@ public class VisitorController {
 
             //validation
             //create visit user
-            VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);  //visitor user status ekle
+            VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, pkg);  //visitor user status ekle
 
             /*
             //create iyzipay payment page
