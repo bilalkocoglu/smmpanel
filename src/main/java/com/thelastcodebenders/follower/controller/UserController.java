@@ -368,7 +368,12 @@ public class UserController {
             TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
 
             if (tokenResponse.getStatus().equals("success")){
-                System.out.println("token = " + tokenResponse.getToken());
+                //System.out.println("token = " + tokenResponse.getToken());
+                //card payment (token ile birlikte tutulacak)
+                boolean res = cardPaymentService.createCardPayment(user, tokenResponse.getToken(), balanceInt);
+                if (!res){
+                    throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
+                }
                 model.addAttribute("paytrtoken", tokenResponse.getToken());
                 return "user-load-balance-iyzico";
             }else {
@@ -403,6 +408,7 @@ public class UserController {
 
     }
 
+    /*
     @PostMapping("/iyzico/callback")    //SEND TELEGRAM MESSAGE
     public String iyzicoCallback(@RequestParam("token") String token,
                                  RedirectAttributes redirectAttributes) throws LoginException {
@@ -430,6 +436,7 @@ public class UserController {
         return "redirect:/user/load-balance";
     }
 
+     */
 
     //USER PROFİLE
     @GetMapping("/profile")

@@ -1,10 +1,14 @@
 package com.thelastcodebenders.follower.payment.paytr;
 
 import com.google.gson.Gson;
+import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.model.CardPayment;
 import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.model.VisitorUser;
+import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenRequest;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
-import com.thelastcodebenders.follower.service.AccountActivationService;
+import com.thelastcodebenders.follower.service.*;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +25,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 
 @Service
 public class PaytrService {
@@ -43,15 +44,32 @@ public class PaytrService {
     private RestTemplate restTemplate;
     private AccountActivationService accountActivationService;
 
+    private CardPaymentService cardPaymentService;
+    private VisitorUserService visitorUserService;
+    private UserService userService;
+    private DrawService drawService;
+    private TelegramService telegramService;
+
     public PaytrService(RestTemplate restTemplate,
-                        AccountActivationService accountActivationService){
+                        AccountActivationService accountActivationService,
+                        CardPaymentService cardPaymentService,
+                        VisitorUserService visitorUserService,
+                        UserService userService,
+                        DrawService drawService,
+                        TelegramService telegramService){
         this.restTemplate = restTemplate;
         this.accountActivationService = accountActivationService;
+
+        this.cardPaymentService = cardPaymentService;
+        this.visitorUserService = visitorUserService;
+        this.userService = userService;
+        this.drawService = drawService;
+        this.telegramService = telegramService;
     }
 
     public TokenResponse userCreateToken(User user, String ip, int balance) throws NoSuchAlgorithmException, InvalidKeyException {
         try {
-            System.out.println(ip);
+            //System.out.println(ip);
             TokenRequest request = new TokenRequest();
             request.setMerchant_id(MERCHANT_ID);
             request.setMerchant_salt(MERCHANT_SALT);
@@ -63,7 +81,7 @@ public class PaytrService {
 
             request.setPayment_amount(balance*100);
             String oid = accountActivationService.generateRandomPassword(40);
-            request.setMerchant_oid(oid);
+            request.setMerchant_oid('1'+oid);       //1 balance 2 visitor user
 
             request.setUser_ip("188.119.44.74");
 
@@ -109,7 +127,7 @@ public class PaytrService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            System.out.println(request.toString());
+            //System.out.println(request.toString());
             // if you need to pass form parameters in request with headers.
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("merchant_id", request.getMerchant_id());
@@ -143,6 +161,31 @@ public class PaytrService {
             log.error("PayTR Service CreateUserToken Error => " + e.getMessage());
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void callbackAction(CallbackRequest callbackRequest){
+        CardPayment cardPayment = null;
+        VisitorUser visitorUser = null;
+        if (callbackRequest.getMerchant_oid().charAt(0) == '1'){
+            cardPayment = cardPaymentService.findActiveByToken(callbackRequest.getMerchant_oid());
+        }else if (callbackRequest.getMerchant_oid().charAt(0) == '2'){
+
+        }
+
+        if (callbackRequest.getStatus().equals("success")){
+            if (cardPayment != null){
+                cardPayment.setFinished(true);
+                cardPaymentService.update(cardPayment);
+                userService.updateUserBalance(cardPayment.getUser(), Double.valueOf(callbackRequest.getPayment_amount()));
+                drawService.addDrawCount(cardPayment.getUser());
+                telegramService.asyncSendAdminMessage(cardPayment.getUser().getId()+ "-" +cardPayment.getUser().getName() + " " + cardPayment.getUser().getSurname() + " kullanıcısı tarafından "+ callbackRequest.getPayment_amount() + " TL bakiye eklendi.");
+            }
+            if (visitorUser != null){
+
+            }
+        }else {
+
         }
     }
 }

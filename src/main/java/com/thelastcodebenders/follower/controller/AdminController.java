@@ -166,7 +166,7 @@ public class AdminController {
     @GetMapping("/cardpayments")        //CARD PAYMENT PAGE
     public String cardPayments(Model model){
         model.addAttribute("payment_table_columns", cardPaymentService.tableColumns());
-        model.addAttribute("payments", cardPaymentService.allCardPayment());
+        model.addAttribute("payments", cardPaymentService.findFinishedCardPayment());
         model.addAttribute("page", "cardpayments");
         return "admin-card-payments";
     }

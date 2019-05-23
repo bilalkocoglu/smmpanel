@@ -4,6 +4,8 @@ import com.iyzipay.model.CheckoutForm;
 import com.iyzipay.model.CheckoutFormInitialize;
 import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.model.CardPayment;
+import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
 import com.thelastcodebenders.follower.seo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
@@ -37,10 +39,9 @@ public class VisitorController {
     private IyzicoService iyzicoService;
     private VisitorUserService visitorUserService;
     private OrderService orderService;
-    private MailService mailService;
     private ServiceService serviceService;
     private final SitemapView sitemapView;
-    private TelegramService telegramService;
+    private PaytrService paytrService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
@@ -50,10 +51,9 @@ public class VisitorController {
                              IyzicoService iyzicoService,
                              VisitorUserService visitorUserService,
                              OrderService orderService,
-                             MailService mailService,
                              ServiceService serviceService,
                              SitemapView sitemapView,
-                             TelegramService telegramService){
+                             PaytrService paytrService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
@@ -62,10 +62,9 @@ public class VisitorController {
         this.iyzicoService = iyzicoService;
         this.visitorUserService = visitorUserService;
         this.orderService = orderService;
-        this.mailService = mailService;
         this.serviceService = serviceService;
         this.sitemapView = sitemapView;
-        this.telegramService = telegramService;
+        this.paytrService = paytrService;
     }
 
     //Login
@@ -299,7 +298,7 @@ public class VisitorController {
 
             //validation
             //create visit user
-            VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);
+            VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);  //visitor user status ekle
 
             //create iyzipay payment page
             CheckoutFormInitialize checkoutFormInitialize = iyzicoService.createPackagePayment(visitorUser, pkg, request.getRemoteAddr());
@@ -335,7 +334,7 @@ public class VisitorController {
             return "redirect:/package/order/" + packageId;
         }
     }
-
+/*
     @PostMapping("/package/order/iyzico/callback")
     public String visitorIyzicoCallback(@RequestParam("token") String token,
                                  RedirectAttributes redirectAttributes) {
@@ -395,11 +394,19 @@ public class VisitorController {
         }
     }
 
+ */
+
     @PostMapping("/paytr/callback")
     public void visitorPaytrCallback(@ModelAttribute CallbackRequest callbackRequest,
                                        HttpServletResponse httpServletResponse) throws IOException{
-        System.out.println("BURAYA İSTEK GELDİ");
+        System.out.println("PayTR Callback !");
         System.out.println(callbackRequest.toString());
+        try {
+            paytrService.callbackAction(callbackRequest);
+        }catch (Exception e){
+            log.error("PayTR Callback Error -> " + e.getMessage());
+        }
+
         httpServletResponse.getWriter().write("OK");
     }
 

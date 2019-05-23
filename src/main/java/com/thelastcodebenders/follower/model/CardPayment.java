@@ -17,17 +17,18 @@ import java.time.LocalDateTime;
 @Table(name = "card_payment")
 public class CardPayment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_payment_id")
-    private Long id;
+    private String id;  //-token
 
     @ManyToOne
     @JoinColumn(name = "fk_cardpayment_user")
     private User user;
 
-    private double amount;
+    private int amount;
 
     private String date;
 
-    private String iyzipayToken;
+    //private String token;
+
+    private boolean finished;
 }
