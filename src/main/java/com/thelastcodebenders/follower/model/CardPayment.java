@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Table(name = "card_payment")
 public class CardPayment {
     @Id
-    @Column(name = "card_payment_id")
+    @Column(name = "card_payment_id", length = 41)
     private String id;  //-token
 
     @ManyToOne
