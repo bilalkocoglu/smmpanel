@@ -65,7 +65,7 @@ public class PaytrService {
             String oid = accountActivationService.generateRandomPassword(40);
             request.setMerchant_oid(oid);
 
-            request.setUser_ip(ip);
+            request.setUser_ip("188.119.44.74");
 
             Object[][] objects = {
                     new Object[]{"Bakiye", String.valueOf(balance), 1}
@@ -109,7 +109,7 @@ public class PaytrService {
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
+            System.out.println(request.toString());
             // if you need to pass form parameters in request with headers.
             MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
             map.add("merchant_id", request.getMerchant_id());
