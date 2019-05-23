@@ -13,4 +13,5 @@ public class TokenResponse {
     private String status;
     private String token;
     private String reason;
+    private String merchant_oid;
 }

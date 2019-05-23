@@ -370,7 +370,7 @@ public class UserController {
             if (tokenResponse.getStatus().equals("success")){
                 //System.out.println("token = " + tokenResponse.getToken());
                 //card payment (token ile birlikte tutulacak)
-                boolean res = cardPaymentService.createCardPayment(user, tokenResponse.getToken(), balanceInt);
+                boolean res = cardPaymentService.createCardPayment(user, tokenResponse.getMerchant_oid(), balanceInt);
                 if (!res){
                     throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
                 }

@@ -155,7 +155,7 @@ public class PaytrService {
 
             TokenResponse tokenResponse = new Gson().fromJson(res.getBody(), TokenResponse.class);
 
-
+            tokenResponse.setMerchant_oid(request.getMerchant_oid());
             return tokenResponse;
         }catch (Exception e){
             log.error("PayTR Service CreateUserToken Error => " + e.getMessage());
