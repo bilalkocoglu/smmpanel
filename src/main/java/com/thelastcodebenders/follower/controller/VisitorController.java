@@ -1,10 +1,5 @@
 package com.thelastcodebenders.follower.controller;
 
-import com.iyzipay.model.CheckoutForm;
-import com.iyzipay.model.CheckoutFormInitialize;
-import com.iyzipay.model.Status;
-import com.thelastcodebenders.follower.client.telegram.TelegramService;
-import com.thelastcodebenders.follower.model.CardPayment;
 import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
@@ -313,7 +308,7 @@ public class VisitorController {
                         "Şu anda ödeme alma işlemini başlatamadık. Lütfen tekrar deneyiniz veya diğer ödeme yöntemlerini kullanınız. Sorun ile ilgili destek talebi açarsanız arkadaşlarımız kısa süre içinde yardımcı olacaktır.");
                 return "redirect:/package/order/" + packageId;
             }
-            visitorUserService.updateToken(visitorUser.getId(), checkoutFormInitialize.getToken());
+            visitorUserService.update(visitorUser.getId(), checkoutFormInitialize.getToken());
              */
             TokenResponse tokenResponse = paytrService.visitorCreateToken(visitorUser, request.getRemoteAddr(), pkg);
 
@@ -321,7 +316,7 @@ public class VisitorController {
                 //System.out.println("token = " + tokenResponse.getToken());
                 //card payment (token ile birlikte tutulacak)
                 visitorUser.setToken(tokenResponse.getMerchant_oid());
-                boolean res = visitorUserService.updateToken(visitorUser);
+                boolean res = visitorUserService.update(visitorUser);
                 if (!res){
                     throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
                 }
@@ -363,7 +358,7 @@ public class VisitorController {
                     && checkoutForm.getPaymentStatus().equals("SUCCESS")){
 
                 //package ve url al
-                VisitorUser visitorUser = visitorUserService.findByToken(token);
+                VisitorUser visitorUser = visitorUserService.findActiveByToken(token);
 
                 if (visitorUser == null){
                     telegramService.asyncSendAdminMessage("Ziyaretçi bir kullanıcıdan ödeme alındı fakat token eşleşmemesi sebebiyle sipariş verilemedi.");

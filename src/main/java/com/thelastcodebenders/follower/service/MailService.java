@@ -65,14 +65,22 @@ public class MailService {
     }
 
     @Async
-    public void asyncSendVisitorOrderMail(String mail, String orderId, String name, String surname){
+    public void asyncSendVisitorOrderMail(String mail, String orderId, String name, String surname, boolean status){
         try {
             Map model = new HashMap();
             Template template = freeMarkerConfig.getTemplate("mail-create-ticket.ftl");
-            String subject = "Siparişiniz Alındı !";
+            String subject;
+            if (status){
+                subject = "Siparişiniz Alındı !";
+                model.put("button_message", "Merhaba " + name + " " + surname + ", aramıza hoşgeldiniz ! Ödemeniz ve siparişiniz alınmıştır. Aşağıdaki sipariş numaranız ile sipariş durumunuzu kontrol edebilirsiniz !");
+                model.put("button_text", orderId);
+            }else {
+                subject = "Siparişiniz Hakkında";
+                model.put("button_message","Merhaba " + name + " " + surname + ". Teknik bir aksaklıktan dolayı ödemeniz alınmış fakat siparişiniz oluşturulamamıştır. Konu ile ilgili iletişim bilgilerimizden bize ulaşabilirsiniz. Bu hatayı telafi etmek için uğraşıyor olacağız.");
+                model.put("button_text", "SİTEYE GİT");
+            }
 
-            model.put("button_message", "Merhaba " + name + " " + surname + ", aramıza hoşgeldiniz ! Ödemeniz ve siparişiniz alınmıştır. Aşağıdaki sipariş numaranız ile sipariş durumunuzu kontrol edebilirsiniz !");
-            model.put("button_text", orderId);
+
             model.put("button_href", HOST + "/");
             model.put("title", "Sosyal Trend");
             model.put("create_order_link", HOST + "/all-packages");

@@ -10,5 +10,5 @@ import java.util.List;
 public interface VisitorUserRepository extends JpaRepository<VisitorUser, Long> {
     List<VisitorUser> findByEmail(String email);
 
-    List<VisitorUser> findByToken(String token);
+    List<VisitorUser> findByTokenAndFinished(String token, boolean finished);
 }

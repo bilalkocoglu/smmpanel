@@ -24,5 +24,10 @@ public class VisitorUser {
     private String number;
     private String url;
     private String token;
-    private long packageId;
+
+    @ManyToOne
+    @JoinColumn
+    private Package pkg;
+
+    private boolean finished;
 }

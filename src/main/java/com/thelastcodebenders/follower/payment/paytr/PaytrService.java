@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.payment.paytr;
 
 import com.google.gson.Gson;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.model.CardPayment;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.User;
@@ -50,6 +51,8 @@ public class PaytrService {
     private UserService userService;
     private DrawService drawService;
     private TelegramService telegramService;
+    private OrderService orderService;
+    private MailService mailService;
 
     public PaytrService(RestTemplate restTemplate,
                         AccountActivationService accountActivationService,
@@ -57,7 +60,9 @@ public class PaytrService {
                         VisitorUserService visitorUserService,
                         UserService userService,
                         DrawService drawService,
-                        TelegramService telegramService){
+                        TelegramService telegramService,
+                        OrderService orderService,
+                        MailService mailService){
         this.restTemplate = restTemplate;
         this.accountActivationService = accountActivationService;
 
@@ -66,6 +71,8 @@ public class PaytrService {
         this.userService = userService;
         this.drawService = drawService;
         this.telegramService = telegramService;
+        this.orderService = orderService;
+        this.mailService = mailService;
     }
 
     public TokenResponse userCreateToken(User user, String ip, int balance) throws NoSuchAlgorithmException, InvalidKeyException {
@@ -268,7 +275,7 @@ public class PaytrService {
         if (callbackRequest.getMerchant_oid().charAt(0) == '1'){
             cardPayment = cardPaymentService.findActiveByToken(callbackRequest.getMerchant_oid());
         }else if (callbackRequest.getMerchant_oid().charAt(0) == '2'){
-
+            visitorUser = visitorUserService.findActiveByToken(callbackRequest.getMerchant_oid());
         }
 
         if (callbackRequest.getStatus().equals("success")){
@@ -296,7 +303,23 @@ public class PaytrService {
                 telegramService.asyncSendAdminMessage(cardPayment.getUser().getId()+ "-" +cardPayment.getUser().getName() + " " + cardPayment.getUser().getSurname() + " kullanıcısı tarafından "+ amount + " TL bakiye eklendi.");
             }
             if (visitorUser != null){
+                visitorUser.setFinished(true);
+                visitorUserService.update(visitorUser);
 
+                long orderId = orderService.createVisitorPackageOrderReturnOrderId(visitorUser.getPkg(), visitorUser.getUrl());
+
+                if (orderId == -1){
+                    log.error("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
+                    //admin info
+                    telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden bir kullanıcıdan ödeme alındı fakat " + visitorUser.getPkg().getService().getApi().getName() + " API'den " + visitorUser.getPkg().getService().getId() + " idli servis ile ilgili cevap gelmediği için sipariş verilemedi.");
+                    //user info
+                    mailService.asyncSendVisitorOrderMail(visitorUser.getEmail(), "-1" , visitorUser.getName(), visitorUser.getSurname(), false);
+                }
+
+                //admin info
+                telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden " + visitorUser.getPkg().getPrice() + " tutarında ödeme alındı ve " + visitorUser.getPkg().getId() + "paketinden sipariş verildi.");
+                //user info
+                mailService.asyncSendVisitorOrderMail(visitorUser.getEmail(), String.valueOf(orderId), visitorUser.getName(), visitorUser.getSurname(), true);
             }
         }else {
             log.error("PayTR Service Callback status not Success ! CallbackRequest => " + callbackRequest.toString());

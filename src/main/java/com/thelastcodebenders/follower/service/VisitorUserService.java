@@ -37,6 +37,7 @@ public class VisitorUserService {
                     .surname(packageOrderPaymentForm.getSurname())
                     .url(packageOrderPaymentForm.getUrl())
                     .packageId(packageId)
+                    .finished(false)
                     .build();
 
             visitorUser = visitorUserRepository.save(visitorUser);
@@ -89,13 +90,13 @@ public class VisitorUserService {
         }
     }
 
-    public VisitorUser findByToken(String token){
-        List<VisitorUser> visitorUsers = visitorUserRepository.findByToken(token);
+    public VisitorUser findActiveByToken(String token){
+        List<VisitorUser> visitorUsers = visitorUserRepository.findByTokenAndFinished(token, false);
 
         if (visitorUsers.isEmpty()){
             throw new DetectedException("Ödeme alındı fakat sipariş verilemedi. Konu hakkında sayfa altındaki yer alan iletişim formundan bizimle iletişime geçiniz.");
         }else
-            return visitorUsers.get(0);
+            return visitorUsers.get(visitorUsers.size()-1);
     }
 
     public void resetToken(long id){
@@ -111,7 +112,7 @@ public class VisitorUserService {
         }
     }
 
-    public boolean updateToken(VisitorUser visitorUser){
+    public boolean update(VisitorUser visitorUser){
         try {
             visitorUser = visitorUserRepository.save(visitorUser);
             return true;

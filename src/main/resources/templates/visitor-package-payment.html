@@ -43,14 +43,12 @@
 					<div th:replace="visitor-template :: messages"></div>
 
 					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-10">
+						<div class="col-12">
 							<script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
 							<iframe visible="true" runat="server" id="paytriframe" frameborder="0" scrolling="no" style="width: 100%;"
 									th:src="${'https://www.paytr.com/odeme/guvenli/' + paytrtoken}"></iframe>
 							<script>iFrameResize({}, '#paytriframe');</script>
 						</div>
-						<div class="col-1"></div>
 					</div>
 				</main>
 			</div>
