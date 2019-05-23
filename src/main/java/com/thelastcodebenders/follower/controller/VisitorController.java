@@ -7,6 +7,7 @@ import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.model.CardPayment;
 import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
+import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
 import com.thelastcodebenders.follower.seo.SitemapView;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.exception.DetectedException;
@@ -300,6 +301,7 @@ public class VisitorController {
             //create visit user
             VisitorUser visitorUser = visitorUserService.save(packageOrderPaymentForm, packageId);  //visitor user status ekle
 
+            /*
             //create iyzipay payment page
             CheckoutFormInitialize checkoutFormInitialize = iyzicoService.createPackagePayment(visitorUser, pkg, request.getRemoteAddr());
             System.out.println(checkoutFormInitialize.toString());
@@ -312,10 +314,25 @@ public class VisitorController {
                 return "redirect:/package/order/" + packageId;
             }
             visitorUserService.updateToken(visitorUser.getId(), checkoutFormInitialize.getToken());
+             */
+            TokenResponse tokenResponse = paytrService.visitorCreateToken(visitorUser, request.getRemoteAddr(), pkg);
+
+            if (tokenResponse.getStatus().equals("success")){
+                //System.out.println("token = " + tokenResponse.getToken());
+                //card payment (token ile birlikte tutulacak)
+                visitorUser.setToken(tokenResponse.getMerchant_oid());
+                boolean res = visitorUserService.updateToken(visitorUser);
+                if (!res){
+                    throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
+                }
+            }else {
+                throw new DetectedException("Ödeme işlemi başlatılamadı. Lütfen daha sonra tekrar deneyin.");
+            }
 
             model.addAttribute("popularCategories", packageService.visitorPopularCategories());
             model.addAttribute("message", new VisitorMessageDTO());
-            model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
+            //model.addAttribute("iyzicoscript", checkoutFormInitialize.getCheckoutFormContent());
+            model.addAttribute("paytrtoken", tokenResponse.getToken());
             model.addAttribute("title", "Sosyal Medya Paneli - SMM Panel - Sosyal Trend - Yeni Trendiniz.");
             model.addAttribute("description", "SMM Panel'de yeni trend. Sosyal medya panelimiz ile instagram, twitter, facebook gibi sosyal medyalardan uygun fiyatlı takipçi, beğeni gibi hizmet satınalabilirsiniz. Hızlı ve kaliteli hizmet ile şifresiz gönderim imkanı sağlıyoruz.");
             model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");

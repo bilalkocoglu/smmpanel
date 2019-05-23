@@ -29,33 +29,18 @@ public class VisitorUserService {
         try {
             packageOrderFormValidate(packageOrderPaymentForm);
 
-            List<VisitorUser> visitorUsers = visitorUserRepository.findByEmail(packageOrderPaymentForm.getEmail());
 
-            VisitorUser visitorUser;
+            VisitorUser visitorUser = VisitorUser.builder()
+                    .email(packageOrderPaymentForm.getEmail())
+                    .name(packageOrderPaymentForm.getName())
+                    .number(packageOrderPaymentForm.getNumber())
+                    .surname(packageOrderPaymentForm.getSurname())
+                    .url(packageOrderPaymentForm.getUrl())
+                    .packageId(packageId)
+                    .build();
 
-            if (visitorUsers.isEmpty()){
-                visitorUser = VisitorUser.builder()
-                        .email(packageOrderPaymentForm.getEmail())
-                        .name(packageOrderPaymentForm.getName())
-                        .number(packageOrderPaymentForm.getNumber())
-                        .surname(packageOrderPaymentForm.getSurname())
-                        .url(packageOrderPaymentForm.getUrl())
-                        .packageId(packageId)
-                        .build();
-
-                visitorUser = visitorUserRepository.save(visitorUser);
-                return visitorUser;
-            }else {
-                visitorUser = visitorUsers.get(0);
-                visitorUser.setName(packageOrderPaymentForm.getName());
-                visitorUser.setNumber(packageOrderPaymentForm.getNumber());
-                visitorUser.setSurname(packageOrderPaymentForm.getSurname());
-                visitorUser.setUrl(packageOrderPaymentForm.getUrl());
-                visitorUser.setPackageId(packageId);
-
-                visitorUser = visitorUserRepository.save(visitorUser);
-                return visitorUser;
-            }
+            visitorUser = visitorUserRepository.save(visitorUser);
+            return visitorUser;
         }catch (Exception e){
             if (e instanceof DetectedException)
                 throw e;
@@ -126,17 +111,14 @@ public class VisitorUserService {
         }
     }
 
-    public void updateToken(long id, String token){
-        System.out.println("token update run");
-        VisitorUser visitorUser = findById(id);
-
-        if (visitorUser == null){
-            throw new DetectedException("İşleminiz şu anda yapılamadı. Lütfen daha sonra tekrar deneyin.");
+    public boolean updateToken(VisitorUser visitorUser){
+        try {
+            visitorUser = visitorUserRepository.save(visitorUser);
+            return true;
+        }catch (Exception e){
+            log.error("Visitor user update error !");
+            return false;
         }
-
-        visitorUser.setToken(token);
-        visitorUser = visitorUserRepository.save(visitorUser);
-        System.out.println(visitorUser);
     }
 
 }
