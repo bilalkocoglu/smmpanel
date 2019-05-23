@@ -51,6 +51,7 @@ public class PaytrService {
 
     public TokenResponse userCreateToken(User user, String ip, int balance) throws NoSuchAlgorithmException, InvalidKeyException {
         try {
+            System.out.println(ip);
             TokenRequest request = new TokenRequest();
             request.setMerchant_id(MERCHANT_ID);
             request.setMerchant_salt(MERCHANT_SALT);

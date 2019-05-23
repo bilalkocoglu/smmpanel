@@ -398,7 +398,7 @@ public class VisitorController {
     @PostMapping("/paytr/callback")
     public void visitorPaytrCallback(@ModelAttribute CallbackRequest callbackRequest,
                                        HttpServletResponse httpServletResponse) throws IOException{
-        System.out.println(callbackRequest.toString());
+        System.out.println("BURAYA İSTEK GELDİ");
         httpServletResponse.getWriter().write("OK");
     }
 
