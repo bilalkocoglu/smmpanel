@@ -201,7 +201,7 @@ public class PaytrService {
 
             }
         }else {
-
+            log.error("PayTR Service Callback status not Success ! CallbackRequest => " + callbackRequest.toString());
         }
     }
 }

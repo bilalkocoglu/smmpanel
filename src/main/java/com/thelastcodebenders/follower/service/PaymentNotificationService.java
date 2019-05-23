@@ -104,7 +104,7 @@ public class PaymentNotificationService {
                 paymentNotification.setConfirmation(true);
 
                 //kampanya
-                double plusAmount = paymentNotification.getAmount() * 0.02;
+                double plusAmount = paymentNotification.getAmount() + paymentNotification.getAmount() * 0.02;
 
                 boolean res = userService.updateUserBalance(paymentNotification.getUser(), plusAmount);
                 if (!res)
