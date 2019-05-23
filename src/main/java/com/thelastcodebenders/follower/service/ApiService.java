@@ -3,6 +3,7 @@ package com.thelastcodebenders.follower.service;
 import com.thelastcodebenders.follower.client.panel.PanelService;
 import com.thelastcodebenders.follower.client.rate.CurrencyRateService;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.OtherServiceUpdateDTO;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
@@ -34,6 +35,7 @@ public class ApiService {
     private DrawPrizeService drawPrizeService;
     private CurrencyRateService currencyRateService;
     private TelegramService telegramService;
+    private CacheService cacheService;
 
     public ApiService(APIRepository apiRepository,
                       PanelService panelService,
@@ -43,7 +45,8 @@ public class ApiService {
                       UserService userService,
                       DrawPrizeService drawPrizeService,
                       CurrencyRateService currencyRateService,
-                      TelegramService telegramService){
+                      TelegramService telegramService,
+                      CacheService cacheService){
         this.apiRepository = apiRepository;
         this.panelService = panelService;
         this.serviceRepository = serviceRepository;
@@ -53,6 +56,7 @@ public class ApiService {
         this.drawPrizeService = drawPrizeService;
         this.currencyRateService = currencyRateService;
         this.telegramService = telegramService;
+        this.cacheService = cacheService;
     }
 
     public List<String> adminTableColumns(){
@@ -182,7 +186,7 @@ public class ApiService {
                 api.setState(true);
             if (action == UserAction.PASSIVATE){
                 if(api.isState()){
-                    List<Service> services = serviceRepository.findByApi(api);
+                    List<Service> services = serviceRepository.findByStateAndApi(ServiceState.ACTIVE, api);
                     for (Service s: services) {
 
                         //packages
@@ -192,8 +196,10 @@ public class ApiService {
                         drawPrizeService.servicePassivateHandler(s);
 
                         s.setState(ServiceState.PASSIVE);
+                        serviceRepository.save(s);
                     }
-                    serviceRepository.saveAll(services);
+                    //CACHE CLEAR
+                    cacheService.servicesUpdate();
                 }
                 api.setState(false);
             }
@@ -208,26 +214,15 @@ public class ApiService {
 
     public String allApiUpdateBalance(){
         String message = null;
+        String logMessage ;
         List<API> apis = getAllAPIs();
         for (API api: apis) {
             double balance = panelService.getBalance(api);
             if (balance == -1 && api.isState()){        //api'den doğru sonuç gelmiyor kapanmış olabilir !
                 message = "Durumu değişen apiler mevcut. Servislerinizi kontrol etmelisiniz.";
-                log.warn(api.getId() + "Idli apiden bakiye güncelleme için doğru sonuç gelmiyor. Api artık hizmet vermiyor olabilir !");
-                List<Service> services = serviceRepository.findByApi(api);
-                for (Service service: services) {
-
-                    //package
-                    packageService.servicePassivateHandler(service);
-
-                    //drawprize
-                    drawPrizeService.servicePassivateHandler(service);
-
-                    service.setState(ServiceState.PASSIVE);
-                    serviceRepository.save(service);
-                }
-                api.setState(false);
-                apiRepository.save(api);
+                logMessage = api.getId() + "Idli apiden bakiye güncelleme için doğru sonuç gelmiyor. Api artık hizmet vermiyor olabilir !";
+                log.warn(logMessage);
+                telegramService.asyncSendAdminMessage(logMessage);
             }else if (balance > -1 && !api.isState()){
                 message = "Durumu değişen apiler mevcut. Servislerinizi kontrol etmelisiniz.";
                 log.warn(api.getId() + "Idli API'den tekrar balance alınmaya başlandı !");
@@ -251,19 +246,7 @@ public class ApiService {
 
         if (balance == -1 && api.isState()){
             log.warn(api.getId() + "Idli apiden bakiye güncelleme için doğru sonuç gelmiyor. Api artık hizmet vermiyor olabilir !");
-            List<Service> services = serviceRepository.findByApi(api);
-            for (Service service: services) {
-                //packages
-                packageService.servicePassivateHandler(service);
-
-                //drawprizes
-                drawPrizeService.servicePassivateHandler(service);
-
-                service.setState(ServiceState.PASSIVE);
-                serviceRepository.save(service);
-            }
-            api.setState(false);
-            apiRepository.save(api);
+            telegramService.asyncSendAdminMessage(api.getName() + "API sinin bakiyesi çekilemedi. Lütfen girip kontrol ediniz !");
         }else if (balance > -1 && !api.isState()){
             log.warn(api.getId() + "Idli API'den tekrar balance alınmaya başlandı !");
             api.setState(true);
@@ -274,10 +257,9 @@ public class ApiService {
 
 
             if (balance < API_BALANCE_LIMIT){
-                User user = userService.getAdmin();
 
                 String mailMessage = "ID : " + api.getId() + " - Name : " + api.getName() + " -> Bakiyeniz " + API_BALANCE_LIMIT + " olarak belirlediğiniz limit değerin altına düşmüş. İlgili apiye bakiye yüklemelisiniz !";
-                mailService.sendBalanceWarningMail(user.getMail(), mailMessage);
+                telegramService.asyncSendAdminMessage(mailMessage);
             }
 
             api.setBalance(balance);
@@ -338,6 +320,9 @@ public class ApiService {
                             service.setState(ServiceState.DELETED);
                             serviceRepository.save(service);
 
+                            //SERVİCES CACHE CLEAR
+                            cacheService.servicesUpdate();
+
                             deletedServices.add(service);
                         }else {
                             //değişiklik olup olmadığına bak
@@ -352,6 +337,9 @@ public class ApiService {
                                 //pasife al ve kaydet
                                 service.setState(ServiceState.PASSIVE);
                                 serviceRepository.save(service);
+
+                                //SERVİCES CACHE CLEAR
+                                cacheService.servicesUpdate();
 
                                 //passivate listesine ekle
                                 passivatedServices.add(service);
@@ -527,8 +515,6 @@ public class ApiService {
                 if (api.getRateUSD() == currencyUSDRate){
                     throw new DetectedException("Son güncellemeden sonra dolar kurunda değişme yok !");
                 }
-
-                List<Service> services = serviceRepository.findByApi(api);
 
                 api.setRateUSD(currencyUSDRate);
                 apiRepository.save(api);

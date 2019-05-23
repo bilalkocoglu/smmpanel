@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.ChatMessageDTO;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
@@ -41,6 +42,7 @@ public class AdminController {
     private OrderService orderService;
     private CategoryArticleService categoryArticleService;
     private DrawPrizeService drawPrizeService;
+    private CacheService cacheService;
 
     public AdminController(TicketService ticketService,
                            PaymentNotificationService paymentNotificationService,
@@ -55,7 +57,8 @@ public class AdminController {
                            PackageService packageService,
                            OrderService orderService,
                            CategoryArticleService categoryArticleService,
-                           DrawPrizeService drawPrizeService){
+                           DrawPrizeService drawPrizeService,
+                           CacheService cacheService){
         this.ticketService = ticketService;
         this.paymentNotificationService = paymentNotificationService;
         this.userService = userService;
@@ -70,6 +73,7 @@ public class AdminController {
         this.orderService = orderService;
         this.categoryArticleService = categoryArticleService;
         this.drawPrizeService = drawPrizeService;
+        this.cacheService = cacheService;
     }
 
     //  ADMIN INDEX
@@ -532,9 +536,11 @@ public class AdminController {
                                 RedirectAttributes redirectAttributes){
         try {
             boolean res = serviceService.updateService(serviceFormDTO, serviceId);
-            if(res)
+            if(res){
+                cacheService.servicesUpdate();
+                serviceService.createVisitorServicesItems();
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
-            else
+            } else
                 redirectAttributes.addFlashAttribute("errormessage", "İşlem şuan gerçekleştirilemedi, daha sonra tekrar deneyiniz.");
         }catch (Exception e){
             if (e instanceof DetectedException)

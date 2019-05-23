@@ -76,7 +76,7 @@ public class PackageService {
         return packageRepository.findAll();
     }
 
-    @Cacheable("activePackages")
+    @Cacheable("packages-top-12")
     public List<Package> activePackagesTop12(){
         List<Package> packages = packageRepository.findByState(true);
 

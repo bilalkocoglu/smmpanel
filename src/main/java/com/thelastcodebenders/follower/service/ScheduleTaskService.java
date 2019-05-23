@@ -1,6 +1,7 @@
 package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,27 +14,24 @@ public class ScheduleTaskService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleTaskService.class);
 
     private ApiService apiService;
-    private MailService mailService;
-    private UserService userService;
     private OrderService orderService;
     private DrawService drawService;
-    private CacheManager cacheManager;
     private TelegramService telegramService;
+    private CacheService cacheService;
+    private PackageService packageService;
 
     public ScheduleTaskService(ApiService apiService,
-                               MailService mailService,
-                               UserService userService,
                                OrderService orderService,
                                DrawService drawService,
-                               CacheManager cacheManager,
-                               TelegramService telegramService){
+                               TelegramService telegramService,
+                               CacheService cacheService,
+                               PackageService packageService){
         this.apiService = apiService;
-        this.mailService = mailService;
-        this.userService = userService;
         this.orderService = orderService;
         this.drawService = drawService;
-        this.cacheManager = cacheManager;
         this.telegramService = telegramService;
+        this.cacheService = cacheService;
+        this.packageService = packageService;
     }
 
     @Scheduled(fixedDelay = 40 * 60 * 1000, initialDelay = 50 * 1000)     //45 minutes
@@ -69,10 +67,11 @@ public class ScheduleTaskService {
         }
     }
 
-    @Scheduled(fixedDelay = 30 * 60 * 1000, initialDelay = 3 * 60 * 1000)
+
+    @Scheduled(fixedDelay = 30 * 60 * 1000, initialDelay = 30 * 60 * 1000)
     public void clearCache(){
-        log.info("Cache Clear !");
-        cacheManager.getCacheNames().stream()
-                .forEach(cacheName -> cacheManager.getCache(cacheName).clear());
+        cacheService.topPackagesClear();
+        packageService.activePackagesTop12();
     }
+
 }

@@ -20,4 +20,6 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     List<Service> findByState(ServiceState state);
 
     List<Service> findBySubCategoryAndState(SubCategory subCategory, ServiceState state);
+
+    List<Service> findByStateAndApi(ServiceState state, API api);
 }

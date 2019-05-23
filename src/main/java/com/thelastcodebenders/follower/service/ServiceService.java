@@ -177,7 +177,7 @@ public class ServiceService {
     }
 
 
-    @Cacheable("userservicespage")
+    @Cacheable("service-userpage")
     public List<UserServicesListItem> createUserServicesItems(){
         try {
             List<UserServicesListItem> userServicesListItems = new ArrayList<>();
@@ -225,6 +225,7 @@ public class ServiceService {
         }
     }
 
+    @Cacheable("service-visitor")
     public List<VisitorServicesItem> createVisitorServicesItems(){
         List<VisitorServicesItem> visitorServicesItems = new ArrayList<>();
         List<Category> categories = categoryService.allCategory();

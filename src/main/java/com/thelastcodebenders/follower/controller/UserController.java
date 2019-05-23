@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
     public static final String END_POINT = "/user";
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final int LOAD_BALANCE_LIMIT = 20;
 
     private ServiceService serviceService;
     private AskedQuestionService askedQuestionService;
@@ -360,9 +361,9 @@ public class UserController {
 
             int balanceInt = Integer.valueOf(balance);
 
-            if (balanceInt<10){
-                log.error("Balance 10 TLden az !");
-                throw new DetectedException("Minimum 10 TL yükleme yapabilirsiniz !");
+            if (balanceInt < LOAD_BALANCE_LIMIT){
+                log.error("Balance " + LOAD_BALANCE_LIMIT + " TLden az !");
+                throw new DetectedException("Minimum " + LOAD_BALANCE_LIMIT + " TL yükleme yapabilirsiniz !");
             }
 
             TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
