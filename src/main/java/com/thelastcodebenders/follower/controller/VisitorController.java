@@ -399,6 +399,7 @@ public class VisitorController {
     public void visitorPaytrCallback(@ModelAttribute CallbackRequest callbackRequest,
                                        HttpServletResponse httpServletResponse) throws IOException{
         System.out.println("BURAYA İSTEK GELDİ");
+        System.out.println(callbackRequest.toString());
         httpServletResponse.getWriter().write("OK");
     }
 
