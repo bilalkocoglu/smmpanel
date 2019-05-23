@@ -42,7 +42,7 @@ public class Service {
     @Column(length = 3000)
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.ALL})
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "fk_api")
     private API api;
 
