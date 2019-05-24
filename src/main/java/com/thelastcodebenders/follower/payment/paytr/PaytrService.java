@@ -92,6 +92,7 @@ public class PaytrService {
             request.setMerchant_oid('1'+oid);       //1 balance 2 visitor user
 
             request.setUser_ip(ip);
+            System.out.println(ip);
 
             Object[][] objects = {
                     new Object[]{"Bakiye", String.valueOf(balance), 1}
@@ -125,12 +126,18 @@ public class PaytrService {
                 concat.append(info);
             }
 
+            System.out.println(concat);
+
+
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             SecretKeySpec secret_key = new SecretKeySpec(MERCHANT_KEY.getBytes(), "HmacSHA256");
             sha256_HMAC.init(secret_key);
 
             String hash = Base64.encodeBase64String(sha256_HMAC.doFinal(concat.toString().getBytes()));
             request.setPaytr_token(hash);
+
+
+            System.out.println(hash);
 
 
             HttpHeaders headers = new HttpHeaders();
@@ -221,6 +228,7 @@ public class PaytrService {
             for (String info : infs ) {
                 concat.append(info);
             }
+
 
             Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
             SecretKeySpec secret_key = new SecretKeySpec(MERCHANT_KEY.getBytes(), "HmacSHA256");

@@ -366,7 +366,7 @@ public class UserController {
             TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
 
             if (tokenResponse.getStatus().equals("success")){
-                //System.out.println("token = " + tokenResponse.getToken());
+                System.out.println("token = " + tokenResponse.getToken());
                 //card payment (token ile birlikte tutulacak)
                 boolean res = cardPaymentService.createCardPayment(user, tokenResponse.getMerchant_oid(), balanceInt);
                 if (!res){
