@@ -105,8 +105,8 @@ public class PaytrService {
             request.setMerchant_fail_url(USER_FAIL_CALLBACK);
 
             request.setTimeout_limit("30");
-            request.setDebug_on("1");
-            request.setTest_mode("1");
+            request.setDebug_on("0");
+            request.setTest_mode("0");
             request.setNo_installment("0");
             request.setMax_installment("0");
             request.setCurrency("TL");
@@ -202,8 +202,8 @@ public class PaytrService {
             request.setMerchant_fail_url(VISITOR_CALLBACK);
 
             request.setTimeout_limit("30");
-            request.setDebug_on("1");
-            request.setTest_mode("1");
+            request.setDebug_on("0");
+            request.setTest_mode("0");
             request.setNo_installment("0");
             request.setMax_installment("0");
             request.setCurrency("TL");
