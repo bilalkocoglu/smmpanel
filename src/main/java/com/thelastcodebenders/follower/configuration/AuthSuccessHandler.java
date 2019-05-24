@@ -30,6 +30,8 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
             targetUrl = "/user/dashboard";
         }
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getRemoteAddr());
+        log.info("Success Login Handler ! IP -> " + httpServletRequest.getLocalAddr());
+
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
     }
 }
