@@ -1,7 +1,6 @@
 package com.thelastcodebenders.follower;
 
-import com.thelastcodebenders.follower.service.PackageService;
-import com.thelastcodebenders.follower.service.ServiceService;
+import com.thelastcodebenders.follower.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -38,14 +37,27 @@ public class SocialManagementApplication implements CommandLineRunner {
 	@Autowired
 	PackageService packageService;
 
+	@Autowired
+	AskedQuestionService askedQuestionService;
+
+	@Autowired
+	AnnouncementService announcementService;
+
+	@Autowired
+	BankAccountService bankAccountService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(SocialManagementApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+		//CACHES
 		serviceService.createVisitorServicesItems();
 		serviceService.createUserServicesItems();
 		packageService.activePackagesTop12();
+		askedQuestionService.allAskedQuestions();
+		announcementService.findAll();
+		bankAccountService.allAccounts();
 	}
 }

@@ -1,8 +1,5 @@
 package com.thelastcodebenders.follower.controller;
 
-import com.iyzipay.model.CheckoutForm;
-import com.iyzipay.model.CheckoutFormInitialize;
-import com.iyzipay.model.Status;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
 import com.thelastcodebenders.follower.dto.*;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
@@ -93,7 +90,7 @@ public class UserController {
         model.addAttribute("orders", orderService.getOrdersByAuthUser());
         model.addAttribute("unconfirmed_payment_ntf", paymentNotificationService.unconfirmedLoginUserNotifications());
         model.addAttribute("unread_ticket_count", ticketService.unreadTickets(RoleType.USER));
-        model.addAttribute("announcements", announcementService.allAskedQuestions());
+        model.addAttribute("announcements", announcementService.findAll());
         model.addAttribute("page", "homepage");
         return "user-index";
     }
@@ -343,7 +340,7 @@ public class UserController {
         return "user-load-balance";
     }
 
-    @PostMapping("/load-balance")
+    @PostMapping("/load-balance")       //paytr init
     public String loadBalancePost(Model model,
                                   @RequestParam("balance") String balance,
                                   HttpServletRequest httpServletRequest,

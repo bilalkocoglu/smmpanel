@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class CacheService {
     private static final Logger log = LoggerFactory.getLogger(CacheService.class);
@@ -16,22 +18,44 @@ public class CacheService {
     }
 
     //service-xxxx CLEAR !
-    public void servicesUpdate(){
+    public void servicesClear(){
         cacheManager.getCacheNames().forEach(cacheName ->{
             if (cacheName.split("-")[0].equals("service"))
-                cacheManager.getCache(cacheName).clear();
+                Objects.requireNonNull(cacheManager.getCache(cacheName)).clear();
         });
+        log.info("Service Caches Clear !");
     }
 
     //packages-top-12
     public void topPackagesClear(){
-        cacheManager.getCache("packages-top-12").clear();
+        Objects.requireNonNull(cacheManager.getCache("packages-top-12")).clear();
     }
 
+    public void askedQuestionsClear(){
+        Objects.requireNonNull(cacheManager.getCache("asked-questions")).clear();
+        log.info("Askedquestions Cache Clear !");
+    }
 
+    public void announcementsClear(){
+        Objects.requireNonNull(cacheManager.getCache("announcements")).clear();
+        log.info("Announcements Cache Clear !");
+    }
+
+    public void bankaccountsClear(){
+        Objects.requireNonNull(cacheManager.getCache("bankAccounts")).clear();
+        log.info("BankAccounts Cache Clear !");
+    }
 
     /*
     ----------------------------------CACHE MAP-----------------------------------------
+        INIT METHODS (SocialManagementApplication.java)
+        ServiceService.createVisitorServicesItems();
+		ServiceService.createUserServicesItems();
+		PackageService.activePackagesTop12();
+		AskedQuestionService.allAskedQuestions();
+        AnnouncementService.findAll();
+        BankAccountService.allAccounts();
+
         **service-xxxx (cache name)
             -ServiceService.createVisitorServicesItems()    -> name: service-visitor
             -ServiceService.createUserServicesItems()   -> name: service-userpage
@@ -46,5 +70,26 @@ public class CacheService {
 
             CLEARS
                 -30m Periods
+
+        **asked-questions (cache name)
+            -AskedQuestionService.findAll() -> name: asked-questions
+
+            CLEARS
+                -AskedQuestionService.save()
+                -AskedQuestionService.delete()
+
+        **announcements
+            -AnnouncementService.findAll() -> name: announcements
+
+            CLEARS
+                -AnnouncementService.save()
+                -AnnouncementService.delete()
+
+        **bankAccounts
+            -BankAccountService.allAccounts() -> name: allAccounts
+
+            CLEARS
+
+
      */
 }

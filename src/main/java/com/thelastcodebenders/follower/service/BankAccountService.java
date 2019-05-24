@@ -1,11 +1,13 @@
 package com.thelastcodebenders.follower.service;
 
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.BankAccount;
 import com.thelastcodebenders.follower.repository.BankAccountRepository;
 import com.thelastcodebenders.follower.repository.PaymentNotificationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,22 +19,28 @@ public class BankAccountService {
 
     private BankAccountRepository bankAccountRepository;
     private PaymentNotificationRepository paymentNotificationRepository;
+    private CacheService cacheService;
 
     public BankAccountService(BankAccountRepository bankAccountRepository,
-                              PaymentNotificationRepository paymentNotificationRepository){
+                              PaymentNotificationRepository paymentNotificationRepository,
+                              CacheService cacheService){
         this.bankAccountRepository = bankAccountRepository;
         this.paymentNotificationRepository = paymentNotificationRepository;
+        this.cacheService = cacheService;
     }
 
     public void save(BankAccount bankAccount){
         try {
             bankAccountRepository.save(bankAccount);
+            cacheService.bankaccountsClear();
+            allAccounts();
         }catch (Exception e){
             log.error("Bank Account - save - Error ! -> " + e.getMessage());
             throw e;
         }
     }
 
+    @Cacheable("bankAccounts")
     public List<BankAccount> allAccounts(){
         return bankAccountRepository.findAll();
     }
@@ -49,6 +57,8 @@ public class BankAccountService {
             }
 
             bankAccountRepository.deleteById(id);
+            cacheService.bankaccountsClear();
+            allAccounts();
             return true;
         }catch (Exception e){
             if (e instanceof DetectedException)

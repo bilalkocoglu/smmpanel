@@ -9,7 +9,6 @@ import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.enums.UserAction;
 import com.thelastcodebenders.follower.exception.DetectedException;
 import com.thelastcodebenders.follower.model.*;
-import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.repository.APIRepository;
 import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.slf4j.Logger;
@@ -199,7 +198,7 @@ public class ApiService {
                         serviceRepository.save(s);
                     }
                     //CACHE CLEAR
-                    cacheService.servicesUpdate();
+                    cacheService.servicesClear();
                 }
                 api.setState(false);
             }
@@ -321,7 +320,7 @@ public class ApiService {
                             serviceRepository.save(service);
 
                             //SERVİCES CACHE CLEAR
-                            cacheService.servicesUpdate();
+                            cacheService.servicesClear();
 
                             deletedServices.add(service);
                         }else {
@@ -339,7 +338,7 @@ public class ApiService {
                                 serviceRepository.save(service);
 
                                 //SERVİCES CACHE CLEAR
-                                cacheService.servicesUpdate();
+                                cacheService.servicesClear();
 
                                 //passivate listesine ekle
                                 passivatedServices.add(service);

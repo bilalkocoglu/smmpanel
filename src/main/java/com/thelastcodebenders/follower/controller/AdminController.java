@@ -112,7 +112,7 @@ public class AdminController {
         return "admin-bank-accounts";
     }
 
-    @PostMapping("/bankaccounts")       //CREATE BANK ACCOUNT
+    @PostMapping("/bankaccounts")       //CREATE BANK ACCOUNT - CACHE CLEAR !
     public String saveAccount(@Valid @ModelAttribute BankAccount bankAccount, RedirectAttributes attributes){
         try {
             bankAccountService.save(bankAccount);
@@ -123,7 +123,7 @@ public class AdminController {
         return "redirect:/admin/bankaccounts";
     }
 
-    @GetMapping("/bankaccounts/{accountId}")    //DELETE BANK ACCOUNT
+    @GetMapping("/bankaccounts/{accountId}")    //DELETE BANK ACCOUNT - CACHE CLEAR !
     public String deleteAccount(@PathVariable("accountId") long id, RedirectAttributes redirectAttributes){
         try {
             boolean res = bankAccountService.deleteAccount(id);
@@ -249,7 +249,7 @@ public class AdminController {
         return "admin-asked-questions";
     }
 
-    @PostMapping("/asked-questions")    //create ASKED QUESTİON
+    @PostMapping("/asked-questions")    //create ASKED QUESTİON - CACHE CLEAR !
     public String createAskedQuestion(@Valid @ModelAttribute AskedQuestion askedQuestion, RedirectAttributes redirectAttributes){
         boolean res = askedQuestionService.save(askedQuestion);
         if (res)
@@ -259,7 +259,7 @@ public class AdminController {
         return "redirect:/admin/asked-questions";
     }
 
-    @GetMapping("/asked-questions/remove/{questionId:.*}")      //delete ASKED QUESTİON
+    @GetMapping("/asked-questions/remove/{questionId:.*}")      //delete ASKED QUESTİON - CACHE CLEAR !
     public String deleteAskedQuestion(@PathVariable("questionId") long id, RedirectAttributes redirectAttributes){
         boolean res = askedQuestionService.delete(id);
         if (res)
@@ -276,13 +276,13 @@ public class AdminController {
     @GetMapping("/announcements")       //ANNOUNCEMENT PAGE
     public String accouncements(Model model){
         model.addAttribute("announcement_table_columns", announcementService.tableColumns());
-        model.addAttribute("announcements", announcementService.allAskedQuestions());
+        model.addAttribute("announcements", announcementService.findAll());
         model.addAttribute("announcement", new Announcement());
         model.addAttribute("page", "announcement");
         return "admin-annuncements";
     }
 
-    @PostMapping("/announcements")      //CREATE ANNOUNCEMENT
+    @PostMapping("/announcements")      //CREATE ANNOUNCEMENT - CACHE CLEAR !
     public String createAnnouncement(@Valid @ModelAttribute Announcement announcement, RedirectAttributes redirectAttributes){
         boolean res = announcementService.save(announcement);
         if (res)
@@ -293,7 +293,7 @@ public class AdminController {
         return "redirect:/admin/announcements";
     }
 
-    @GetMapping("/announcements/remove/{announcementId:.*}")      //DELETE ANNOUNCEMENT
+    @GetMapping("/announcements/remove/{announcementId:.*}")      //DELETE ANNOUNCEMENT - CACHE CLEAR !
     public String deleteAnnouncement(@PathVariable("announcementId") long id, RedirectAttributes redirectAttributes){
         boolean res = announcementService.delete(id);
         if (res)
@@ -537,7 +537,7 @@ public class AdminController {
         try {
             boolean res = serviceService.updateService(serviceFormDTO, serviceId);
             if(res){
-                cacheService.servicesUpdate();
+                cacheService.servicesClear();
                 serviceService.createVisitorServicesItems();
                 redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
             } else
