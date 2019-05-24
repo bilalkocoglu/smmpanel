@@ -1,18 +1,28 @@
 package com.thelastcodebenders.follower;
 
+import com.thelastcodebenders.follower.model.API;
+import com.thelastcodebenders.follower.model.Service;
+import com.thelastcodebenders.follower.repository.APIRepository;
+import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class SocialManagementApplicationTests {
 
+    @Autowired
+    APIRepository apiRepository;
 
+    @Autowired
+    ServiceRepository serviceRepository;
 
     @Test
     public void time() {
@@ -30,7 +40,7 @@ public class SocialManagementApplicationTests {
         System.out.println(messageDate1.compareTo(timeOutDate));
     }
 
-    /*
+  /*
     @Test
     public void name() {
         Role admin = Role.builder().role("ADMIN").build();
@@ -54,23 +64,24 @@ public class SocialManagementApplicationTests {
 
         System.out.println(user1);
     }
-/*
+
     @Test
     public void apiUpdateServices() {
         apiService.allApiUpdateOtherService();
     }
-
     @Test
     public void deleteServicesById(){
-        API api = apiRepository.findById((long)6773).get();
+        API api = apiRepository.findById((long)1293).get();
 
-        List<Service> services = serviceRepository.findByApi(api);
+        List<Service> services;
+        services = serviceRepository.findByApi(api);
 
         System.out.println(services.size());
 
         serviceRepository.deleteAll(services);
     }
+*/
 
-     */
+
 }
 
