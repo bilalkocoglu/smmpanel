@@ -91,7 +91,7 @@ public class PaytrService {
             String oid = accountActivationService.generateRandomPassword(40);
             request.setMerchant_oid('1'+oid);       //1 balance 2 visitor user
 
-            request.setUser_ip("188.119.44.74");
+            request.setUser_ip(ip);
 
             Object[][] objects = {
                     new Object[]{"Bakiye", String.valueOf(balance), 1}
@@ -188,7 +188,7 @@ public class PaytrService {
             String oid = accountActivationService.generateRandomPassword(40);
             request.setMerchant_oid('2'+oid);       //1 balance 2 visitor user
 
-            request.setUser_ip("188.119.44.74");
+            request.setUser_ip(ip);
 
             Object[][] objects = {
                     new Object[]{String.valueOf(pkg.getId()), String.valueOf(pkg.getPrice()), 1}
