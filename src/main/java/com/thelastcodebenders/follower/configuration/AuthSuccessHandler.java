@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 public class AuthSuccessHandler implements AuthenticationSuccessHandler {
@@ -33,6 +34,11 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getLocalAddr());
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getHeader("request_id"));
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getHeader("fwd"));
+        Collections.list(httpServletRequest.getHeaderNames()).forEach(System.out::println);
+        log.info("Success Login Handler ! IP -> " + httpServletRequest.getContextPath());
+        log.info("Success Login Handler ! IP -> " + httpServletRequest.getMethod());
+
+
 
 
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
