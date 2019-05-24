@@ -31,6 +31,8 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         }
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getRemoteAddr());
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getLocalAddr());
+        log.info("Success Login Handler ! IP -> " + httpServletRequest.toString());
+
 
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
     }
