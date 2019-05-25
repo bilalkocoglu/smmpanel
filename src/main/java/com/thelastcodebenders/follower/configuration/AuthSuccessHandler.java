@@ -30,11 +30,13 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         }else if (role.contains("USER")){
             targetUrl = "/user/dashboard";
         }
-        log.info("Success Login Handler ! IP -> " + httpServletRequest.getRemoteAddr());
+        log.info("Success Login Handler ! IP -> " + httpServletRequest.getHeader("x-forwarded-for"));
+        /*
         Collections.list(httpServletRequest.getHeaderNames()).forEach(name -> {
             System.out.println(name + " - " + httpServletRequest.getHeader(name));
         });
-
+         */
+        //x-forwarded-for
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
     }
 }

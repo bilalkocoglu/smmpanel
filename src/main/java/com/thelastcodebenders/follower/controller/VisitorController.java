@@ -310,7 +310,7 @@ public class VisitorController {
             }
             visitorUserService.update(visitorUser.getId(), checkoutFormInitialize.getToken());
              */
-            TokenResponse tokenResponse = paytrService.visitorCreateToken(visitorUser, request.getRemoteAddr(), pkg);
+            TokenResponse tokenResponse = paytrService.visitorCreateToken(visitorUser, request.getHeader("x-forwarded-for"), pkg);
 
             if (tokenResponse.getStatus().equals("success")){
                 //System.out.println("token = " + tokenResponse.getToken());
@@ -461,7 +461,7 @@ public class VisitorController {
                                  @ModelAttribute VisitorMessageDTO visitorMessage,
                                  HttpServletRequest httpServletRequest){
         try {
-            boolean res = visitorMessageService.sendVisitorMessage(visitorMessage, httpServletRequest.getRemoteAddr());
+            boolean res = visitorMessageService.sendVisitorMessage(visitorMessage, httpServletRequest.getHeader("x-forwarded-for"));
             if (res)
                 redirectAttributes.addFlashAttribute("successmessage", "Mesajınız başarıyla gönderildi. En kısa zamanda dönüş yapılacaktır.");
             else

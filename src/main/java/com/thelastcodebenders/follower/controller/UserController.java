@@ -363,7 +363,7 @@ public class UserController {
                 throw new DetectedException("Minimum " + LOAD_BALANCE_LIMIT + " TL yükleme yapabilirsiniz !");
             }
 
-            TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getRemoteAddr(), balanceInt);
+            TokenResponse tokenResponse = paytrService.userCreateToken(user, httpServletRequest.getHeader("x-forwarded-for"), balanceInt);
 
             if (tokenResponse.getStatus().equals("success")){
                 System.out.println("token = " + tokenResponse.getToken());
