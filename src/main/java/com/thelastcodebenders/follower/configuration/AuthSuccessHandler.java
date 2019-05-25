@@ -32,7 +32,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
         }
         log.info("Success Login Handler ! IP -> " + httpServletRequest.getRemoteAddr());
         Collections.list(httpServletRequest.getHeaderNames()).forEach(name -> {
-            System.out.println(httpServletRequest.getHeader(name));
+            System.out.println(name + " - " + httpServletRequest.getHeader(name));
         });
 
         redirectStrategy.sendRedirect(httpServletRequest, httpServletResponse, targetUrl);
