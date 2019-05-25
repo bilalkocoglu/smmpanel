@@ -20,3 +20,7 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
     padding-bottom: 15px;
     padding-top: 15px;
 }
+@media(max-width: 767px){
+    #price-list .accordion-image .card-block {
+        padding: 0px !important;}
+}
