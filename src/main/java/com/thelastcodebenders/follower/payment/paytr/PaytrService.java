@@ -2,7 +2,6 @@ package com.thelastcodebenders.follower.payment.paytr;
 
 import com.google.gson.Gson;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
-import com.thelastcodebenders.follower.enums.AsyncMailType;
 import com.thelastcodebenders.follower.model.CardPayment;
 import com.thelastcodebenders.follower.model.Package;
 import com.thelastcodebenders.follower.model.User;
@@ -42,6 +41,8 @@ public class PaytrService {
     private static final String USER_FAIL_CALLBACK = "https://sosyaltrend.net/user/load-balance";
     private static final String VISITOR_CALLBACK = "https://sosyaltrend.net/all-packages";
     private static final String VISITOR_FAIL_CALLBACK = "https://sosyaltrend.net/all-packages";
+
+    private static final String TEST_MODE = "OFF";
 
     private RestTemplate restTemplate;
     private AccountActivationService accountActivationService;
@@ -106,8 +107,16 @@ public class PaytrService {
             request.setMerchant_fail_url(USER_FAIL_CALLBACK);
 
             request.setTimeout_limit("30");
-            request.setDebug_on("1");
-            request.setTest_mode("1");
+
+            if (TEST_MODE.equals("OFF")){
+                request.setDebug_on("0");
+                request.setTest_mode("0");
+            }else {
+                request.setDebug_on("1");
+                request.setTest_mode("1");
+            }
+
+
             request.setNo_installment("0");
             request.setMax_installment("0");
             request.setCurrency("TL");
@@ -206,11 +215,18 @@ public class PaytrService {
             request.setUser_basket(basket);
 
             request.setMerchant_ok_url(VISITOR_CALLBACK);
-            request.setMerchant_fail_url(VISITOR_CALLBACK);
+            request.setMerchant_fail_url(VISITOR_FAIL_CALLBACK);
 
             request.setTimeout_limit("30");
-            request.setDebug_on("1");
-            request.setTest_mode("1");
+
+            if (TEST_MODE.equals("OFF")){
+                request.setDebug_on("0");
+                request.setTest_mode("0");
+            }else {
+                request.setDebug_on("1");
+                request.setTest_mode("1");
+            }
+
             request.setNo_installment("0");
             request.setMax_installment("0");
             request.setCurrency("TL");

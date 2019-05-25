@@ -259,10 +259,18 @@ public class VisitorController {
             return "redirect:/all-packages";
         }
 
+
+
         double apiPrice = (pkg.getService().getApiPrice()/1000) * pkg.getQuantity();
+
+        double apiBalance;
+        if (pkg.getService().getApi().isUseUSD())
+            apiBalance = pkg.getService().getApi().getBalance() * pkg.getService().getApi().getRateUSD();
+        else
+            apiBalance = pkg.getService().getApi().getBalance();
         //System.out.println(apiPrice);
         //System.out.println(pkg.getService().getApi().getBalance());
-        if ( pkg.getService().getApi().getBalance() < apiPrice){
+        if ( apiBalance < apiPrice){
             log.error("Api bakiyesi yetersiz !");
             redirectAttributes.addFlashAttribute("errormessage", "İstediğiniz paket için geçici bir süre sipariş alamıyoruz. Lütfen daha sonra tekrar deneyin.");
             return "redirect:/all-packages";

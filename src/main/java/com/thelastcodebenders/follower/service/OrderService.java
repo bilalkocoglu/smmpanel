@@ -123,7 +123,14 @@ public class OrderService {
                 throw new DetectedException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
             }
 
-            if( order.getApiPrice() > pkg.getService().getApi().getBalance() ){
+            double apiBalance;
+            if (pkg.getService().getApi().isUseUSD())
+                apiBalance = pkg.getService().getApi().getBalance() * pkg.getService().getApi().getRateUSD();
+            else
+                apiBalance = pkg.getService().getApi().getBalance();
+
+            if( order.getApiPrice() > apiBalance ){
+                telegramService.asyncSendAdminMessage(pkg.getService().getApi().getName() + " API de bakiye yetersiz olduğu için kullanıcıdan sipariş alınamadı !");
                 log.error("OrderService createPackageOrder Error -> API Insufficient Balance !");
                 throw new DetectedException("İşleminiz gerçekleştirilemedi. " +
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");
@@ -184,6 +191,8 @@ public class OrderService {
                 }
             }
 
+
+
             User user = userService.getAuthUser();
 
             Order order = orderAssembler.convertFormDtoToServiceOrder(newOrderForm, user, service);
@@ -193,7 +202,14 @@ public class OrderService {
                 throw new DetectedException("Sipariş için yeterli bakiyeye sahip değilsiniz !");
             }
 
-            if( order.getApiPrice() > service.getApi().getBalance() ){
+            double apiBalance;
+            if (service.getApi().isUseUSD())
+                apiBalance = service.getApi().getBalance() * service.getApi().getRateUSD();
+            else
+                apiBalance = service.getApi().getBalance();
+
+            if( order.getApiPrice() > apiBalance ){
+                telegramService.asyncSendAdminMessage(service.getApi().getName() + " API de bakiye yetersiz olduğu için sipariş kabul edilemedi !");
                 log.error("OrderService createServiceOrder Error -> API Insufficient Balance !");
                 throw new DetectedException("İşleminiz gerçekleştirilemedi. " +
                         "Bir destek talebi açıp sistem yöneticisine sipariş hakkında bilgi verip yardım isteyebilirsiniz.");

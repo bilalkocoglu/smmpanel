@@ -31,17 +31,20 @@ public class DrawService {
     private DrawVisitRepository drawVisitRepository;
     private DrawPrizeService drawPrizeService;
     private PanelService panelService;
+    private ApiService apiService;
 
     public DrawService(DrawCountRepository drawCountRepository,
                        DrawOrderRepository drawOrderRepository,
                        DrawVisitRepository drawVisitRepository,
                        DrawPrizeService drawPrizeService,
-                       PanelService panelService){
+                       PanelService panelService,
+                       ApiService apiService){
         this.drawCountRepository = drawCountRepository;
         this.drawOrderRepository = drawOrderRepository;
         this.drawVisitRepository = drawVisitRepository;
         this.drawPrizeService = drawPrizeService;
         this.panelService = panelService;
+        this.apiService = apiService;
     }
 
     public DrawCount findDrawCountByUser(User user){
@@ -188,6 +191,8 @@ public class DrawService {
             if (apiOrderId == null || apiOrderId.equals("0")){
                 throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
             }
+
+            apiService.asyncApiUpdateBalance(drawPrize.getService().getApi());
 
             DrawOrder drawOrder = DrawOrder.builder()
                     .apiOrderId(apiOrderId)
