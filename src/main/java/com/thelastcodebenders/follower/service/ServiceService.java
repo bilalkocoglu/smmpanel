@@ -52,6 +52,7 @@ public class ServiceService {
     public List<String> serviceColumns(){
         return Stream.of(
                 "ID",
+                "API ID",
                 "Name",
                 "Category",
                 "API",

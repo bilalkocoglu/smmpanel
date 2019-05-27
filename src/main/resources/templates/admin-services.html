@@ -43,6 +43,7 @@
                                         <tbody>
                                             <tr th:each="service : ${services}">
                                                 <td th:text="${service.getId()}"></td>
+                                                <td th:text="${service.getApiServiceId()}"></td>
                                                 <td>
                                                     <p th:if="${service.getCustomName() == null}" th:text="${service.getApiName()}" style="margin: 0px;"></p>
                                                     <p th:if="${service.getCustomName() != null}" th:text="${service.getCustomName()}" style="margin: 0px;"></p>

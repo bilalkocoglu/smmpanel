@@ -41,12 +41,6 @@
                                 <span data-i18n="" class="menu-title">Destek Talepleri</span>
                             </a>
                         </li>
-                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'bank-accounts')} ? active : null">
-                            <a th:href="@{/admin/bankaccounts}">
-                                <i class="ft-credit-card"></i>
-                                <span data-i18n="" class="menu-title">Banka Hesapları</span>
-                            </a>
-                        </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'paymentnotifications')} ? active : null">
                             <a th:href="@{/admin/paymentnotifications}">
                                 <i class="ft-bell"></i>
@@ -59,22 +53,28 @@
                                 <span data-i18n="" class="menu-title">Ödemeler</span>
                             </a>
                         </li>
+                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'bank-accounts')} ? active : null">
+                            <a th:href="@{/admin/bankaccounts}">
+                                <i class="ft-credit-card"></i>
+                                <span data-i18n="" class="menu-title">Banka Hesapları</span>
+                            </a>
+                        </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'users')} ? active : null">
                             <a th:href="@{/admin/users}">
                                 <i class="ft-users"></i>
                                 <span data-i18n="" class="menu-title">Kullanıcılar</span>
                             </a>
                         </li>
-                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'askedquestion')} ? active : null">
-                            <a th:href="@{/admin/asked-questions}">
-                                <i class="ft-help-circle"></i>
-                                <span data-i18n="" class="menu-title">Sık Sorulan Sorular</span>
-                            </a>
-                        </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'announcement')} ? active : null">
                             <a th:href="@{/admin/announcements}">
                                 <i class="ft-cast"></i>
                                 <span data-i18n="" class="menu-title">Duyurular</span>
+                            </a>
+                        </li>
+                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'blog')} ? active : null">
+                            <a th:href="@{/admin/blog}">
+                                <i class="ft-grid"></i>
+                                <span data-i18n="" class="menu-title">Blog (Beta)</span>
                             </a>
                         </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'category')} ? active : null">
@@ -111,6 +111,12 @@
                             <a th:href="@{/admin/apis}">
                                 <i class="ft-navigation"></i>
                                 <span data-i18n="" class="menu-title">APİ'ler</span>
+                            </a>
+                        </li>
+                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'askedquestion')} ? active : null">
+                            <a th:href="@{/admin/asked-questions}">
+                                <i class="ft-help-circle"></i>
+                                <span data-i18n="" class="menu-title">Sık Sorulan Sorular</span>
                             </a>
                         </li>
                     </ul>

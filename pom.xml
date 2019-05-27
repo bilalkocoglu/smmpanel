@@ -65,7 +65,6 @@
 			<artifactId>sitemapgen4j</artifactId>
 			<version>1.1.2</version>
 		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/com.iyzipay/iyzipay-java -->
 		<dependency>
 			<groupId>com.iyzipay</groupId>

@@ -1,5 +1,8 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.thelastcodebenders.follower.blog.dto.PostForm;
+import com.thelastcodebenders.follower.blog.model.Post;
+import com.thelastcodebenders.follower.blog.service.PostService;
 import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.ChatMessageDTO;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
@@ -43,6 +46,7 @@ public class AdminController {
     private CategoryArticleService categoryArticleService;
     private DrawPrizeService drawPrizeService;
     private CacheService cacheService;
+    private PostService postService;
 
     public AdminController(TicketService ticketService,
                            PaymentNotificationService paymentNotificationService,
@@ -58,7 +62,8 @@ public class AdminController {
                            OrderService orderService,
                            CategoryArticleService categoryArticleService,
                            DrawPrizeService drawPrizeService,
-                           CacheService cacheService){
+                           CacheService cacheService,
+                           PostService postService){
         this.ticketService = ticketService;
         this.paymentNotificationService = paymentNotificationService;
         this.userService = userService;
@@ -74,6 +79,7 @@ public class AdminController {
         this.categoryArticleService = categoryArticleService;
         this.drawPrizeService = drawPrizeService;
         this.cacheService = cacheService;
+        this.postService = postService;
     }
 
     //  ADMIN INDEX
@@ -767,6 +773,17 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
         }
         return "redirect:/admin/draw-settings";
+    }
+
+
+    //BLOG
+    @GetMapping("/blog")        //blog page
+    public String blogPage(Model model){
+        model.addAttribute("categories", categoryService.allCategory());
+        model.addAttribute("posts", postService.findAll());
+        model.addAttribute("emptyForm", new PostForm());
+        model.addAttribute("page", "blog");
+        return "admin-blog";
     }
 }
 
