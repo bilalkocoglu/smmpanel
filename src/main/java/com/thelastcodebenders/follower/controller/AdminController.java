@@ -7,6 +7,7 @@ import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.ChatMessageDTO;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
 import com.thelastcodebenders.follower.dto.ServiceFormDTO;
+import com.thelastcodebenders.follower.dto.VisitorMessageDTO;
 import com.thelastcodebenders.follower.dto.tickets.UserTicket;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.enums.UserAction;
@@ -784,6 +785,91 @@ public class AdminController {
         model.addAttribute("emptyForm", new PostForm());
         model.addAttribute("page", "blog");
         return "admin-blog";
+    }
+
+    @GetMapping("/blog/{postId:.*}")       //blog post edit
+    public String blogPostPage(Model model,
+                               @PathVariable("postId") long postId,
+                               RedirectAttributes redirectAttributes){
+        try {
+            PostForm postForm = postService.returnPreviewPost(postId);
+            model.addAttribute("postId", postForm.getPostId());
+            model.addAttribute("categories", categoryService.allCategory());
+            model.addAttribute("posts", postService.findAll());
+            model.addAttribute("emptyForm", postForm);
+            model.addAttribute("page", "blog");
+            return "admin-blog";
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("Admin controller postPreview Error => " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+            return "redirect:/admin/blog";
+        }
+    }
+
+    @PostMapping("/blog/preview")   //blog preview page
+    public String postPreview(Model model,
+                              @ModelAttribute PostForm postForm,
+                              RedirectAttributes redirectAttributes){
+        try {
+            //System.out.println(postForm);
+            Post post = postService.previewPost(postForm);
+            model.addAttribute("post", post);
+            model.addAttribute("posts", postService.findAll());
+            model.addAttribute("commentCount", 0);
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("title", "Sosyal Medya Paneli - SMM Panel - Sosyal Trend - Yeni Trendiniz.");
+            model.addAttribute("description", "SMM Panel'de yeni trend. Sosyal medya panelimiz ile instagram, twitter, facebook gibi sosyal medyalardan uygun fiyatlı takipçi, beğeni gibi hizmet satınalabilirsiniz. Hızlı ve kaliteli hizmet ile şifresiz gönderim imkanı sağlıyoruz.");
+            model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+            model.addAttribute("previewblog", true);
+            return "visitor-blog-post";
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("Admin controller postPreview Error => " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşleminiz şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+            return "redirect:/admin/blog";
+        }
+    }
+
+    @GetMapping("/blog/delete/{postId:.*}")
+    public String deletePost(RedirectAttributes redirectAttributes,
+                             @PathVariable("postId") long postId){
+        try {
+            postService.deletePost(postId);
+            redirectAttributes.addFlashAttribute("successmessage", "İşlem başarıyla gerçekleştirildi !");
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("AdminController deletepost Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+        }
+        return "redirect:/admin/blog";
+    }
+
+    @GetMapping("/blog/publish/{postId:.*}")
+    public String publishPost(RedirectAttributes redirectAttributes,
+                              @PathVariable("postId") long postId){
+        try {
+            Post post = postService.publishPost(postId);
+            redirectAttributes.addFlashAttribute("successmessage", post.getTitle() + " başarıyla yayınlandı !");
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else{
+                log.error("AdminController deletepost Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "İşlem şu anda gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.");
+            }
+        }
+        return "redirect:/admin/blog";
     }
 }
 

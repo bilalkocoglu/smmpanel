@@ -164,6 +164,24 @@ public class UserService {
             return user;
     }
 
+    public RoleType getAuthUserRole() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            for (Object o: auth.getAuthorities()) {
+                if (o.toString().equals("ADMIN"))
+                    return RoleType.ADMIN;
+                else if(o.toString().equals("USER"))
+                    return RoleType.USER;
+                else
+                    return RoleType.ANONYMOUS;
+            }
+        }catch (Exception e){
+            log.error("UserService getAuthUserRole Error -> " + e.getMessage());
+        }
+        return RoleType.ANONYMOUS;
+    }
+
     public User getAdmin(){
         Role role = roleService.findByRole(RoleType.ADMIN);
         List<User> users = userRepository.findByRole(role);

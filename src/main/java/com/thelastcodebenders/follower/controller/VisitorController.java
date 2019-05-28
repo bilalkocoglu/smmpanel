@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
 import com.thelastcodebenders.follower.payment.paytr.dto.TokenResponse;
@@ -66,10 +67,18 @@ public class VisitorController {
     //Login
     @GetMapping("/login")
     public String loginPage(Model model){
-        model.addAttribute("title", "Giriş Yap - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
-        model.addAttribute("description", "SMM panel ile sosyal medyadaki tüm hesaplarınıza uygun fiyatlı ve kaliteli servislerimiz ile beğeni, takipçi vb. aklınıza gelebilecek herşeyi gönderebilirsiniz. Hemen SMM panelimize giriş yaparak Sosyal Medya Panelinde yeni trend ile tanışın. Hızlı ve garantili servisin tadını çıkarın");
-        model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
-        return "visitor-login";
+        RoleType type = userService.getAuthUserRole();
+
+        if (type == RoleType.ADMIN){
+            return "redirect:/admin/dashboard";
+        }else if (type == RoleType.USER){
+            return "redirect:/user/dashboard";
+        }else{
+            model.addAttribute("title", "Giriş Yap - İnstagram Takipçi   Facebook | Twitter | Sosyal Trend");
+            model.addAttribute("description", "SMM panel ile sosyal medyadaki tüm hesaplarınıza uygun fiyatlı ve kaliteli servislerimiz ile beğeni, takipçi vb. aklınıza gelebilecek herşeyi gönderebilirsiniz. Hemen SMM panelimize giriş yaparak Sosyal Medya Panelinde yeni trend ile tanışın. Hızlı ve garantili servisin tadını çıkarın");
+            model.addAttribute("keywords", "smm panel, sosyal medya paneli, instagram takipçi hilesi, instagram beğeni hilesi, facebook beğeni hilesi,  twitter takipçi,  twitter beğeni hilesi, youtube abone kasma");
+            return "visitor-login";
+        }
     }
 
     //AUTH Failure

@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
@@ -25,9 +24,7 @@ public class Post {
     @Column(length = 10000)
     private String body;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "post_tag", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+    private String tags;
 
     private String title;
     private String mainPhotoUrl;
@@ -37,4 +34,11 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "fk_category")
     private Category category;
+
+    private String date;
+
+    @Column(length = 500)
+    private String summary;
+
+    private String slug;
 }
