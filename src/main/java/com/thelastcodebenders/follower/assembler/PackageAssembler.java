@@ -29,7 +29,7 @@ public class PackageAssembler {
         return UserPagePackageDTO.builder()
                 .description(pkg.getDescription())
                 .id(pkg.getId())
-                .name(pkg.getCategory().getName() + " - " +pkg.getName())
+                .name(pkg.getName())
                 .price(pkg.getPrice())
                 .quantity(pkg.getQuantity())
                 .subCategory(pkg.getService().getSubCategory())

@@ -72,13 +72,12 @@
 											<span th:text="${category.getName()}"></span> <span th:text="${packageItem.getSubCategory().getName()}"></span> Satın Al
 										</h2>
 										<div class="brk-pricing-horizontal__viewed">
-											<h3 class="font__family-montserrat font__weight-bold font__size-12" th:text="${pkg.getName()}">
-												Silver
-											</h3>
+											<h3 th:text="${pkg.getSubCategory().getCategory().getName()}" class="font__family-montserrat font__weight-bold font__size-12"></h3>
 										</div>
 										<div class="brk-pricing-horizontal__info">
 											<div class="brk-pricing-horizontal__img-icon">
-												<img class="img-icon lazyload" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="/visitor/img/logo.png" alt="alt">
+												<span th:text="${pkg.getName()}" class="font__family-montserrat lazyload font__weight-bold font__size-30 line__height-40">
+													</span>
 											</div>
 											<div class="brk-pricing-horizontal__price">
 												<span class="sign">₺</span>
