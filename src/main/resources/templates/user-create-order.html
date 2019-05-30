@@ -101,19 +101,19 @@
                                   	</span>
                                       <span th:each="subItem : ${item.getSubItems()}">
                                           <a data-toggle="collapse"
-                                             th:attr="data-parent='#wrap' + ${subItem.getSubCategory().getCategory().getName()},
-                                           aria-controls=${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'"
-                                             th:href="'#' + ${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'"
+                                             th:attr="data-parent='#wrap' + ${subItem.getSubCategory().getCategory().getName().replace(' ', '-')},
+                                           aria-controls=${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName().replace(' ', '-')} + 'Sub'"
+                                             th:href="'#' + ${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName().replace(' ', '-')} + 'Sub'"
                                              aria-expanded="true"
                                              class="card-title lead clicks">
 
-                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'main'"
+                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName().replace(' ', '-')} + 'main'"
                                                  class="card-header card-header-collapse">
                                                 <span th:text="${subItem.getSubCategory().getCategory().getName()} + ' - ' + ${subItem.getSubCategory().getName()}"></span>
                                                 <span style="float: right" class="badge badge-light" th:text="${subItem.getServices().size()}"></span>
                                             </div>
                                             </a>
-                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName()} + 'Sub'" role="tabpanel" class="collapse show">
+                                            <div th:id="${subItem.getSubCategory().getCategory().getName() + subItem.getSubCategory().getName().replace(' ', '-')} + 'Sub'" role="tabpanel" class="collapse show">
                                                 <div class="card-body">
                                                   <div class="card-block">
                                                             <div class="tab-pane" id="tabIcon1" th:attr="area-labelledby='baseIcon-tab' + ${subItem.getSubCategory().getCategory().getName()}">
