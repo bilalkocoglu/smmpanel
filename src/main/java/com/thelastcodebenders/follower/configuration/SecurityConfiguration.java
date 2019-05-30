@@ -85,7 +85,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/").and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler);
 
-        http.requiresChannel().anyRequest().requiresInsecure();
     }
 
     @Override
