@@ -15,6 +15,7 @@ import com.thelastcodebenders.follower.repository.ServiceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,7 +195,7 @@ public class ServiceService {
                     Kapmanyalar adında bir listsubitem oluşturulup userServicesListSubItems içine atılır
                     bu item in services özelliğine paketler atılır.
                  */
-                List<Package> packages = packageRepository.findByCategoryAndState(category, true);
+                List<Package> packages = packageRepository.findByCategoryAndState(category, true, new Sort(Sort.Direction.ASC, "quantity"));
                 if (!packages.isEmpty())
                     userServicesListItem.setPackages(packages);
                 else

@@ -15,6 +15,7 @@ import com.thelastcodebenders.follower.repository.PackageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -210,7 +211,7 @@ public class PackageService {
 
     public List<VisitorPackagesItem> createVisitorPackagesFormat(Category category){
         List<VisitorPackagesItem> visitorPackagesItems = new ArrayList<>();
-        List<Package> packages = packageRepository.findByCategoryAndState(category, true);
+        List<Package> packages = packageRepository.findByCategoryAndState(category, true, new Sort(Sort.Direction.ASC, "quantity"));
 
         List<SubCategory> subCategories = categoryService.findSubCategoryByMainCategoryId(category.getId());
 
