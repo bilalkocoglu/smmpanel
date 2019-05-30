@@ -46,6 +46,10 @@ public class CacheService {
         log.info("BankAccounts Cache Clear !");
     }
 
+    public void popularCategoryClear(){
+        Objects.requireNonNull(cacheManager.getCache("popularCategories")).clear();
+    }
+
     /*
     ----------------------------------CACHE MAP-----------------------------------------
         INIT METHODS (SocialManagementApplication.java)
@@ -89,7 +93,15 @@ public class CacheService {
             -BankAccountService.allAccounts() -> name: allAccounts
 
             CLEARS
+                -BankAccountService.save -delete
 
+        **popularCategories
+            -PackageService.visitorPopularCategories() -> name: popularCategories
+
+            CLEARS
+                -PackageService.save
+                -PackageService.changeState
+                -PackageService.servicePassivateHandler
 
      */
 }

@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 
 import com.thelastcodebenders.follower.assembler.PackageAssembler;
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.PackageFormDTO;
 import com.thelastcodebenders.follower.dto.UserPagePackageDTO;
 import com.thelastcodebenders.follower.dto.VisitorPackagesItem;
@@ -28,15 +29,18 @@ public class PackageService {
     private PackageAssembler packageAssembler;
     private ServiceService serviceService;
     private CategoryService categoryService;
+    private CacheService cacheService;
 
     public PackageService(PackageRepository packageRepository,
                           PackageAssembler packageAssembler,
                           ServiceService serviceService,
-                          CategoryService categoryService){
+                          CategoryService categoryService,
+                          CacheService cacheService){
         this.packageRepository = packageRepository;
         this.packageAssembler = packageAssembler;
         this.serviceService = serviceService;
         this.categoryService = categoryService;
+        this.cacheService = cacheService;
     }
 
     public List<String> packageColumns(){
@@ -48,6 +52,8 @@ public class PackageService {
             Service service = serviceService.findServiceById(Long.valueOf(packageFormDTO.getServiceId()));
             Package pkg = packageAssembler.convertFormDtoToPackage(packageFormDTO, service);
             packageRepository.save(pkg);
+            cacheService.popularCategoryClear();
+            visitorPopularCategories();
             return true;
         }catch (Exception e){
             log.error("Package Service Save Error -> " + e.getMessage());
@@ -117,6 +123,8 @@ public class PackageService {
                 pkg.setState(false);
 
             pkg = packageRepository.save(pkg);
+            cacheService.popularCategoryClear();
+            visitorPopularCategories();
             return true;
         }catch (Exception e){
             if (e instanceof DetectedException)
@@ -140,6 +148,9 @@ public class PackageService {
             pkg.setState(false);
             packageRepository.save(pkg);
         }
+
+        cacheService.popularCategoryClear();
+        visitorPopularCategories();
     }
 
     public void updatePackagePriceByService(Service service, double oldCustomPrice, double newCustomPrice) {
@@ -157,7 +168,6 @@ public class PackageService {
     }
 
 
-    @Cacheable("allcategories")
     public List<Category> visitorAllPackageCategories(){
         List<Category> categories = categoryService.allCategory();
         List<Category> notEmptyCategories = new ArrayList<>();
