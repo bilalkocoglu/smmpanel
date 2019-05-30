@@ -249,7 +249,7 @@ public class VisitorController {
                     log.error("Visitor Controller PackageByCategory Error -> " + e.getMessage());
                 }
             }
-
+            model.addAttribute("infomessage", "<strong>ÖNEMLİ!</strong> Lütfen sipariş verirken ilgili sayfanın tam linkini giriniz !");
             model.addAttribute("category", category);
             model.addAttribute("title",  category.getName() + " Takipçi Satın al - " + category.getName() + " Beğeni| Sosyal Trend");
             model.addAttribute("description", category.getName() + " takipçi satın al, " + category.getName() + " beğeni hilesi ve " + category.getName() + " takipçi hilesi gibi sitelerde vakit kaybetmeden uygun fiyatlı bir şekilde " + category.getName() + " begeni, " + category.getName()+ " takipci satın alarak " + category.getName() + " profilinizi güçlendirebilirsiniz. Hemen sende sitemizi ziyaret et ve şifreni vermeden takipçi almanın keyfini çıkar.");
@@ -291,7 +291,7 @@ public class VisitorController {
             redirectAttributes.addFlashAttribute("errormessage", "İstediğiniz paket için geçici bir süre sipariş alamıyoruz. Lütfen daha sonra tekrar deneyin.");
             return "redirect:/all-packages";
         }
-
+        model.addAttribute("infomessage", "<strong>ÖNEMLİ!</strong> Lütfen sipariş verirken ilgili sayfanın tam linkini giriniz !");
         model.addAttribute("pkg", packageService.createUserPageServiceFormat(packageId));
         model.addAttribute("popularCategories", packageService.visitorPopularCategories());
         model.addAttribute("message", new VisitorMessageDTO());
