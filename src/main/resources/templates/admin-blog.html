@@ -140,6 +140,7 @@
                                                                 <th>Kategori</th>
                                                                 <th>Başlık</th>
                                                                 <th>Tarih</th>
+                                                                <th>Görüntülenme</th>
                                                                 <th>Durum</th>
                                                                 <th>Action</th>
                                                             </tr>
@@ -149,6 +150,7 @@
                                                                 <td th:text="${post.getCategory().getName()}"></td>
                                                                 <td th:text="${post.getTitle()}"></td>
                                                                 <td th:text="${post.getDate()}"></td>
+                                                                <td th:text="${post.getViewCount()}"></td>
                                                                 <td>
                                                                     <span th:if="${post.getType() == T(com.thelastcodebenders.follower.blog.enums.PostType).DRAFT}">
                                                                         TASLAK

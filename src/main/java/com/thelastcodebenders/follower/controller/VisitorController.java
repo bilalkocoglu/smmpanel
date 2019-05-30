@@ -1,5 +1,8 @@
 package com.thelastcodebenders.follower.controller;
 
+import com.thelastcodebenders.follower.blog.enums.FindSlugType;
+import com.thelastcodebenders.follower.blog.model.Post;
+import com.thelastcodebenders.follower.blog.service.PostService;
 import com.thelastcodebenders.follower.enums.RoleType;
 import com.thelastcodebenders.follower.payment.paytr.PaytrService;
 import com.thelastcodebenders.follower.payment.paytr.dto.CallbackRequest;
@@ -23,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class VisitorController {
@@ -39,6 +43,7 @@ public class VisitorController {
     private ServiceService serviceService;
     private final SitemapView sitemapView;
     private PaytrService paytrService;
+    private PostService postService;
 
     public VisitorController(UserService userService,
                              PackageService packageService,
@@ -50,7 +55,8 @@ public class VisitorController {
                              OrderService orderService,
                              ServiceService serviceService,
                              SitemapView sitemapView,
-                             PaytrService paytrService){
+                             PaytrService paytrService,
+                             PostService postService){
         this.userService = userService;
         this.packageService = packageService;
         this.categoryService = categoryService;
@@ -62,6 +68,7 @@ public class VisitorController {
         this.serviceService = serviceService;
         this.sitemapView = sitemapView;
         this.paytrService = paytrService;
+        this.postService = postService;
     }
 
     //Login
@@ -554,4 +561,129 @@ public class VisitorController {
     }
 
      */
+
+    //BLOG
+    @GetMapping("/blog")
+    public String blogPage(Model model,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page){
+        try {
+            List<Integer> pageNumbers = postService.getPageNumbers();
+            model.addAttribute("postCategories", postService.postCategories());
+            model.addAttribute("pagination", pageNumbers);
+            page = postService.pageNumberControl(page, pageNumbers.get(pageNumbers.size()-1));
+            model.addAttribute("activePage", page);
+            model.addAttribute("posts", postService.getPosts(page));
+            model.addAttribute("hotnews", postService.getHotNews());
+            model.addAttribute("populars", postService.getPopulars());
+            model.addAttribute("categoryPage", false);
+
+
+
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("title", "Blog");
+            model.addAttribute("description", "Blog");
+            model.addAttribute("keywords", "Blog");
+            return "visitor-blog";
+        }catch (Exception e){
+            log.error("VisitorController blogPage Error -> " + e.getMessage());
+            return "redirect:/";
+        }
+    }
+
+    @GetMapping("/blog/{postSlug}")
+    public String postPage(Model model,
+                           RedirectAttributes redirectAttributes,
+                           @PathVariable("postSlug") String postSlug){
+        try {
+            Post post = postService.findPostBySlug(postSlug);
+            model.addAttribute("post", post);
+            postService.postViewCountPlus(post);
+            model.addAttribute("commentCount", 0);
+            model.addAttribute("postCategories", postService.postCategories());
+            model.addAttribute("hotnews", postService.getHotNews());
+            model.addAttribute("populars", postService.getPopulars());
+            model.addAttribute("previewblog", false);
+            model.addAttribute("similarPosts", postService.getSimilarPosts(post));
+
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("title", "Blog");
+            model.addAttribute("description", "Blog");
+            model.addAttribute("keywords", "Blog");
+
+            return "visitor-blog-post";
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("VisitorController postPage Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "Malesef yazı bulunamadı!");
+            }
+            return "redirect:/blog";
+        }
+    }
+
+    @GetMapping("/blog/{postSlug}/next")
+    public String nextPostPage(RedirectAttributes redirectAttributes,
+                               @PathVariable("postSlug") String postSlug){
+        try {
+            String nextSlug = postService.nextPrevPostSlug(postSlug, FindSlugType.NEXT);
+            return "redirect:/blog/" + nextSlug;
+        }catch (Exception e){
+            return "redirect:/blog/" + postSlug;
+        }
+    }
+
+    @GetMapping("/blog/{postSlug}/prev")
+    public String prevPostPage(RedirectAttributes redirectAttributes,
+                               @PathVariable("postSlug") String postSlug){
+        try {
+            String prevSlug = postService.nextPrevPostSlug(postSlug, FindSlugType.PREV);
+            return "redirect:/blog/" + prevSlug;
+        }catch (Exception e){
+            return "redirect:/blog/" + postSlug;
+        }
+    }
+
+    @GetMapping("/blog/category/{categoryName}")
+    public String categoryPage(Model model,
+                               RedirectAttributes redirectAttributes,
+                               @PathVariable("categoryName") String categoryName,
+                               @RequestParam(value = "page", required = false, defaultValue = "1") int page){
+        try {
+            Category category = categoryService.findCategoryByName(categoryName);
+
+            if (category == null)
+                throw new DetectedException("Böyle bir kategori bulunamadı !");
+            model.addAttribute("currentcategory", category);
+            List<Integer> pageNumbers = postService.getCategoryPageNumbers(category);
+            model.addAttribute("pagination", pageNumbers);
+            model.addAttribute("postCategories", postService.postCategories());
+            page = postService.pageNumberControl(page, pageNumbers.get(pageNumbers.size()-1));
+            model.addAttribute("activePage", page);
+            model.addAttribute("posts", postService.categorPosts(category, page));
+            model.addAttribute("hotnews", postService.getHotNews());
+            model.addAttribute("populars", postService.getPopulars());
+            model.addAttribute("categoryPage", true);
+
+
+            model.addAttribute("popularCategories", packageService.visitorPopularCategories());
+            model.addAttribute("message", new VisitorMessageDTO());
+            model.addAttribute("title", "Blog");
+            model.addAttribute("description", "Blog");
+            model.addAttribute("keywords", "Blog");
+
+            return "visitor-blog";
+
+        }catch (Exception e){
+            if (e instanceof DetectedException)
+                redirectAttributes.addFlashAttribute("errormessage", e.getMessage());
+            else {
+                log.error("VisitorController categoryPage Error -> " + e.getMessage());
+                redirectAttributes.addFlashAttribute("errormessage", "Böyle bir kategori bulunamadı.");
+            }
+            return "redirect:/blog";
+        }
+    }
 }

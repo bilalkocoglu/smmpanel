@@ -583,7 +583,8 @@ function isSafari() {
     "/visitor/js/components/parallax-video.js": true,
     "/visitor/js/components/sliders.js": true,
     "/visitor/js/components/breadcrumbs.js": true,
-    "/visitor/js/components/info-box.js": true
+    "/visitor/js/components/info-box.js": true,
+    "/visitor/js/components/blog-page.js":true
   },
   lazyUrls = {
     "component__map": {
@@ -1112,6 +1113,45 @@ function isSafari() {
         "assets_skrollr",
         "assets_fss",
         "paper"
+      ]
+    },
+    "component__blog_css": {
+      "css": [
+        "/visitor/css/components/blog.css"
+      ]
+    },
+    "component__blog_js": {
+      "js": [
+        "/visitor/js/components/blog.js"
+      ]
+    },
+    "component__blog": {
+      "js": [
+        "/visitor/js/components/blog.js"
+      ],
+      "dependency": [
+        "slider__slick",
+        "component__blog_css"
+      ]
+    },
+    "component__blog_grid": {
+      "css": [
+        "/visitor/css/components/blog-grid.css"
+      ]
+    },
+    "component__blog_page_css": {
+      "css": [
+        "/visitor/css/components/blog-page.css"
+      ]
+    },
+    "component__blog_page": {
+      "js": [
+        "/visitor/js/components/blog-page.js"
+      ],
+      "dependency": [
+        "component__social_links",
+        "component__blog",
+        "component__blog_page_css"
       ]
     },
     "component__image_caption_css": {

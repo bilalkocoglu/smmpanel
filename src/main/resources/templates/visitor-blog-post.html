@@ -78,7 +78,7 @@
 							</ol>
 						</div>
 					</div>
-					<div class="col-12 col-lg-6">
+					<div th:if="${previewblog==true}" class="col-12 col-lg-6">
 						<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
 							<a th:href="@{'/admin/blog/publish/' + ${post.getId()}}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
 								<span class="before">YAYINLA</span>
@@ -87,7 +87,7 @@
 							</a>
 						</div>
 					</div>
-					<div class="col-12 col-lg-6">
+					<div th:if="${previewblog==true}" class="col-12 col-lg-6">
 						<div class="d-flex justify-content-lg-end justify-content-start pr-40 pr-xs-0 breadcrumbs__title">
 							<a th:href="@{'/admin/blog/' + ${post.getId()}}" class="btn btn-inside-out btn- brk-header__item brk-header__btn brk-header__btn_white btn-sm-1 brk-base-box-shadow border-radius-25 font__family-open-sans font__weight-bold pr-30 pl-30" data-brk-library="component__button">
 								<span class="before">DÜZENLEMEYE DEVAM</span>
@@ -113,7 +113,7 @@
 										<i class="far fa-clock"></i>
 										<span th:text="${post.getDate()}"></span>
 									</a>
-									<a href="#" class="brk-post-full__meta-comments">
+									<a href="#" class="brk-post-full__meta-date">
 										<i class="far fa-comments"></i> <span th:text="${commentCount}"></span>
 									</a>
 									<a href="#" class="brk-post-full__meta-comments">
@@ -148,53 +148,21 @@
 									Önizleme Modu
 								</div>
 								<div th:if="${previewblog == false}" class="brs-carousel brs-carousel_news" data-brk-library="slider__slick">
-									<div class="brs-post brs-post_mini-vertical" data-brk-library="component__widgets">
-										<a href="#" class="brs-post__img-container">
-											<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/240x200" alt="alt" class="brs-post__img lazyload">
+									<div th:each="newpost: ${hotnews}"
+										 class="brs-post brs-post_mini-vertical" data-brk-library="component__widgets">
+										<a th:href="@{'/blog/' + ${newpost.getSlug()}}" class="brs-post__img-container">
+											<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+												 th:attr="data-src=${newpost.getMainPhotoUrl()}"
+												 alt="alt"
+												 class="brs-post__img lazyload">
 										</a>
 										<div class="brs-post__about">
-											<a href="#" class="brs-post__date">
+											<a th:href="@{'/blog/' + ${newpost.getSlug()}}" class="brs-post__date">
 												<i class="far fa-clock brs-post__date-icon"></i>
-												<span class="font__family-montserrat font__size-13 line__height-14">Aug 12, 17</span>
+												<span th:text="${newpost.getDate()}" class="font__family-montserrat font__size-13 line__height-14"></span>
 											</a>
-											<h2 class="brs-post__title font__family-montserrat font__size-16 font_weight-light line__height-18">
-												Some large title lorem ipsum</h2>
-											<a href="#" class="brs-post__link">
-												<i class="fal fa-angle-right brs-post__link-icon"></i>
-											</a>
-										</div>
-									</div>
-									<div class="brs-post brs-post_mini-vertical" data-brk-library="component__widgets">
-										<a href="#" class="brs-post__img-container">
-											<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/240x200" alt="alt" class="brs-post__img lazyload">
-										</a>
-										<div class="brs-post__about">
-											<a href="#" class="brs-post__date">
-												<i class="far fa-clock brs-post__date-icon"></i>
-												<span class="font__family-montserrat font__size-13 line__height-14">
-													Aug 12, 17
-												</span>
-											</a>
-											<h2 class="brs-post__title font__family-montserrat font__size-16 font_weight-light line__height-18">
-												Some large title
-											</h2>
-											<a href="#" class="brs-post__link">
-												<i class="fal fa-angle-right brs-post__link-icon"></i>
-											</a>
-										</div>
-									</div>
-									<div class="brs-post brs-post_mini-vertical" data-brk-library="component__widgets"><a href="#" class="brs-post__img-container"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/240x200" alt="alt" class="brs-post__img lazyload"></a>
-										<div class="brs-post__about">
-											<a href="#" class="brs-post__date">
-												<i class="far fa-clock brs-post__date-icon"></i>
-												<span class="font__family-montserrat font__size-13 line__height-14">
-													Aug 12, 17
-												</span>
-											</a>
-											<h2 class="brs-post__title font__family-montserrat font__size-16 font_weight-light line__height-18">
-												Some large title
-											</h2>
-											<a href="#" class="brs-post__link">
+											<h2 th:text="${newpost.getTitle()}" class="brs-post__title font__family-montserrat font__size-16 font_weight-light line__height-18"></h2>
+											<a th:href="@{'/blog/' + ${newpost.getSlug()}}" class="brs-post__link">
 												<i class="fal fa-angle-right brs-post__link-icon"></i>
 											</a>
 										</div>
@@ -213,38 +181,49 @@
 											Önizleme Modu
 										</div>
 										<div th:if="${previewblog == false}" class="tab-pane brs-tab__body-item fade show active" id="popular" role="tabpanel" aria-labelledby="popular-tab">
-											<div class="brs-post brs-post_mini-horizontal" data-brk-library="component__widgets">
-												<div class="brs-post__img-container"><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/110x84" alt="alt" class="brs-post__img lazyload"></a></div>
-												<div class="brs-post__about"><a href="#" class="brs-post__date"><i class="far fa-clock brs-post__date-icon"></i> <span class="font__family-montserrat font__size-13 line__height-14 font__weight-normal">Aug 12, 17</span> </a><a href="#">
-													<h3 class="brs-post__title font__family-montserrat font__size-15 font__weight-normal line__height-18">Some large title</h3>
-												</a></div>
-											</div>
-											<div class="brs-post brs-post_mini-horizontal" data-brk-library="component__widgets">
-												<div class="brs-post__img-container"><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/110x84" alt="alt" class="brs-post__img lazyload"></a></div>
-												<div class="brs-post__about"><a href="#" class="brs-post__date"><i class="far fa-clock brs-post__date-icon"></i> <span class="font__family-montserrat font__size-13 line__height-14 font__weight-normal">Aug 12, 17</span> </a><a href="#">
-													<h3 class="brs-post__title font__family-montserrat font__size-15 font__weight-normal line__height-18">Some large title</h3>
-												</a></div>
-											</div>
-											<div class="brs-post brs-post_mini-horizontal" data-brk-library="component__widgets">
-												<div class="brs-post__img-container"><a href="#"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="https://place-hold.it/110x84" alt="alt" class="brs-post__img lazyload"></a></div>
-												<div class="brs-post__about"><a href="#" class="brs-post__date"><i class="far fa-clock brs-post__date-icon"></i> <span class="font__family-montserrat font__size-13 line__height-14 font__weight-normal">Aug 12, 17</span> </a><a href="#">
-													<h3 class="brs-post__title font__family-montserrat font__size-15 font__weight-normal line__height-18">Some large title</h3>
-												</a></div>
+											<div th:each="popular: ${populars}" class="brs-post brs-post_mini-horizontal" data-brk-library="component__widgets">
+												<div class="brs-post__img-container">
+													<a th:href="@{'/blog/' + ${popular.getSlug()}}">
+														<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+															 th:attr="data-src=${popular.getMainPhotoUrl()}"
+															 alt="alt"
+															 class="brs-post__img lazyload">
+													</a>
+												</div>
+												<div class="brs-post__about">
+													<a th:href="@{'/blog/' + ${popular.getSlug()}}" class="brs-post__date">
+														<i class="far fa-clock brs-post__date-icon"></i>
+														<span th:text="${popular.getDate()}" class="font__family-montserrat font__size-13 line__height-14 font__weight-normal"></span>
+													</a>
+													<a th:href="@{'/blog/' + ${popular.getSlug()}}">
+														<h3 th:text="${popular.getTitle()}" class="brs-post__title font__family-montserrat font__size-15 font__weight-normal line__height-18"></h3>
+													</a>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+								<div class="brs-sidebar__title">
+									<h3 class="font__family-montserrat font__size-21 font__weight-bold line__height-22">
+										Kategoriler
+									</h3>
+								</div>
+								<ul class="brk-tags brk-tags_solid font__family-montserrat" data-brk-library="component__tags">
+									<li th:each="category : ${postCategories}">
+										<a href="#" rel="tag" th:text="${category.getName()}"></a>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
 				</div>
-				<h5 class="font__family-montserrat font__size-40 line__height-42 text-uppercase mb-50 mt-60 text-center">
+				<h5 th:if="${previewblog == false && similarPosts.size()>0}" class="font__family-montserrat font__size-40 line__height-42 text-uppercase mb-50 mt-60 text-center">
 					Benzer <span class="font__weight-bold">Yazılar</span>
 				</h5>
 				<div th:if="${previewblog == true}">
 					Önizleme Modu
 				</div>
-				<div th:if="${previewblog == false}" class="default-slider slick-loading dots-rounded-skin" data-slick="{
+				<div th:if="${previewblog == false && similarPosts.size()>0}" class="default-slider slick-loading dots-rounded-skin" data-slick="{
 				&quot;slidesToShow&quot;: 3,
 				&quot;slidesToScroll&quot;: 1,
 				&quot;dots&quot;: true,
@@ -258,91 +237,27 @@
 					&quot;settings&quot;: {&quot;slidesToShow&quot;: 1}
 				}
 				]}" data-brk-library="slider__slick">
-					<div class="pl-15 pr-15">
+					<div th:each="similarPost: ${similarPosts}" class="pl-15 pr-15">
 						<div class="post-rounded brk-base-box-shadow text-center" data-brk-library="component__content_slider">
-							<div class="post-rounded__thumb lazyload" data-bg="img/rounded-1.jpg">
-								<a href="#" class="btn btn-inside-out btn-inside-out-invert btn-lg border-radius-30 font__family-open-sans font__weight-bold letter-spacing--100 z-index-1 post-rounded__btn pl-70 pr-70" data-brk-library="component__button">
+							<div class="post-rounded__thumb lazyload"
+								 th:attr="data-bg=${similarPost.getMainPhotoUrl()}">
+								<a th:href="@{'/blog/' + ${similarPost.getSlug()}}" class="btn btn-inside-out btn-inside-out-invert btn-lg border-radius-30 font__family-open-sans font__weight-bold letter-spacing--100 z-index-1 post-rounded__btn pl-70 pr-70" data-brk-library="component__button">
 									<span class="before">
-										Read More
+										Devamını Oku
 									</span>
 									<span class="text">
-										Click Me
+										Tamamını Oku
 									</span>
 									<span class="after">
-										Read More
+										Devamını Oku
 									</span>
 								</a>
 							</div>
 							<div class="post-rounded__text">
-								<a href="#">
-									<h3 class="font__family-montserrat font__weight-bold font__size-19">
-										Aquatic: Stock Photography
-									</h3>
+								<a th:href="@{'/blog/' + ${similarPost.getSlug()}}">
+									<h3 th:text="${similarPost.getTitle()}" class="font__family-montserrat font__weight-bold font__size-19"></h3>
 								</a>
-								<p class="font__family-open-sans font__size-16 brk-dark-font-color line__height-28">
-									Phasellus dolor. Maecenas ulum mollis diam. Pellentesqueneque ellentesque habitant m tristique.
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="pl-15 pr-15">
-						<div class="post-rounded brk-base-box-shadow text-center" data-brk-library="component__content_slider">
-							<div class="post-rounded__thumb lazyload" data-bg="img/rounded-2.jpg">
-								<a href="#" class="btn btn-inside-out btn-inside-out-invert btn-lg border-radius-30 font__family-open-sans font__weight-bold letter-spacing--100 z-index-1 post-rounded__btn pl-70 pr-70" data-brk-library="component__button">
-									<span class="before">Read More</span>
-									<span class="text">Click Me</span>
-									<span class="after">Read More</span>
-								</a>
-							</div>
-							<div class="post-rounded__text">
-								<a href="#">
-									<h3 class="font__family-montserrat font__weight-bold font__size-19">
-										The Lyric Video Is Trending
-									</h3>
-								</a>
-								<p class="font__family-open-sans font__size-16 brk-dark-font-color line__height-28">
-									You&apos;ve just heard the newest hit song. Next step: learn the words so you don&apos;t embarrass yourself.
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="pl-15 pr-15">
-						<div class="post-rounded brk-base-box-shadow text-center" data-brk-library="component__content_slider">
-							<div class="post-rounded__thumb lazyload" data-bg="img/rounded-3.jpg">
-								<a href="#" class="btn btn-inside-out btn-inside-out-invert btn-lg border-radius-30 font__family-open-sans font__weight-bold letter-spacing--100 z-index-1 post-rounded__btn pl-70 pr-70" data-brk-library="component__button">
-									<span class="before">Read More</span>
-									<span class="text">Click Me</span>
-									<span class="after">Read More</span>
-								</a>
-							</div>
-							<div class="post-rounded__text">
-								<a href="#">
-									<h3 class="font__family-montserrat font__weight-bold font__size-19">
-										Blossom: The Best in Floral
-									</h3>
-								</a>
-								<p class="font__family-open-sans font__size-16 brk-dark-font-color line__height-28">
-									Flowers are one of Mother Nature&apos;s most beautiful gifts. Not only are they a source of natural...
-								</p>
-							</div>
-						</div>
-					</div>
-					<div class="pl-15 pr-15">
-						<div class="post-rounded brk-base-box-shadow text-center" data-brk-library="component__content_slider">
-							<div class="post-rounded__thumb lazyload" data-bg="img/rounded-2.jpg">
-								<a href="#" class="btn btn-inside-out btn-inside-out-invert btn-lg border-radius-30 font__family-open-sans font__weight-bold letter-spacing--100 z-index-1 post-rounded__btn pl-70 pr-70" data-brk-library="component__button">
-									<span class="before">Read More</span>
-									<span class="text">Click Me</span>
-									<span class="after">Read More</span>
-								</a>
-							</div>
-							<div class="post-rounded__text">
-								<a href="#">
-									<h3 class="font__family-montserrat font__weight-bold font__size-19">
-										The Lyric Video Is Trending
-									</h3>
-								</a>
-								<p class="font__family-open-sans font__size-16 brk-dark-font-color line__height-28">You&apos;ve just heard the newest hit song. Next step: learn the words so you don&apos;t embarrass yourself.</p>
+								<p th:text="${similarPost.getSummary()}" class="font__family-open-sans font__size-16 brk-dark-font-color line__height-28"></p>
 							</div>
 						</div>
 					</div>
@@ -350,12 +265,12 @@
 
 			<div class="mt-50">
 				<div class="brk-pagination brk-pagination-large" data-brk-library="component__pagination">
-					<a href="#" class="text-center">
+					<a th:href="@{'/blog/' + ${post.getSlug()} + '/prev'}" class="text-center">
 						<span class="brk-prev-link">
 							<i class="fa fa-angle-left"></i>Önceki
 						</span>
 					</a>
-					<a href="#" class="text-center">
+					<a th:href="@{'/blog/' + ${post.getSlug()} + '/next'}" class="text-center">
 						<span class="brk-next-link">
 							Sonraki<i class="fa fa-angle-right"></i>
 						</span>

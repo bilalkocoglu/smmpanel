@@ -23,7 +23,7 @@ public class OrderAssembler {
 
     private String dateTimeNow(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        String date = LocalDateTime.now().format(formatter);
+        String date = LocalDateTime.now().plusHours(3).format(formatter);
 
         return date;
     }

@@ -78,6 +78,12 @@
                             <span data-i18n="" class="menu-title">Sık Sorulan Sorular</span>
                         </a>
                     </li>
+                    <li class=" nav-item" th:classappend="${#strings.equals(page, 'blog')} ? active : null">
+                        <a th:href="@{/blog}">
+                            <i class="ft-bell"></i>
+                            <span data-i18n="" class="menu-title">Ödeme Bildirimleri</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

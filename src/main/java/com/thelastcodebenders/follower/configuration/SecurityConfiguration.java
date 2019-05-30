@@ -70,7 +70,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/order/**",
                         //"/deneme",
                         "/paytr/callback",
-                        "/robots.txt").permitAll()
+                        "/robots.txt",
+                        "/blog/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/user/**").hasAuthority("USER")
                 .anyRequest()
@@ -83,6 +84,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler);
+
+        http.requiresChannel().anyRequest().requiresInsecure();
     }
 
     @Override

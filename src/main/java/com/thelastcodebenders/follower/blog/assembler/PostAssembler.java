@@ -9,6 +9,7 @@ import com.thelastcodebenders.follower.service.CategoryService;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 
@@ -36,7 +37,8 @@ public class PostAssembler {
 
         DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        post.setDate(LocalDateTime.now().format(customFormatter));
+        //time zone
+        post.setDate(LocalDateTime.now().plusHours(3).format(customFormatter));
         post.setMainPhotoUrl(form.getMainPhotoUrl());
         post.setTags(form.getTags());
         post.setViewCount((long)0);
