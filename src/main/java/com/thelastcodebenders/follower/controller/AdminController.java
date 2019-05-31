@@ -881,7 +881,7 @@ public class AdminController {
     public String drawOrders(Model model){
         model.addAttribute("orders", drawService.findDrawVisitOrderNotNull());
         model.addAttribute("page", "draworders");
-        return "admin-orders";
+        return "admin-draw-orders";
     }
 }
 
