@@ -69,13 +69,14 @@ public class OrderService {
         double total = 0;
 
         for (Order order: completedOrders) {
-            total += order.getCustomPrice()-order.getApiPrice();
+            double orderTotal =  order.getCustomPrice()-order.getApiPrice();
+            total = total + orderTotal;
         }
 
         List<DrawOrder> complatedDrawOrder = drawOrderRepository.findByStatus(OrderStatusType.COMPLETED);
 
         for (DrawOrder drawOrder: complatedDrawOrder) {
-            total -= drawOrder.getDrawPrize().getApiPrice();
+            total = total - drawOrder.getDrawPrize().getApiPrice();
         }
 
 
