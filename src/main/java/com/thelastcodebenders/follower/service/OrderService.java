@@ -5,6 +5,7 @@ import com.thelastcodebenders.follower.assembler.OrderAssembler;
 import com.thelastcodebenders.follower.client.panel.PanelService;
 import com.thelastcodebenders.follower.client.panel.dto.OrderStatusResponse;
 import com.thelastcodebenders.follower.client.telegram.TelegramService;
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.NewOrderFormDTO;
 import com.thelastcodebenders.follower.dto.UserPageOrderDTO;
 import com.thelastcodebenders.follower.dto.VisitorPageOrderDTO;
@@ -12,13 +13,13 @@ import com.thelastcodebenders.follower.enums.CreateAPIOrderType;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.enums.ServiceState;
 import com.thelastcodebenders.follower.exception.DetectedException;
-import com.thelastcodebenders.follower.model.Order;
+import com.thelastcodebenders.follower.model.*;
 import com.thelastcodebenders.follower.model.Package;
-import com.thelastcodebenders.follower.model.Service;
-import com.thelastcodebenders.follower.model.User;
+import com.thelastcodebenders.follower.repository.DrawOrderRepository;
 import com.thelastcodebenders.follower.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 
 import javax.security.auth.login.LoginException;
@@ -37,6 +38,8 @@ public class OrderService {
     private ApiService apiService;
     private PackageService packageService;
     private TelegramService telegramService;
+    private DrawOrderRepository drawOrderRepository;
+    private CacheService cacheService;
 
     public OrderService(ServiceService serviceService,
                         UserService userService,
@@ -45,7 +48,9 @@ public class OrderService {
                         PanelService panelService,
                         ApiService apiService,
                         PackageService packageService,
-                        TelegramService telegramService){
+                        TelegramService telegramService,
+                        DrawOrderRepository drawOrderRepository,
+                        CacheService cacheService){
         this.serviceService = serviceService;
         this.userService = userService;
         this.orderRepository = orderRepository;
@@ -54,29 +59,25 @@ public class OrderService {
         this.apiService = apiService;
         this.packageService = packageService;
         this.telegramService = telegramService;
+        this.drawOrderRepository = drawOrderRepository;
+        this.cacheService = cacheService;
     }
 
-    //net kazanç
+    @Cacheable("winnings")
     public double getWinnings(){
-        List<Order> completedOrders = orderRepository.findByClosed(true);
-
-        double possitive = 0;
-        double negative = 0;
+        List<Order> completedOrders = orderRepository.findByStatus(OrderStatusType.COMPLETED);
+        double total = 0;
 
         for (Order order: completedOrders) {
-            if (order.getStatus() == OrderStatusType.COMPLETED){
-                possitive += order.getCustomPrice();
-                negative += order.getApiPrice();
-            }else if (order.getStatus() == OrderStatusType.PARTIAL){
-                possitive += order.getCustomPrice() - order.getRemainBalance();
-
-                //api tarafından bize yapılması beklenen iade
-                double apiRemain = (order.getRemainBalance() * order.getApiPrice()) / order.getCustomPrice();
-                negative += order.getApiPrice() - apiRemain;
-            }
+            total += order.getCustomPrice()-order.getApiPrice();
         }
 
-        double total = possitive - negative;
+        List<DrawOrder> complatedDrawOrder = drawOrderRepository.findByStatus(OrderStatusType.COMPLETED);
+
+        for (DrawOrder drawOrder: complatedDrawOrder) {
+            total -= drawOrder.getDrawPrize().getApiPrice();
+        }
+
 
         return Double.parseDouble(String.format("%.2f", total));
     }
@@ -391,9 +392,9 @@ public class OrderService {
                     order.setStatus(OrderStatusType.INPROGRESS);
                 }
                 else if (orderStatusResponse.getStatus().equals("Completed")){
-                    //tamamlandı
+                    //tamamlandı - winning cache reset
                     log.info(order.getId() + " -> Complated !");
-
+                    cacheService.winningsClear();
 
                     try {
                         if ( orderStatusResponse.getStart_count() != null){
@@ -407,6 +408,7 @@ public class OrderService {
 
                     order.setClosed(true);
                     order.setStatus(OrderStatusType.COMPLETED);
+                    getWinnings();
                 }
                 else if (orderStatusResponse.getStatus().equals("Partial")){
                     //bir kısmı tamamlandı kalanı iade edildi

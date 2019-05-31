@@ -50,6 +50,9 @@ public class CacheService {
         Objects.requireNonNull(cacheManager.getCache("popularCategories")).clear();
     }
 
+    public void winningsClear(){
+        cacheManager.getCache("winnings").clear();
+    }
     /*
     ----------------------------------CACHE MAP-----------------------------------------
         INIT METHODS (SocialManagementApplication.java)
@@ -59,6 +62,7 @@ public class CacheService {
 		AskedQuestionService.allAskedQuestions();
         AnnouncementService.findAll();
         BankAccountService.allAccounts();
+        OrderService.getWinnings;
 
         **service-xxxx (cache name)
             -ServiceService.createVisitorServicesItems()    -> name: service-visitor
@@ -103,5 +107,11 @@ public class CacheService {
                 -PackageService.changeState
                 -PackageService.servicePassivateHandler
 
+        **winnings
+            -OrderService.getWinnings() -> name: winnings
+
+            CLEARS
+                -DrawService.updateActiveOrderStatus
+                -OrderService.updateActiveOrderStatus
      */
 }

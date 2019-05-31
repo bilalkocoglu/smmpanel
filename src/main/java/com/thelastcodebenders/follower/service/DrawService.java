@@ -2,6 +2,7 @@ package com.thelastcodebenders.follower.service;
 
 import com.thelastcodebenders.follower.client.panel.PanelService;
 import com.thelastcodebenders.follower.client.panel.dto.OrderStatusResponse;
+import com.thelastcodebenders.follower.configuration.cache.CacheService;
 import com.thelastcodebenders.follower.dto.CountDownDTO;
 import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.exception.DetectedException;
@@ -31,18 +32,21 @@ public class DrawService {
     private DrawVisitRepository drawVisitRepository;
     private DrawPrizeService drawPrizeService;
     private PanelService panelService;
+    private CacheService cacheService;
 
 
     public DrawService(DrawCountRepository drawCountRepository,
                        DrawOrderRepository drawOrderRepository,
                        DrawVisitRepository drawVisitRepository,
                        DrawPrizeService drawPrizeService,
-                       PanelService panelService){
+                       PanelService panelService,
+                       CacheService cacheService){
         this.drawCountRepository = drawCountRepository;
         this.drawOrderRepository = drawOrderRepository;
         this.drawVisitRepository = drawVisitRepository;
         this.drawPrizeService = drawPrizeService;
         this.panelService = panelService;
+        this.cacheService = cacheService;
     }
 
     public DrawCount findDrawCountByUser(User user){
@@ -234,12 +238,13 @@ public class DrawService {
                     order.setStatus(OrderStatusType.INPROGRESS);
                 }
                 else if (orderStatusResponse.getStatus().equals("Completed")){
-                    //tamamlandı
+                    //tamamlandı - winning cache reset
                     log.info(order.getId() + " -> Complated !");
 
 
                     order.setClosed(true);
                     order.setStatus(OrderStatusType.COMPLETED);
+                    cacheService.winningsClear();
                 }
                 else if (orderStatusResponse.getStatus().equals("Partial")){
                     //bir kısmı tamamlandı kalanı iade edildi

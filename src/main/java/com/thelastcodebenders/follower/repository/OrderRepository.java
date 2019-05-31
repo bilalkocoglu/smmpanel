@@ -1,5 +1,6 @@
 package com.thelastcodebenders.follower.repository;
 
+import com.thelastcodebenders.follower.enums.OrderStatusType;
 import com.thelastcodebenders.follower.model.Order;
 import com.thelastcodebenders.follower.model.User;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUser(User user, Sort sort);
 
     List<Order> findByClosed(boolean closed);
+
+    List<Order> findByStatus(OrderStatusType orderStatusType);
 
     int countByUserAndClosed(User user, boolean closed);
 }
