@@ -271,4 +271,15 @@ public class DrawService {
         }
     }
 
+    public List<DrawVisit> findDrawVisitOrderNotNull(){
+        List<DrawVisit> drawVisits = new ArrayList<>();
+
+        drawVisitRepository.findAll().forEach(drawVisit -> {
+            if (drawVisit.getDrawOrder() != null)
+                drawVisits.add(drawVisit);
+        });
+
+        return drawVisits;
+    }
+
 }

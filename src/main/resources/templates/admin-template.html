@@ -35,6 +35,12 @@
                                 <span data-i18n="" class="menu-title">Siparişler</span>
                             </a>
                         </li>
+                        <li class=" nav-item" th:classappend="${#strings.equals(page, 'draworders')} ? active : null">
+                            <a th:href="@{/admin/draw-orders}">
+                                <i class="ft-package"></i>
+                                <span data-i18n="" class="menu-title">Çekiliş Siparişleri</span>
+                            </a>
+                        </li>
                         <li class=" nav-item" th:classappend="${#strings.equals(page, 'tickets')} ? active : null">
                             <a th:href="@{/admin/tickets}">
                                 <i class="ft-message-square"></i>

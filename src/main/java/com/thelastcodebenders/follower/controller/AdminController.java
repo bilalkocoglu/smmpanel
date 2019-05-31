@@ -48,6 +48,7 @@ public class AdminController {
     private DrawPrizeService drawPrizeService;
     private CacheService cacheService;
     private PostService postService;
+    private DrawService drawService;
 
     public AdminController(TicketService ticketService,
                            PaymentNotificationService paymentNotificationService,
@@ -64,7 +65,8 @@ public class AdminController {
                            CategoryArticleService categoryArticleService,
                            DrawPrizeService drawPrizeService,
                            CacheService cacheService,
-                           PostService postService){
+                           PostService postService,
+                           DrawService drawService){
         this.ticketService = ticketService;
         this.paymentNotificationService = paymentNotificationService;
         this.userService = userService;
@@ -81,6 +83,7 @@ public class AdminController {
         this.drawPrizeService = drawPrizeService;
         this.cacheService = cacheService;
         this.postService = postService;
+        this.drawService = drawService;
     }
 
     //  ADMIN INDEX
@@ -870,6 +873,15 @@ public class AdminController {
             }
         }
         return "redirect:/admin/blog";
+    }
+
+
+    //Draw Orders Page
+    @GetMapping("/draw-orders")
+    public String drawOrders(Model model){
+        model.addAttribute("orders", drawService.findDrawVisitOrderNotNull());
+        model.addAttribute("page", "draworders");
+        return "admin-orders";
     }
 }
 
