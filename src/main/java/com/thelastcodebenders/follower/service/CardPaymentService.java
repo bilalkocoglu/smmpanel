@@ -41,7 +41,7 @@ public class CardPaymentService {
             cardPayment.setAmount(balance);
             cardPayment.setFinished(false);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-            cardPayment.setDate(LocalDateTime.now().format(formatter));
+            cardPayment.setDate(LocalDateTime.now().plusHours(3).format(formatter));
 
             cardPaymentRepository.save(cardPayment);
             return true;
