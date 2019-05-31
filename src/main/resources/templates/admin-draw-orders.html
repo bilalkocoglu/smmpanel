@@ -42,7 +42,7 @@
                                               <tr th:each="order : ${orders}">
                                                   <td th:text="${order.getId()}"></td>
                                                   <td th:text="${order.getUser().getId() + ' - ' + order.getUser().getName() + ' ' + order.getUser().getSurname()}"></td>
-                                                  <td th:text="${order.getDate().replace('T',' ')}"></td>
+                                                  <td th:text="${order.getDate().toString().replace('T',' ')}"></td>
                                                   <td th:text="${order.getDrawOrder().getDrawPrize().getId() + ' - ' + order.getDrawOrder().getDrawPrize().getName()}"></td>
                                                   <td>
 								                    <span th:if="${order.getDrawOrder().getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
