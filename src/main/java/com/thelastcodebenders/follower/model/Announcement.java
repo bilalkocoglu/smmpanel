@@ -30,5 +30,6 @@ public class Announcement {
 
     @NotNull
     @NotEmpty
+    @Column(length = 1000)
     private String description;
 }
