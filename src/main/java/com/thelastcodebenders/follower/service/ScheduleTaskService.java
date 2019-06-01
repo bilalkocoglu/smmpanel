@@ -9,6 +9,8 @@ import org.springframework.cache.CacheManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ScheduleTaskService {
     private static final Logger log = LoggerFactory.getLogger(ScheduleTaskService.class);
@@ -38,10 +40,9 @@ public class ScheduleTaskService {
     public void servicesUpdate() {
         //User admin = userService.getAdmin();
 
-        String otherUpdateMessage = apiService.allApiUpdateOtherService();
-        if (!otherUpdateMessage.equals("")){
-            //mailService.sendUpdateServiceStateMail(admin.getMail(), otherUpdateMessage);
-            telegramService.sendAdminMessage(otherUpdateMessage);
+        List<String> messages = apiService.allApiUpdateOtherService();
+        for (String msg : messages) {
+            telegramService.sendAdminMessage(msg);
         }
     }
 

@@ -366,8 +366,9 @@ public class ApiService {
         }
     }
 
-    public String allApiUpdateOtherService(){
+    public List<String> allApiUpdateOtherService(){
         try {
+            List<String> messageList = new ArrayList<>();
             List<API> apis = apiRepository.findAll();
 
             for (API api: apis) {
@@ -375,7 +376,8 @@ public class ApiService {
 
                 if (clientServices == null){
                     log.error("Saatte bir yapılan servis güncellemesi apiden servisler çekilemediği için başarısız oldu !");
-                    return "Saatte bir yapılan servis güncellemesi apiden servisler çekilemediği için başarısız oldu !";
+                    messageList.add("Saatte bir yapılan servis güncellemesi apiden servisler çekilemediği için başarısız oldu !");
+                    return messageList;
                 }
 
                 log.info(api.getName() + " API client service count => " + clientServices.size());
@@ -413,14 +415,24 @@ public class ApiService {
                             systemService.setState(ServiceState.PASSIVE);
                             serviceRepository.save(systemService);
                             log.info(systemService.getId() + " Servis güncellendi !");
+                        }else{
+                            if (systemService.getState() != ServiceState.PASSIVE){
+                                //deleteddır.
+                                systemService.setState(ServiceState.PASSIVE);
+                                if (systemService.getCustomName()!=null){
+                                    messageList.add(systemService.getId().toString() + " ID'li Servisten tekrar bilgi alınmaya başlandı. Aktif etmek isteyebilirsiniz.");
+                                }
+                            }
                         }
                     }
                 });
             }
-            return "";
+            return messageList;
         }catch (Exception e){
             log.error("allApiUpdateOtherService Error -> " + e.getMessage());
-            return "Saatte bir yapılan servisleri güncelleme işlemi başarısız oldu ! Hata mesajı : " + e.getMessage();
+            List<String> messageList = new ArrayList<>();
+            messageList.add("Saatte bir yapılan servisleri güncelleme işlemi başarısız oldu ! Hata mesajı : " + e.getMessage());
+            return messageList;
         }
     }
 
