@@ -422,6 +422,7 @@ public class ApiService {
                                 if (systemService.getCustomName()!=null){
                                     messageList.add(systemService.getId().toString() + " ID'li Servisten tekrar bilgi alınmaya başlandı. Aktif etmek isteyebilirsiniz.");
                                 }
+                                serviceRepository.save(systemService);
                             }
                         }
                     }
