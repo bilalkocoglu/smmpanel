@@ -164,4 +164,14 @@ public class PaymentNotificationService {
         return true;
     }
 
+    public double getGiro(){
+        double total = 0;
+        List<PaymentNotification> paymentNotifications = paymentNotificationRepository.findByConfirmation(true);
+
+        for (PaymentNotification p: paymentNotifications) {
+            total += p.getAmount();
+        }
+        return total;
+    }
+
 }

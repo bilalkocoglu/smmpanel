@@ -16,4 +16,6 @@ public interface PaymentNotificationRepository extends JpaRepository<PaymentNoti
     List<PaymentNotification> findByUser(User user);
 
     long countByBankAccount(BankAccount bankAccount);
+
+    List<PaymentNotification> findByConfirmation(boolean confirmation);
 }

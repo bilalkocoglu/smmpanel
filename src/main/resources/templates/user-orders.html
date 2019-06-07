@@ -21,92 +21,70 @@
 
         <div class="main-content">
           <div class="content-wrapper"><!--Statistics cards Starts-->
-              <div th:replace="admin-template :: messages"></div>
 
-              <section id="extended">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">SİPARİŞLER</h4>
-                </div>
-                <div class="card-body collapse show">
-                    <div class="card-block card-dashboard" style="padding-top: 10px !important; overflow-x: scroll">
-                        <table class="table table-striped table-bordered zero-configuration">
-                            <thead>
-                                <tr>
-                                    <th>Sipariş No</th>
-                                    <th>Tarih</th>
-                                    <th>URL</th>
-                                    <th>Tutar</th>
-                                    <th>Servis</th>
-                                    <th>Miktar</th>
-                                    <th>Başlangıç Sayısı</th>
-                                    <th>Durum</th>
-                                    <th>İade Adedi</th>
-                                    <th>İade Tutarı</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="order : ${orders}">
-                                    <td th:text="${order.getId()}"></td>
-                                    <td th:text="${order.getDate()}"></td>
-                                    <td th:text="${order.getDestUrl()}"></td>
-                                    <td th:text="${order.getCustomPrice()}"></td>
-                                    <td th:text="${order.getServiceName()}"></td>
-                                    <td th:text="${order.getQuantity()}"></td>
-                                    <td th:text="${order.getStartCount()}"></td>
-                                    <td>
-								        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
-                                                class="btn btn-round gradient-yellow-green">
-                                            Sipariş Alındı
-                                        </span>
-                                        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
-                                              class="btn white btn-round gradient-light-green-amber">
-                                            Yükleniyor
-                                        </span>
-                                        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}"
-                                              class="btn white btn-round gradient-green-tea">
-                                            Tamamlandı
-                                        </span>
-                                        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}"
-                                              class="btn white btn-round gradient-red-pink">
-                                            Bir Kısmı Tamamlandı(Kalanı İade Edildi)
-                                        </span>
-                                        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}"
-                                              class="btn white btn-round gradient-blueberry">
-                                            Gönderim Sırasında
-                                        </span>
-                                        <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}"
-                                              class="btn white btn-round gradient-ibiza-sunset">
-                                            İptal Edildi
-                                        </span>
-                                    </td>
-                                    <td th:text="${order.getRemain()}"></td>
-                                    <td th:text="${order.getRemainBalance()}"></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Sipariş No</th>
-                                    <th>Tarih</th>
-                                    <th>URL</th>
-                                    <th>Tutar</th>
-                                    <th>Servis</th>
-                                    <th>Miktar</th>
-                                    <th>Başlangıç Sayısı</th>
-                                    <th>Durum</th>
-                                    <th>İade Adedi</th>
-                                    <th>İade Tutarı</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
+              <div class="card" style="overflow-x: scroll">
+                  <div class="card-header">
+                      <h4 style="float: right;" class="card-title">SİPARİŞLER</h4>
+                  </div>
+                  <div class="card-body" style="overflow-y: auto; overflow-x: hidden; max-height:300px; height: auto!important;">
+                      <table class="table table-responsive-sm text-center">
+                          <thead>
+                          <tr>
+                              <th>Sipariş No</th>
+                              <th>Tarih</th>
+                              <th>URL</th>
+                              <th>Tutar</th>
+                              <th>Servis</th>
+                              <th>Miktar</th>
+                              <th>Başlangıç Sayısı</th>
+                              <th>Durum</th>
+                              <th>İade Adedi</th>
+                              <th>İade Tutarı</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                              <tr th:each="order : ${orders}">
+                                  <td th:text="${order.getId()}"></td>
+                                  <td th:text="${order.getDate()}"></td>
+                                  <td th:text="${order.getDestUrl()}"></td>
+                                  <td th:text="${order.getCustomPrice()}"></td>
+                                  <td th:text="${order.getServiceName()}"></td>
+                                  <td th:text="${order.getQuantity()}"></td>
+                                  <td th:text="${order.getStartCount()}"></td>
+                                  <td>
+                                            <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PENDING}"
+                                                  class="btn btn-round gradient-yellow-green">
+                                                Sipariş Alındı
+                                            </span>
+                                      <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).INPROGRESS}"
+                                            class="btn white btn-round gradient-light-green-amber">
+                                                Yükleniyor
+                                            </span>
+                                      <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).COMPLETED}"
+                                            class="btn white btn-round gradient-green-tea">
+                                                Tamamlandı
+                                            </span>
+                                      <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PARTIAL}"
+                                            class="btn white btn-round gradient-red-pink">
+                                                Bir Kısmı Tamamlandı(Kalanı İade Edildi)
+                                            </span>
+                                      <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).PROCESSING}"
+                                            class="btn white btn-round gradient-blueberry">
+                                                Gönderim Sırasında
+                                            </span>
+                                      <span th:if="${order.getStatus() == T(com.thelastcodebenders.follower.enums.OrderStatusType).CANCELED}"
+                                            class="btn white btn-round gradient-ibiza-sunset">
+                                                İptal Edildi
+                                            </span>
+                                  </td>
+                                  <td th:text="${order.getRemain()}"></td>
+                                  <td th:text="${order.getRemainBalance()}"></td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
           </div>
         </div>
 

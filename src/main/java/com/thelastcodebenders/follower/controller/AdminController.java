@@ -90,6 +90,7 @@ public class AdminController {
     @GetMapping("/dashboard")       //ADMIN HOME PAGE
     public String home(Model model) throws LoginException {
         model.addAttribute("winnings", orderService.getWinnings());
+        model.addAttribute("giro" , cardPaymentService.getGiro() + paymentNotificationService.getGiro());
         model.addAttribute("unread_ticket_count", ticketService.unreadTickets(RoleType.ADMIN));
         model.addAttribute("payment_count", paymentNotificationService.unconfirmedNotifications());
         model.addAttribute("user_count", userService.userCount());

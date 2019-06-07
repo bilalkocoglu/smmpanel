@@ -64,4 +64,15 @@ public class CardPaymentService {
     public CardPayment update(CardPayment cardPayment){
         return cardPaymentRepository.save(cardPayment);
     }
+
+    public double getGiro(){
+        double total = 0;
+        List<CardPayment> cardPayments = findFinishedCardPayment();
+
+        for (CardPayment cardPayment: cardPayments) {
+            total += cardPayment.getAmount();
+        }
+
+        return total;
+    }
 }
