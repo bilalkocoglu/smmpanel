@@ -366,7 +366,8 @@ public class OrderService {
             for (Order order: activeOrders) {
                 OrderStatusResponse orderStatusResponse = panelService.orderStatus(order.getApiOrderId(), order.getService().getApi());
 
-                if (orderStatusResponse.getStatus().equals("Pending")){
+                if (orderStatusResponse.getStatus().equals("Pending")
+                        || orderStatusResponse.getStatus().equals("pending")){
                     //sipariş alındı
                     log.info(order.getId() + " -> Pending !");
 
@@ -380,7 +381,8 @@ public class OrderService {
 
                     order.setStatus(OrderStatusType.PENDING);
                 }
-                else if (orderStatusResponse.getStatus().equals("In progress")){
+                else if (orderStatusResponse.getStatus().equals("In progress")
+                        || orderStatusResponse.getStatus().equals("in progress")){
                     //yükleniyor
                     log.info(order.getId() + " -> Inprogress !");
 
@@ -395,7 +397,8 @@ public class OrderService {
 
                     order.setStatus(OrderStatusType.INPROGRESS);
                 }
-                else if (orderStatusResponse.getStatus().equals("Completed")){
+                else if (orderStatusResponse.getStatus().equals("Completed")
+                        || orderStatusResponse.getStatus().equals("completed")) {
                     //tamamlandı - winning cache reset
                     log.info(order.getId() + " -> Complated !");
                     cacheService.winningsClear();
@@ -414,7 +417,8 @@ public class OrderService {
                     order.setStatus(OrderStatusType.COMPLETED);
                     getWinnings();
                 }
-                else if (orderStatusResponse.getStatus().equals("Partial")){
+                else if (orderStatusResponse.getStatus().equals("Partial")
+                        || orderStatusResponse.getStatus().equals("partial")){
                     //bir kısmı tamamlandı kalanı iade edildi
                     log.info(order.getId() + " -> Partial !");
 
@@ -443,7 +447,8 @@ public class OrderService {
                     order.setClosed(true);
                     order.setStatus(OrderStatusType.PARTIAL);
                 }
-                else if (orderStatusResponse.getStatus().equals("Processing")){
+                else if (orderStatusResponse.getStatus().equals("Processing")
+                        || orderStatusResponse.getStatus().equals("processing")){
                     //gönderim sırasında
                     log.info(order.getId() + " -> Processing !");
 
@@ -458,7 +463,8 @@ public class OrderService {
 
                     order.setStatus(OrderStatusType.PROCESSING);
                 }
-                else if (orderStatusResponse.getStatus().equals("Canceled")){
+                else if (orderStatusResponse.getStatus().equals("Canceled")
+                        || orderStatusResponse.getStatus().equals("canceled")){
                     //iptal edildi
                     //para iade edilecek, api bakiyesi güncellenecek
                     log.info(order.getId() + " -> Canceled !");

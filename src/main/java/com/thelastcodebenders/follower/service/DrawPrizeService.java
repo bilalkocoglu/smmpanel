@@ -118,6 +118,9 @@ public class DrawPrizeService {
             if (action == UserAction.ACTIVATE){
                 if (drawPrize.getService().getState() != ServiceState.ACTIVE)
                     throw new DetectedException("Ödülün bağlı olduğu servis pasif durumda !");
+                if (drawPrize.getQuantity()<drawPrize.getService().getApiMinPiece() ||
+                    drawPrize.getQuantity()>drawPrize.getService().getApiMaxPiece())
+                    throw new DetectedException("Ödül miktarı bağlı olduğu servisin izin verdiği aralık dışında !");
                 drawPrize.setState(true);
             }
             if (action == UserAction.PASSIVATE){
