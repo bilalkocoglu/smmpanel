@@ -191,6 +191,7 @@ public class DrawService {
             String apiOrderId = panelService.createDrawPrizeOrderReturnOrderId(drawPrize.getService(), url, String.valueOf(drawPrize.getQuantity()));
 
             if (apiOrderId == null || apiOrderId.equals("0")){
+                log.error("apiOrderId null veya 0 !");
                 throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
             }
 
@@ -211,8 +212,10 @@ public class DrawService {
         }catch (Exception e){
             if (e instanceof DetectedException)
                 throw e;
-            else
+            else{
+                log.error(e.getMessage());
                 throw new DetectedException("Siparişiniz verilemedi. Bunu bir destek talebi açıp bildirirseniz arkadaşlarımız en kısa sürede gerekli yardımı sağlayacaktır.");
+            }
         }
     }
 
