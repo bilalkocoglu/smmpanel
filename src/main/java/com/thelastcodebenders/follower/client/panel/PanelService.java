@@ -126,12 +126,14 @@ public class PanelService {
                     .quantity(quantity)
                     .build();
             String url = service.getApi().getUrl();
+            log.info("Order request -> " + createOrderRequest.toString());
             ResponseEntity<CreateOrderResponse> response = restTemplate.postForEntity(url, createOrderRequest, CreateOrderResponse.class);
 
             if (response.getStatusCode() != HttpStatus.OK){
                 log.error("Client Service createOrderReturnOrderId Method Error -> Response Code : " + response.getStatusCodeValue());
                 return null;
             }
+            log.info("Order response -> " + response.getBody().toString());
 
             return String.valueOf(response.getBody().getOrder());
         }catch (Exception e){
