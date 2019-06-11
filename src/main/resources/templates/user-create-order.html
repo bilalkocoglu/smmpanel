@@ -142,7 +142,11 @@
                                                                                         <th th:text="${service.getCustomName()}"></th>
                                                                                         <td th:text="${service.getCustomMinPiece()}"></td>
                                                                                         <td th:text="${service.getCustomMaxPiece()}">10000</td>
-                                                                                        <td><span th:text="${service.getCustomPrice()}"></span> TL</td>
+                                                                                        <td>
+                                                                                            <span th:if="${service.getCustomMinPiece()!=1 && service.getCustomMaxPiece()!=1}" th:text="${service.getCustomPrice()}"></span>
+                                                                                            <span th:if="${service.getCustomMinPiece()==1 && service.getCustomMaxPiece()==1}" th:text="${service.getCustomPrice()/1000}"></span>
+                                                                                            TL
+                                                                                        </td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
