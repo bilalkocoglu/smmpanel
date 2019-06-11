@@ -80,8 +80,11 @@
                                                                             <td th:text="${service.getCustomMinPiece()}"></td>
                                                                             <td th:text="${service.getCustomMaxPiece()}"></td>
                                                                             <td class="font__size-18 font__weight-semibold">
-                                                                                <span th:if="${service.getCustomMinPiece()!=1 && service.getCustomMaxPiece()!=1}" th:text="${service.getCustomPrice()}"></span> TL
-                                                                                <span th:if="${service.getCustomMinPiece()==1 && service.getCustomMaxPiece()==1}" th:text="${service.getCustomPrice()/1000}"></span> TL
+                                                                                <span>
+                                                                                    <span th:if="${service.getCustomMinPiece()!=1 && service.getCustomMaxPiece()!=1}" th:text="${service.getCustomPrice()}"></span>
+                                                                                    <span th:if="${service.getCustomMinPiece()==1 && service.getCustomMaxPiece()==1}" th:text="${service.getCustomPrice()/1000}"></span>
+                                                                                    TL
+                                                                                </span>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
