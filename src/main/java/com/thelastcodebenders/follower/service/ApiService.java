@@ -461,7 +461,8 @@ public class ApiService {
 
     private boolean isChangeService(Service service, Service equivalentService){
         if (service.getApiMaxPiece() != equivalentService.getApiMaxPiece() ||
-                service.getApiMinPiece() != equivalentService.getApiMinPiece()){
+                service.getApiMinPiece() != equivalentService.getApiMinPiece() ||
+                !service.getApiName().equals(equivalentService.getApiName())){
             return true;
         }
 

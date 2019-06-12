@@ -245,7 +245,7 @@ public class TicketService {
     }
 
     private boolean validateCreateTicketForm(CreateTicketFormDTO createTicketForm){
-        if (isNullOrEmpty(createTicketForm.getCustomSubject()) || isNullOrEmpty(createTicketForm.getMessage()) || isNullOrEmpty(createTicketForm.getSubject())){
+        if (isNullOrEmpty(createTicketForm.getMessage())){
             throw new DetectedException("Tüm alanları eksiksiz girmelisiniz !");
         }else if (createTicketForm.getSubject().length()>50 || createTicketForm.getCustomSubject().length()>100 || createTicketForm.getMessage().length()>200){
             throw new DetectedException("Çok uzun değerler girdiniz !");
