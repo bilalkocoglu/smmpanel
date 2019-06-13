@@ -340,6 +340,8 @@ public class PaytrService {
                     mailService.asyncSendVisitorOrderMail(visitorUser.getEmail(), "-1" , visitorUser.getName(), visitorUser.getSurname(), false);
                 }
 
+                cardPaymentService.createCardPayment(userService.getAdmin(), callbackRequest.getMerchant_oid(), Integer.parseInt(callbackRequest.getPayment_amount()) / 100);
+
                 //admin info
                 telegramService.asyncSendAdminMessage(visitorUser.getEmail() + " ziyaretçisinden " + visitorUser.getPkg().getPrice() + " tutarında ödeme alındı ve " + visitorUser.getPkg().getId() + "paketinden sipariş verildi.");
                 //user info

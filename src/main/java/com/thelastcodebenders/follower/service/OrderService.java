@@ -69,15 +69,20 @@ public class OrderService {
         double total = 0;
 
         for (Order order: completedOrders) {
-            System.out.println("Order Custom Price : " + order.getCustomPrice() + " -- Order Api Price : " + order.getApiPrice());
             double orderTotal =  order.getCustomPrice()-order.getApiPrice();
             total = total + orderTotal;
+        }
+
+        List<Order> partialOrders = orderRepository.findByStatus(OrderStatusType.PARTIAL);
+
+        for (Order order: partialOrders){
+            double winning = order.getCustomPrice()-order.getRemainBalance()-order.getApiPrice();
+            total += winning;
         }
 
         List<DrawOrder> complatedDrawOrder = drawOrderRepository.findByStatus(OrderStatusType.COMPLETED);
 
         for (DrawOrder drawOrder: complatedDrawOrder) {
-            System.out.println("DrawOrder Api Price : " + drawOrder.getDrawPrize().getApiPrice());
 
             total = total - drawOrder.getDrawPrize().getApiPrice();
         }
@@ -439,6 +444,9 @@ public class OrderService {
                     }catch (Exception e){
                         log.error("Order Service OrderStatus Update Error -> Start Count Not Convert Integer !");
                     }
+
+                    cacheService.winningsClear();
+
                     //bakiye güncellemesi
                     apiService.asyncApiUpdateBalance(order.getService().getApi());
 
