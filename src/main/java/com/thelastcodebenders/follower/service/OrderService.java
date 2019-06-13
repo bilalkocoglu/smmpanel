@@ -429,7 +429,11 @@ public class OrderService {
 
 
                     int remain = Integer.valueOf(orderStatusResponse.getRemains());
-                    double remainBalance = (order.getCustomPrice() * remain) / order.getQuantity();
+                    double remainBalance;
+                    if (remain >= order.getQuantity())
+                        remainBalance = order.getCustomPrice();
+                    else
+                        remainBalance = (order.getCustomPrice() * remain) / order.getQuantity();
 
                     order.setRemain(remain);
                     order.setRemainBalance(remainBalance);
